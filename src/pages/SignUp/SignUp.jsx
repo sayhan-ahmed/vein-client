@@ -24,7 +24,7 @@ const SignUp = () => {
       //3. Save username & profile photo
       await updateUserProfile(
         name,
-        "https://lh3.googleusercontent.com/a/ACg8ocKUMU3XIX-JSUB80Gj_bYIWfYudpibgdwZE1xqmAGxHASgdvCZZ=s96-c"
+        "https://png.pngtree.com/png-vector/20231019/ourmid/pngtree-user-profile-avatar-png-image_10211467.png"
       );
       console.log(result);
 
@@ -41,7 +41,7 @@ const SignUp = () => {
       <div className="flex flex-col max-w-md p-6 rounded-md sm:p-10 bg-gray-100 text-gray-900">
         <div className="mb-8 text-center">
           <h1 className="my-3 text-4xl font-bold">Sign Up</h1>
-          <p className="text-sm text-gray-400">Welcome to PlantNet</p>
+          <p className="text-sm text-gray-400">Welcome to Vein.</p>
         </div>
         <form
           onSubmit={handleSubmit}

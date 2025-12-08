@@ -20,7 +20,7 @@ const DonationRequestDetails = () => {
             <div className="w-full overflow-hidden rounded-xl">
               <img
                 className="object-cover w-full"
-                src="https://i.ibb.co/DDnw6j9/1738597899-golden-money-plant.jpg"
+                src="https://thebloodconnection.org/wp-content/uploads/2023/01/TBC-Dec-Jan-Blog-Photos-1200x630-2.jpg"
                 alt="header image"
               />
             </div>
@@ -50,7 +50,7 @@ const DonationRequestDetails = () => {
                 gap-2
               "
           >
-            <div>Donor: Shakil Ahmed Atik</div>
+            <div>Donor: Mr. Donor</div>
 
             <img
               className="rounded-full"
@@ -58,7 +58,7 @@ const DonationRequestDetails = () => {
               width="30"
               alt="Avatar"
               referrerPolicy="no-referrer"
-              src="https://lh3.googleusercontent.com/a/ACg8ocKUMU3XIX-JSUB80Gj_bYIWfYudpibgdwZE1xqmAGxHASgdvCZZ=s96-c"
+              src="https://images.unsplash.com/photo-1527980965255-d3b416303d12?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fGF2YXRhcnxlbnwwfHwwfHx8MA%3D%3D"
             />
           </div>
           <hr className="my-6" />

@@ -1,6 +1,6 @@
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 
-const DonationModal = ({ closeModal, isOpen, plant }) => {
+const DonationModal = ({ closeModal, isOpen }) => {
   // Total Price Calculation
 
   return (
