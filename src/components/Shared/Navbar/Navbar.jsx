@@ -41,7 +41,7 @@ const Navbar = () => {
   return (
     <>
       <section>
-        <h2 className="flex justify-center bg-[#1D3557] text-sm text-white py-2">
+        <h2 className="flex justify-center bg-[#1D3557] text-xs md:text-sm text-white py-2">
           You don't need to be a doctor to save a life!
         </h2>
       </section>
