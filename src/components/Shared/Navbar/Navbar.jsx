@@ -1,8 +1,8 @@
 import Container from "../Container";
 import { AiOutlineMenu } from "react-icons/ai";
 import { BiDonateHeart } from "react-icons/bi";
-import { MdOutlineWaterDrop } from "react-icons/md";
-import { FiLogIn, FiHome, FiMoon } from "react-icons/fi";
+import { LiaDonateSolid } from "react-icons/lia";
+import { FiLogIn, FiHome } from "react-icons/fi";
 import { CiWarning } from "react-icons/ci";
 import { FaRegBell } from "react-icons/fa";
 import { RxDashboard } from "react-icons/rx";
@@ -46,10 +46,10 @@ const Navbar = () => {
         </h2>
       </section>
       <div
-        className={`sticky top-0 z-50 transition-all duration-300${
+        className={`sticky top-0 z-50 transition-all ${
           scrolled
-            ? "bg-indigo-50/70 backdrop-blur-md shadow-xl py-2"
-            : "bg-transparent py-4 border-b border-gray-100"
+            ? "bg-white backdrop-blur-md shadow-xl py-2"
+            : "bg-transparent py-2 border-b border-gray-100"
         }`}
       >
         <Container>
@@ -69,10 +69,10 @@ const Navbar = () => {
                 <NavLink
                   to="/"
                   className={({ isActive }) =>
-                    `flex items-center gap-2 px-4 py-2 rounded-lg transition ${
+                    `flex items-center gap-2 px-3 py-2 rounded-lg transition ${
                       isActive
                         ? "bg-red-50/80 text-red-500 font-bold"
-                        : "hover:bg-gray-50"
+                        : "hover:bg-red-50 hover:text-red-500"
                     }`
                   }
                 >
@@ -84,10 +84,10 @@ const Navbar = () => {
                 <NavLink
                   to="/donation-requests"
                   className={({ isActive }) =>
-                    `flex items-center gap-2 transition ${
+                    `flex items-center gap-2 px-3 py-2 rounded-lg transition ${
                       isActive
-                        ? "text-secondary font-semibold"
-                        : "hover:text-secondary"
+                        ? "bg-red-50/80 text-red-500 font-bold"
+                        : "hover:bg-red-50 hover:text-red-500"
                     }`
                   }
                 >
@@ -100,14 +100,14 @@ const Navbar = () => {
                   <NavLink
                     to="/funding"
                     className={({ isActive }) =>
-                      `flex items-center gap-2 transition ${
+                      `flex items-center gap-2 px-3 py-2 rounded-lg transition ${
                         isActive
-                          ? "text-secondary font-semibold"
-                          : "hover:text-secondary"
+                          ? "bg-red-50/80 text-red-500 font-bold"
+                          : "hover:bg-red-50 hover:text-red-500"
                       }`
                     }
                   >
-                    <MdOutlineWaterDrop className="text-lg" />
+                    <LiaDonateSolid className="text-lg" />
                     <span>Funding</span>
                   </NavLink>
                 )}

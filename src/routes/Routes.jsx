@@ -14,6 +14,7 @@ import MyDonationRequests from "../pages/Dashboard/Donor/MyDonationRequests";
 import ManageRequests from "../pages/Dashboard/Donor/ManageRequests";
 import MyRecipientRequests from "../pages/Dashboard/Recipient/MyDonationRequests";
 import { createBrowserRouter } from "react-router";
+import AllDonationRequests from "../pages/AllDonationRequests/AllDonationRequests";
 
 export const router = createBrowserRouter([
   {
@@ -24,6 +25,10 @@ export const router = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
+      },
+      {
+        path: "/donation-requests",
+        element: <AllDonationRequests />,
       },
       {
         path: "/donation-request/:id",
