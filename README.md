@@ -4,10 +4,12 @@
 2. Navlinks icon change (funding - LiaDonateSolid)
 3. Navbar py when not scrolled
 4. Navbar bg change on scroll
+5. 
 
 # Fixed:
 
 1. Main layout pt removed
+2. Navbar sticky state bg change
 
 # TODO:
 
@@ -17,6 +19,7 @@
 
 1. Banner component on Home page and it's route
 2. All Donation Requests page for navlink "Donation Requests"
+3. Featured component on Home page
 
 # Installation:
 

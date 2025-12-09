@@ -45,13 +45,7 @@ const Navbar = () => {
           You don't need to be a doctor to save a life!
         </h2>
       </section>
-      <div
-        className={`sticky top-0 z-50 transition-all ${
-          scrolled
-            ? "bg-white backdrop-blur-md shadow-xl py-2"
-            : "bg-transparent py-2 border-b border-gray-100"
-        }`}
-      >
+      <div className="sticky top-0 z-50 transition-all bg-white backdrop-blur-md shadow-xl py-2">
         <Container>
           <div className="flex flex-row items-center justify-between gap-3 md:gap-0">
             {/* Logo - Always on Left */}
