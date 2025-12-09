@@ -58,7 +58,7 @@ const Featured = () => {
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-50 border border-red-100 mb-4">
             <MdBloodtype className="text-red-500 text-xl" />
-            <span className="text-red-600 font-semibold text-sm">
+            <span className="text-red-600 font-semibold text-sm uppercase">
               Interactive Tool
             </span>
           </div>

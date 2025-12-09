@@ -5,6 +5,7 @@
 3. Navbar py when not scrolled
 4. Navbar bg change on scroll
 5. Featured section bg color
+6. Interactive tool header uppercase
 
 # Fixed:
 
