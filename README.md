@@ -15,7 +15,7 @@
 
 # TODO:
 
-1.
+1. Make pages for footer links
 
 # Added:
 
@@ -26,3 +26,4 @@
 # Installation:
 
 1. lottie animation
+2. sweet alert
