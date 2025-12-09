@@ -52,7 +52,7 @@ const Featured = () => {
     : null;
 
   return (
-    <section className="py-20 bg-linear-to-b from-gray-50 to-white">
+    <section className="py-20 bg-linear-to-b from-red-50/50 to-white">
       <Container>
         {/* Section Header */}
         <div className="text-center mb-12">

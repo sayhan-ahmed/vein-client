@@ -9,7 +9,6 @@ import {
   MdAccessTime,
 } from "react-icons/md";
 import Container from "../Shared/Container";
-import Button from "../Shared/Button/Button";
 
 const Banner = () => {
   return (
@@ -104,7 +103,7 @@ const Banner = () => {
           </div>
 
           {/* --- RIGHT: Lottie Animation --- */}
-          <div className="relative h-[500px] md:h-[600px] w-full flex items-center justify-center lg:justify-end">
+          <div className="hidden lg:block relative h-[500px] md:h-[600px] w-full items-center justify-center lg:justify-end">
             {/* Spotlight Glow */}
             <div className="absolute inset-0 bg-linear-to-tr from-red-500/10 via-transparent to-transparent blur-3xl rounded-full transform scale-75 pointer-events-none"></div>
 

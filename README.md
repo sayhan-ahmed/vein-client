@@ -4,12 +4,14 @@
 2. Navlinks icon change (funding - LiaDonateSolid)
 3. Navbar py when not scrolled
 4. Navbar bg change on scroll
-5. 
+5. Featured section bg color
 
 # Fixed:
 
 1. Main layout pt removed
 2. Navbar sticky state bg change
+3. Unimported Button component removed from Banner.jsx
+4. Lottie animation hidden on below lg screen
 
 # TODO:
 
