@@ -16,6 +16,8 @@
 3. Unimported Button component removed from Banner.jsx
 4. Lottie animation hidden on below lg screen
 5. Comment console.log in AuthProvider.jsx
+6. Removed FcGoogle icon import from Login.jsx
+7. Fixed location state in Login.jsx
 
 # TODO:
 
