@@ -1,12 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useParams, useNavigate } from "react-router";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import Container from "../../components/Shared/Container";
 import Button from "../../components/Shared/Button/Button";
 import DonationModal from "../../components/Modal/DonationModal";
+import Loader from "../../components/Shared/Loader";
+import {
+  FaHospital,
+  FaCalendarAlt,
+  FaMapMarkerAlt,
+  FaUser,
+  FaEnvelope,
+  FaQuoteLeft,
+} from "react-icons/fa";
+import { MdBloodtype } from "react-icons/md";
+import { FaArrowLeft } from "react-icons/fa6";
 
 const DonationRequestDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const axiosSecure = useAxiosSecure();
   const [request, setRequest] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -15,13 +27,10 @@ const DonationRequestDetails = () => {
   useEffect(() => {
     const fetchRequestDetails = async () => {
       try {
-        // Based on the JSON content being served from /donors in other pages,
-        // we fetch the specific request from the same resource collection.
         const res = await axiosSecure.get(`/donation-requests/${id}`);
         setRequest(res.data);
       } catch (error) {
         console.error("Failed to fetch request details", error);
-        // Fallback or error state
       } finally {
         setLoading(false);
       }
@@ -37,7 +46,7 @@ const DonationRequestDetails = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <span className="loading loading-spinner loading-lg text-red-600"></span>
+        <Loader />
       </div>
     );
   }
@@ -45,150 +54,224 @@ const DonationRequestDetails = () => {
   if (!request) {
     return (
       <Container>
-        <div className="text-center py-20">
-          <h2 className="text-2xl font-bold text-gray-700">
-            Request not found
+        <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
+          <div className="text-9xl mb-4">🔍</div>
+          <h2 className="text-3xl font-black text-slate-800">
+            Request Not Found
           </h2>
+          <p className="text-slate-500 mt-2">
+            The donation request you serve looking for doesn't exist or has been
+            removed.
+          </p>
         </div>
       </Container>
     );
   }
 
   return (
-    <Container>
-      <div className="mx-auto flex flex-col lg:flex-row justify-between w-full gap-12 pt-10 pb-20">
-        {/* Left Side - Details */}
-        <div className="flex flex-col gap-6 flex-1">
-          <div className="bg-red-50 p-8 rounded-3xl border border-red-100">
-            <div className="flex items-center gap-4 mb-6">
-              <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-sm text-red-600 font-bold text-2xl border-4 border-red-100">
-                {request.bloodGroup}
-              </div>
-              <div>
-                <h1 className="text-3xl font-bold text-gray-900">
-                  {request.recipientName}
-                </h1>
-                <div className="flex items-center gap-2 text-gray-600 mt-1">
-                  <span className="bg-white px-3 py-1 rounded-full text-xs font-medium border border-red-100 text-red-600">
-                    Recipient
-                  </span>
-                  <span className="text-sm">
-                    {request.recipientUpazila}, {request.recipientDistrict}
-                  </span>
-                </div>
-              </div>
+    <div className="min-h-screen bg-slate-50/50 py-12">
+      <Container>
+        <div className="max-w-6xl mx-auto">
+          {/* Header / Title Section */}
+          <div className="flex justify-between items-center">
+            <div className="mb-10 text-center lg:text-left">
+              <span className="inline-block py-1 px-3 rounded-full bg-red-100 text-red-600 text-xs font-bold uppercase tracking-wider mb-4 border border-red-200">
+                {request.donationStatus === "pending"
+                  ? "Confidently Pending"
+                  : request.donationStatus}
+              </span>
+              <h1 className="text-3xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight mb-2">
+                Help{" "}
+                <span className="text-red-600">{request.recipientName}</span>{" "}
+                recover
+              </h1>
+              <p className="text-slate-500 text-lg font-medium">
+                A request for{" "}
+                <span className="font-bold text-red-600">
+                  {request.bloodGroup}
+                </span>{" "}
+                blood at {request.hospitalName}
+              </p>
             </div>
+            <button
+              onClick={() => navigate(-1)}
+              className="bg-[#1D3657] text-white cursor-pointer px-6 py-2 rounded-full hover:bg-red-600 hover:-translate-x-2 transition-all duration-300 flex items-center gap-2 mb-7"
+            >
+              <FaArrowLeft />
+              Go Back
+            </button>
+          </div>
 
-            <div className="space-y-4">
-              <div className="flex items-start gap-3">
-                <div className="mt-1 bg-white p-2 rounded-lg text-red-500">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="w-5 h-5"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"
-                    />
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
-                    />
-                  </svg>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-900">
-                    Hospital Details
-                  </h4>
-                  <p className="text-gray-600">{request.hospitalName}</p>
-                  <p className="text-gray-500 text-sm">{request.fullAddress}</p>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
+            {/* Left Column: Main Info */}
+            <div className="lg:col-span-2 space-y-8">
+              {/* Primary Details Card */}
+              <div className="bg-white rounded-2xl shadow-lg shadow-slate-200/80 border border-slate-100 p-8 lg:p-10 relative overflow-hidden">
+                <div className="relative z-10">
+                  <h3 className="text-xl font-bold text-slate-800 flex items-center gap-px mb-6">
+                    <MdBloodtype className="text-red-500 text-3xl" />
+                    Transfusion Details
+                  </h3>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-10">
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                        Blood Group
+                      </label>
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 rounded-2xl bg-linear-to-br from-red-500 to-rose-600 flex items-center justify-center text-white font-black text-lg shadow-lg shadow-red-500/30">
+                          {request.bloodGroup}
+                        </div>
+                        <div>
+                          <p className="font-bold text-slate-800 text-lg">
+                            Urgent
+                          </p>
+                          <p className="text-xs text-slate-500 font-medium">
+                            {request.bloodType}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                        Hospital
+                      </label>
+                      <div className="flex items-start gap-3">
+                        <div className="p-2.5 rounded-xl bg-blue-50 text-blue-600 shrink-0">
+                          <FaHospital size={20} />
+                        </div>
+                        <div>
+                          <p className="font-bold text-slate-800 leading-tight">
+                            {request.hospitalName}
+                          </p>
+                          <p className="text-sm text-slate-500 mt-1 font-medium">
+                            {request.fullAddress}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                        Location
+                      </label>
+                      <div className="flex items-start gap-3">
+                        <div className="p-2.5 rounded-xl bg-emerald-50 text-emerald-600 shrink-0">
+                          <FaMapMarkerAlt size={20} />
+                        </div>
+                        <div>
+                          <p className="font-bold text-slate-800">
+                            {request.recipientUpazila}
+                          </p>
+                          <p className="text-sm text-slate-500 font-medium">
+                            {request.recipientDistrict}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                        Timing
+                      </label>
+                      <div className="flex items-start gap-3">
+                        <div className="p-2.5 rounded-xl bg-violet-50 text-violet-600 shrink-0">
+                          <FaCalendarAlt size={20} />
+                        </div>
+                        <div>
+                          <p className="font-bold text-slate-800">
+                            {request.donationDate}
+                          </p>
+                          <p className="text-sm text-slate-500 font-medium">
+                            {request.donationTime}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              <div className="flex items-start gap-3">
-                <div className="mt-1 bg-white p-2 rounded-lg text-red-500">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="w-5 h-5"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"
-                    />
-                  </svg>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-900">Date & Time</h4>
-                  <p className="text-gray-600">
-                    {request.donationDate} at {request.donationTime}
+              {/* Message Card */}
+              <div className="bg-white rounded-2xl shadow-lg shadow-slate-200/80 border border-slate-100 p-8">
+                <h3 className="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2">
+                  <FaQuoteLeft className="text-slate-300" />
+                  Request Message
+                </h3>
+                <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
+                  <p className="text-slate-600 leading-relaxed font-medium italic">
+                    "{request.requestMessage}"
                   </p>
                 </div>
               </div>
             </div>
 
-            <div className="mt-8 pt-8 border-t border-red-100">
-              <h4 className="font-semibold text-gray-900 mb-2">
-                Request Message
-              </h4>
-              <p className="text-gray-600 italic">"{request.requestMessage}"</p>
+            {/* Right Column: Sidebar */}
+            <div className="space-y-8">
+              {/* Requester Profile */}
+              <div className="bg-white rounded-2xl shadow-lg shadow-slate-200/80 border border-slate-100 p-8 sticky top-32">
+                <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-6">
+                  Requester Details
+                </h4>
+
+                <div className="flex items-center gap-4 mb-8">
+                  {request.requesterImage ? (
+                    <img
+                      className="w-16 h-16 rounded-full object-cover border-2 border-slate-100"
+                      src={request.requesterImage}
+                      alt="Requester"
+                    />
+                  ) : (
+                    <div className="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 border border-[#1D3657]">
+                      <FaUser size={32} className="text-[#1D3657]" />
+                    </div>
+                  )}
+                  <div>
+                    <h3 className="text-lg font-bold text-[#1D3657]">
+                      {request.requesterName}
+                    </h3>
+                    <p className="text-sm text-slate-500 font-medium">
+                      {request.requesterRole}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="space-y-4 mb-8">
+                  <div className="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 border border-slate-100">
+                    <div className="p-2 bg-white rounded-full shadow-sm text-slate-500">
+                      <FaEnvelope />
+                    </div>
+                    <div className="overflow-hidden">
+                      <p className="text-xs font-bold text-slate-400 uppercase">
+                        Email
+                      </p>
+                      <p className="text-sm font-semibold text-slate-800 truncate">
+                        {request.requesterEmail}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <Button onClick={() => setIsOpen(true)} label="Donate" />
+
+                <p className="text-xs text-center text-slate-400 mt-4 leading-relaxed px-4">
+                  By clicking, you verified your eligibility to donate blood on
+                  the specified date.
+                </p>
+              </div>
             </div>
           </div>
         </div>
+      </Container>
 
-        {/* Right Side - Action */}
-        <div className="md:w-1/3">
-          <div className="bg-white p-6 rounded-2xl shadow-xl border border-gray-100 sticky top-24">
-            <h3 className="text-xl font-bold text-gray-900 mb-6">
-              Donate Blood
-            </h3>
-
-            <div className="space-y-4 mb-6">
-              <div className="flex justify-between items-center text-sm">
-                <span className="text-gray-500">Status</span>
-                <span className="badge badge-warning">
-                  {request.donationStatus}
-                </span>
-              </div>
-              <div className="flex justify-between items-center text-sm">
-                <span className="text-gray-500">Requester</span>
-                <span className="font-medium text-gray-900">
-                  {request.requesterName}
-                </span>
-              </div>
-            </div>
-
-            <Button
-              onClick={() => setIsOpen(true)}
-              label="Donate Now"
-              customClasses="w-full bg-red-600 hover:bg-red-700 border-none rounded-xl h-12 text-white font-bold shadow-lg shadow-red-200"
-            />
-
-            <p className="text-xs text-center text-gray-400 mt-4">
-              Your donation can save a life. Please verify your eligibility
-              before proceeding.
-            </p>
-          </div>
-        </div>
-
-        <DonationModal
-          closeModal={closeModal}
-          isOpen={isOpen}
-          donationRequest={request}
-          userInfo={{}} // Pass authentic user info here if available from auth context
-        />
-      </div>
-    </Container>
+      <DonationModal
+        closeModal={closeModal}
+        isOpen={isOpen}
+        donationRequest={request}
+        userInfo={{}}
+      />
+    </div>
   );
 };
 
