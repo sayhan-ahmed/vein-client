@@ -27,6 +27,7 @@
 2. All Donation Requests page for navlink "Donation Requests"
 3. Featured component on Home page
 4. Search page route
+5. Donation Request Details page route
 
 # Installation:
 

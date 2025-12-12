@@ -32,8 +32,12 @@ export const router = createBrowserRouter([
         element: <AllDonationRequests />,
       },
       {
-        path: "/donation-request/:id",
-        element: <DonationRequestDetails />,
+        path: "/donation-requests/:id",
+        element: (
+          <PrivateRoute>
+            <DonationRequestDetails />
+          </PrivateRoute>
+        ),
       },
       {
         path: "/search",
