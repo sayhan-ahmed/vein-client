@@ -6,6 +6,8 @@
 4. Navbar bg change on scroll
 5. Featured section bg color
 6. Interactive tool header uppercase
+7. Navbar emergency button change to link to search page
+8. Banner button change to link to search page
 
 # Fixed:
 
@@ -13,6 +15,7 @@
 2. Navbar sticky state bg change
 3. Unimported Button component removed from Banner.jsx
 4. Lottie animation hidden on below lg screen
+5. Comment console.log in AuthProvider.jsx
 
 # TODO:
 
@@ -23,6 +26,7 @@
 1. Banner component on Home page and it's route
 2. All Donation Requests page for navlink "Donation Requests"
 3. Featured component on Home page
+4. Search page route
 
 # Installation:
 

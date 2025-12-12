@@ -63,7 +63,7 @@ const Banner = () => {
               </Link>
 
               <Link
-                to="/donation-requests"
+                to="/search"
                 className="group px-8 py-4 bg-slate-800/40 backdrop-blur-md border border-slate-700/50 rounded-full font-bold text-white hover:bg-slate-700/50 hover:border-slate-600 transition-all duration-300"
               >
                 <div className="flex items-center justify-center gap-3">

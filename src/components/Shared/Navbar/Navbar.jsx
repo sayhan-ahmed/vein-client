@@ -108,10 +108,13 @@ const Navbar = () => {
 
                 {/* Emergency (Logged In) - Red Button */}
                 {user && (
-                  <button className="flex items-center gap-2 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition shadow-sm">
+                  <Link
+                    to="/search"
+                    className="flex items-center gap-2 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition shadow-sm"
+                  >
                     <CiWarning className="text-xl" />
                     <span>Emergency</span>
-                  </button>
+                  </Link>
                 )}
 
                 {/* Bell Icon */}

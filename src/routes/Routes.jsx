@@ -15,6 +15,7 @@ import ManageRequests from "../pages/Dashboard/Donor/ManageRequests";
 import MyRecipientRequests from "../pages/Dashboard/Recipient/MyDonationRequests";
 import { createBrowserRouter } from "react-router";
 import AllDonationRequests from "../pages/AllDonationRequests/AllDonationRequests";
+import SearchPage from "../pages/Search/SearchPage";
 
 export const router = createBrowserRouter([
   {
@@ -33,6 +34,10 @@ export const router = createBrowserRouter([
       {
         path: "/donation-request/:id",
         element: <DonationRequestDetails />,
+      },
+      {
+        path: "/search",
+        element: <SearchPage />,
       },
     ],
   },
