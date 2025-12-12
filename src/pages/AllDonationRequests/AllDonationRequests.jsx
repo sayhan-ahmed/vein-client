@@ -14,6 +14,7 @@ const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 export default function AllDonationRequests() {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [filterLoading, setFilterLoading] = useState(false);
   const [filterBloodGroup, setFilterBloodGroup] = useState("");
   const [filterDistrict, setFilterDistrict] = useState("");
   const [filterUpazila, setFilterUpazila] = useState("");
@@ -60,13 +61,30 @@ export default function AllDonationRequests() {
     return matchesBlood && matchesDistrict && matchesUpazila;
   });
 
+  const handleFilterChange = (setter, value) => {
+    setFilterLoading(true);
+    setter(value);
+
+    // Simulate network delay for effect
+    setTimeout(() => {
+      setFilterLoading(false);
+    }, 1000);
+  };
+
+  const handleDistrictChange = (e) => {
+    setFilterLoading(true);
+    setFilterDistrict(e.target.value);
+    setFilterUpazila("");
+    setTimeout(() => setFilterLoading(false), 1000);
+  };
+
   const resetFilters = () => {
+    setFilterLoading(true);
     setFilterBloodGroup("");
     setFilterDistrict("");
     setFilterUpazila("");
+    setTimeout(() => setFilterLoading(false), 1000);
   };
-
-  if (loading) return <Loader />;
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans selection:bg-red-100 selection:text-red-900">
@@ -116,11 +134,14 @@ export default function AllDonationRequests() {
                       <button
                         key={bg}
                         onClick={() =>
-                          setFilterBloodGroup(filterBloodGroup === bg ? "" : bg)
+                          handleFilterChange(
+                            setFilterBloodGroup,
+                            filterBloodGroup === bg ? "" : bg
+                          )
                         }
                         className={`w-10 h-10 rounded-xl text-sm font-bold flex items-center justify-center transition-all duration-300 hover:scale-105 active:scale-95 ${
                           filterBloodGroup === bg
-                            ? "bg-linear-to-tr from-red-600 to-rose-500 text-white shadow-lg shadow-red-500/30 ring-2 ring-red-500 ring-offset-2"
+                            ? "bg-linear-to-tr from-red-600 to-rose-600 text-white shadow-lg shadow-red-500/30 ring-2 ring-red-500 ring-offset-2"
                             : "bg-slate-50 text-slate-600 hover:bg-white hover:shadow-md border border-slate-100"
                         }`}
                       >
@@ -141,10 +162,7 @@ export default function AllDonationRequests() {
                     <div className="relative">
                       <select
                         value={filterDistrict}
-                        onChange={(e) => {
-                          setFilterDistrict(e.target.value);
-                          setFilterUpazila("");
-                        }}
+                        onChange={handleDistrictChange}
                         className="w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-xl focus:ring-red-500 focus:border-red-500 block p-3 pr-10 appearance-none transition-all hover:bg-white hover:shadow-sm cursor-pointer font-medium"
                       >
                         <option value="">All Districts</option>
@@ -167,7 +185,9 @@ export default function AllDonationRequests() {
                     <div className="relative">
                       <select
                         value={filterUpazila}
-                        onChange={(e) => setFilterUpazila(e.target.value)}
+                        onChange={(e) =>
+                          handleFilterChange(setFilterUpazila, e.target.value)
+                        }
                         disabled={!filterDistrict}
                         className="w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-xl focus:ring-red-500 focus:border-red-500 block p-3 pr-10 appearance-none transition-all hover:bg-white hover:shadow-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed font-medium"
                       >
@@ -206,7 +226,11 @@ export default function AllDonationRequests() {
               </div>
             </div>
 
-            {filteredRequests.length === 0 ? (
+            {loading || filterLoading ? (
+              <div className="flex justify-center items-center py-20 min-h-[400px]">
+                <Loader />
+              </div>
+            ) : filteredRequests.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-20 bg-white rounded-[2.5rem] border border-dashed border-slate-200 text-center">
                 <div className="bg-linear-to-br from-red-50 to-white w-24 h-24 rounded-full flex items-center justify-center mb-6 shadow-md shadow-red-100 border border-red-100">
                   <TbAlertCircle size={60} className="text-red-500" />
@@ -303,7 +327,7 @@ export default function AllDonationRequests() {
                         <div className="absolute inset-0 w-full h-full bg-linear-to-r from-red-600 to-rose-600 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></div>
                         <span className="relative z-10 flex items-center gap-2">
                           View Full Details
-                         <FaLongArrowAltRight />
+                          <FaLongArrowAltRight />
                         </span>
                       </Link>
                     </div>
