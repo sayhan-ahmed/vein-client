@@ -9,6 +9,7 @@
 7. Navbar emergency button change to link to search page
 8. Banner button change to link to search page
 9. Shared button hover color and scale effect
+10. Shared button disabled hover bg color
 
 # Fixed:
 

@@ -4,6 +4,7 @@ import useAxiosSecure from "../../hooks/useAxiosSecure";
 import Container from "../../components/Shared/Container";
 import Button from "../../components/Shared/Button/Button";
 import DonationModal from "../../components/Modal/DonationModal";
+import toast from "react-hot-toast";
 import Loader from "../../components/Shared/Loader";
 import {
   FaHospital,
@@ -16,10 +17,13 @@ import {
 import { MdBloodtype } from "react-icons/md";
 import { FaArrowLeft } from "react-icons/fa6";
 
+import useAuth from "../../hooks/useAuth";
+
 const DonationRequestDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const axiosSecure = useAxiosSecure();
+  const { user } = useAuth();
   const [request, setRequest] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
@@ -41,6 +45,26 @@ const DonationRequestDetails = () => {
 
   const closeModal = () => {
     setIsOpen(false);
+  };
+
+  const handleDonate = async () => {
+    try {
+      const response = await axiosSecure.patch(`/donation-requests/${id}`, {
+        donationStatus: "inprogress",
+        donorName: user?.displayName,
+        donorEmail: user?.email,
+      });
+      if (response.data.modifiedCount > 0) {
+        toast.success("Donation confirmed successfully!", {
+          position: "top-center",
+        });
+        setRequest((prev) => ({ ...prev, donationStatus: "inprogress" }));
+        closeModal();
+      }
+    } catch (error) {
+      console.error("Error confirming donation:", error);
+      toast.error("Failed to confirm donation.", { position: "top-center" });
+    }
   };
 
   if (loading) {
@@ -73,13 +97,8 @@ const DonationRequestDetails = () => {
       <Container>
         <div className="max-w-6xl mx-auto">
           {/* Header / Title Section */}
-          <div className="flex justify-between items-center">
-            <div className="mb-10 text-center lg:text-left">
-              <span className="inline-block py-1 px-3 rounded-full bg-red-100 text-red-600 text-xs font-bold uppercase tracking-wider mb-4 border border-red-200">
-                {request.donationStatus === "pending"
-                  ? "Confidently Pending"
-                  : request.donationStatus}
-              </span>
+          <div className="flex flex-col lg:flex-row justify-between items-center gap-6 mb-10">
+            <div className="text-center lg:text-left">
               <h1 className="text-3xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight mb-2">
                 Help{" "}
                 <span className="text-red-600">{request.recipientName}</span>{" "}
@@ -95,7 +114,7 @@ const DonationRequestDetails = () => {
             </div>
             <button
               onClick={() => navigate(-1)}
-              className="bg-[#1D3657] text-white cursor-pointer px-6 py-2 rounded-full hover:bg-red-600 hover:-translate-x-2 transition-all duration-300 flex items-center gap-2 mb-7"
+              className="bg-[#1D3657] text-white cursor-pointer px-6 py-2 rounded-full hover:bg-red-600 hover:-translate-x-2 transition-all duration-300 flex items-center gap-2 lg:self-start self-center"
             >
               <FaArrowLeft />
               Go Back
@@ -108,10 +127,30 @@ const DonationRequestDetails = () => {
               {/* Primary Details Card */}
               <div className="bg-white rounded-2xl shadow-lg shadow-slate-200/80 border border-slate-100 p-8 lg:p-10 relative overflow-hidden">
                 <div className="relative z-10">
-                  <h3 className="text-xl font-bold text-slate-800 flex items-center gap-px mb-6">
-                    <MdBloodtype className="text-red-500 text-3xl" />
-                    Transfusion Details
-                  </h3>
+                  <div className="flex flex-wrap justify-between items-center mb-6 gap-4">
+                    <h3 className="text-xl font-bold text-slate-800 flex items-center gap-px">
+                      <MdBloodtype className="text-red-500 text-3xl" />
+                      Transfusion Details
+                    </h3>
+                    <span
+                      className={`inline-flex items-center gap-2 py-1 px-3 rounded-full text-xs font-bold uppercase tracking-wider border ${
+                        request.donationStatus === "inprogress"
+                          ? "bg-yellow-100 text-yellow-800 border-yellow-200"
+                          : "bg-red-100 text-red-600 border-red-200"
+                      }`}
+                    >
+                      <span
+                        className={`w-2.5 h-2.5 rounded-full ${
+                          request.donationStatus === "inprogress"
+                            ? "bg-yellow-500"
+                            : "bg-red-500"
+                        }`}
+                      ></span>
+                      {request.donationStatus === "inprogress"
+                        ? "In Progress"
+                        : "Pending"}
+                    </span>
+                  </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-10">
                     <div className="space-y-2">
@@ -253,7 +292,15 @@ const DonationRequestDetails = () => {
                   </div>
                 </div>
 
-                <Button onClick={() => setIsOpen(true)} label="Donate" />
+                <Button
+                  onClick={() => setIsOpen(true)}
+                  label={
+                    request.donationStatus === "inprogress"
+                      ? "In Progress"
+                      : "Donate"
+                  }
+                  disabled={request.donationStatus === "inprogress"}
+                />
 
                 <p className="text-xs text-center text-slate-400 mt-4 leading-relaxed px-4">
                   By clicking, you verified your eligibility to donate blood on
@@ -269,7 +316,8 @@ const DonationRequestDetails = () => {
         closeModal={closeModal}
         isOpen={isOpen}
         donationRequest={request}
-        userInfo={{}}
+        userInfo={user}
+        handleDonate={handleDonate}
       />
     </div>
   );
