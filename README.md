@@ -33,6 +33,10 @@
 4. Search page route
 5. Donation Request Details page route
 
+# Removed:
+
+1. Card component from Home page
+
 # Installation:
 
 1. lottie animation
