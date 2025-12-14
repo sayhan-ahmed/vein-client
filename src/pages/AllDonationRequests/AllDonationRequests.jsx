@@ -89,7 +89,7 @@ export default function AllDonationRequests() {
   return (
     <div className="min-h-screen bg-slate-50 font-sans selection:bg-red-100 selection:text-red-900">
       {/* Header */}
-      <div className="bg-white/80 backdrop-blur-xl border-b border-slate-200 sticky top-0 z-30 transition-all duration-300">
+      <div className="bg-white/80 backdrop-blur-xl border-b border-slate-200 z-30 transition-all duration-300">
         <div className="container mx-auto px-6 py-6 lg:py-8">
           <h1 className="text-3xl lg:text-4xl font-black text-slate-800 tracking-tight">
             Donation{" "}

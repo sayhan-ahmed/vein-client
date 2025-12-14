@@ -239,7 +239,7 @@ const SearchPage = () => {
                                 <div className="flex items-center gap-4">
                                   <div className="w-12 h-12 rounded-2xl overflow-hidden shadow-sm border border-slate-100 group-hover:shadow-md transition-all">
                                     <img
-                                      src={donor.avatar}
+                                      src={donor.image}
                                       alt={donor.name}
                                       className="w-full h-full object-cover"
                                     />

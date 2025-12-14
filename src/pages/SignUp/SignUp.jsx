@@ -1,54 +1,127 @@
 import { Link, useLocation, useNavigate } from "react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import useAuth from "../../hooks/useAuth";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
+import { imageUpload } from "../../utils/imageUpload";
 import { TbDropletFilled } from "react-icons/tb";
 import { MdBloodtype } from "react-icons/md";
 import {
   FaXTwitter,
   FaFacebookF,
   FaHandHoldingHeart,
-  FaLocationDot,
   FaEye,
   FaEyeSlash,
 } from "react-icons/fa6";
 import { ImSpinner9 } from "react-icons/im";
 import { FcGoogle } from "react-icons/fc";
 
+// Import Local JSON Data
+import districtsJson from "../../assets/data/districts.json";
+import upazilasJson from "../../assets/data/upazilas.json";
+
 const SignUp = () => {
   const { createUser, updateUserProfile, loading, setLoading } = useAuth();
+  const axiosPublic = useAxiosPublic();
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state || "/";
 
+  // States
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [districts, setDistricts] = useState([]);
+  const [upazilas, setUpazilas] = useState([]);
+  const [selectedDistrict, setSelectedDistrict] = useState("");
 
-  // form submit handler
+  // Blood Groups
+  const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
+
+  // Load Districts on Mount
+  useEffect(() => {
+    if (districtsJson[2] && districtsJson[2].data) {
+      setDistricts(
+        districtsJson[2].data.sort((a, b) => a.name.localeCompare(b.name))
+      );
+    }
+  }, []);
+
+  // Filter Upazilas when District Changes
+  useEffect(() => {
+    if (selectedDistrict && upazilasJson[2] && upazilasJson[2].data) {
+      const filtered = upazilasJson[2].data.filter(
+        (up) => up.district_id === selectedDistrict
+      );
+      setUpazilas(filtered.sort((a, b) => a.name.localeCompare(b.name)));
+    } else {
+      setUpazilas([]);
+    }
+  }, [selectedDistrict]);
+
+  const handleDistrictChange = (e) => {
+    setSelectedDistrict(e.target.value);
+  };
+
+  // Form Submit Handler
   const handleSubmit = async (event) => {
     event.preventDefault();
     const form = event.target;
+
     const name = form.name.value;
     const email = form.email.value;
     const password = form.password.value;
-    // const image = form.image.files[0]; // Logic preserved from original (ignoring file for now)
+    const confirmPassword = form.confirm_password.value;
+    const bloodGroup = form.blood_group.value;
+    const districtId = form.district.value;
+    const upazilaId = form.upazila.value;
+    const imageFile = form.image.files[0];
+
+    const districtObj = districts.find((d) => d.id === districtId);
+    const upazilaObj = upazilas.find((u) => u.id === upazilaId);
+
+    // Validation
+    if (password !== confirmPassword) {
+      toast.error("Passwords do not match!");
+      return;
+    }
+    if (!imageFile) {
+      toast.error("Please upload a profile image.");
+      return;
+    }
 
     try {
-      // 2. User Registration
+      setLoading(true);
+
+      // 1. Upload Image
+      const imageUrl = await imageUpload(imageFile);
+
+      // 2. Create Firebase User
       const result = await createUser(email, password);
 
-      // 3. Save username & profile photo
-      await updateUserProfile(
-        name,
-        "https://png.pngtree.com/png-vector/20231019/ourmid/pngtree-user-profile-avatar-png-image_10211467.png"
-      );
-      console.log(result);
+      // 3. Update Firebase Profile
+      await updateUserProfile(name, imageUrl);
 
-      navigate(from, { replace: true });
+      // 4. Save User to Database
+      const userInfo = {
+        name,
+        email,
+        image: imageUrl,
+        bloodGroup,
+        district: districtObj?.name,
+        upazila: upazilaObj?.name,
+        role: "donor",
+        status: "active",
+      };
+
+      await axiosPublic.post("/users", userInfo);
+
       toast.success("Signup Successful");
+      navigate(from, { replace: true });
     } catch (err) {
-      console.log(err);
-      toast.error(err?.message);
-      if (setLoading) setLoading(false);
+      console.error(err);
+      toast.error(err?.message || "Registration failed");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -101,7 +174,7 @@ const SignUp = () => {
           {/* The Main Split Card */}
           <div className="w-full max-w-4xl bg-white rounded-[30px] shadow-2xl flex flex-col md:flex-row overflow-visible relative z-10 transition-transform duration-500 h-auto md:min-h-[600px]">
             {/* Floating Middle Card */}
-            <div className="hidden lg:block absolute -left-16 lg:-left-10 xl:-left-24 top-[55%] -translate-y-1/2 z-30 w-[280px] h-[460px] bg-linear-to-b from-red-700 via-rose-700 to-[#021837] rounded-3xl shadow-[0_20px_60px_-10px_rgba(220,38,38,0.6)] flex-col justify-center items-center overflow-hidden transform hover:-translate-y-[calc(50%+10px)] transition-transform duration-500">
+            <div className="hidden lg:block absolute -left-16 lg:-left-10 xl:-left-24 top-[50%] -translate-y-1/2 z-30 w-[280px] h-[460px] bg-linear-to-b from-red-700 via-rose-700 to-[#021837] rounded-3xl shadow-[0_20px_60px_-10px_rgba(220,38,38,0.6)] flex-col justify-center items-center overflow-hidden transform hover:-translate-y-[calc(50%+10px)] transition-transform duration-500">
               {/* Background Ambient Effect */}
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_30%,rgba(255,255,255,0.2),transparent)] opacity-40 pointer-events-none"></div>
 
@@ -162,7 +235,7 @@ const SignUp = () => {
             </div>
 
             {/* Main Card Left Image */}
-            <div className="md:w-1/2 relative bg-slate-900 group overflow-hidden rounded-t-[30px] md:rounded-l-[30px] md:rounded-tr-none h-[280px] md:h-auto md:min-h-full flex flex-col justify-between p-8 md:p-12">
+            <div className="md:w-2/6 relative bg-slate-900 group overflow-hidden rounded-t-[30px] md:rounded-l-[30px] md:rounded-tr-none h-[280px] md:h-auto md:min-h-full flex flex-col justify-between p-8 md:p-12">
               {/* Background Layers */}
               <div className="absolute inset-0 z-0">
                 <div
@@ -178,7 +251,7 @@ const SignUp = () => {
               </div>
 
               {/* Top: Branding & Tag */}
-              <div className="relative z-20 flex flex-col lg:flex-row justify-between items-start space-y-4 lg:space-y-0">
+              <div className="relative z-20 flex flex-col justify-between items-start space-y-4">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-linear-to-br from-rose-500 to-red-600 flex items-center justify-center shadow-lg shadow-rose-500/20 text-white">
                     <MdBloodtype className="text-xl" />
@@ -199,11 +272,10 @@ const SignUp = () => {
                   </span>
                 </div>
               </div>
-
               {/* Right Squares */}
-              <div className="absolute bottom-8 right-8 z-20 flex md:flex-col gap-4">
+              <div className="flex md:flex-col justify-center items-center gap-2">
                 {/* Square 1: Give Blood */}
-                <div className="bg-white/10 backdrop-blur-xl border border-white/10 w-28 h-28 rounded-2xl shadow-lg flex flex-col items-center justify-center p-3 text-center transform hover:scale-105 transition-all duration-300 group">
+                <div className="bg-white/10 backdrop-blur-xl border border-white/10 w-28 h-28 rounded-2xl shadow-lg flex flex-col items-center justify-center p-3 text-center transform hover:scale-105 transition-all duration-300 group lg:hidden">
                   <div className="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center border border-emerald-500/30 mb-2 group-hover:scale-110 transition-transform">
                     <FaHandHoldingHeart className="text-emerald-400 text-sm" />
                   </div>
@@ -214,7 +286,6 @@ const SignUp = () => {
                     Donate Blood
                   </p>
                 </div>
-
                 {/* Square 2: Donors */}
                 <div className="bg-white/5 backdrop-blur-xl border border-white/5 w-28 h-28 rounded-2xl shadow-lg flex flex-col items-center justify-center p-3 text-center transform hover:scale-105 transition-all duration-300 delay-75">
                   <div className="flex -space-x-1.5 mb-2">
@@ -239,24 +310,11 @@ const SignUp = () => {
                     Joined Today
                   </p>
                 </div>
-
-                {/* Square 3: Find Center */}
-                <div className="bg-linear-to-br from-rose-600/80 to-rose-900/80 backdrop-blur-xl border border-rose-500/30 w-28 h-28 rounded-2xl shadow-lg hidden sm:flex flex-col items-center justify-center p-3 text-center transform hover:scale-105 transition-all duration-300 delay-150">
-                  <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center border border-white/20 mb-2 animate-pulse">
-                    <FaLocationDot className="text-white text-sm" />
-                  </div>
-                  <p className="text-white text-[10px] font-bold leading-tight">
-                    Find Donors
-                  </p>
-                  <p className="text-white/80 text-[9px] font-medium mt-0.5">
-                    Near You
-                  </p>
-                </div>
               </div>
             </div>
 
             {/* Main Card Right - Form */}
-            <div className="md:w-1/2 p-8 md:p-12 lg:p-16 bg-white rounded-b-[30px] md:rounded-r-[30px] md:rounded-bl-none flex flex-col justify-center">
+            <div className="md:w-4/6 p-8 md:p-12 lg:p-16 bg-white rounded-b-[30px] md:rounded-r-[30px] md:rounded-bl-none flex flex-col justify-center">
               <div className="mb-8">
                 <h3 className="text-2xl font-bold text-slate-800">
                   Join <span className="text-red-600">Vein.</span>
@@ -266,56 +324,149 @@ const SignUp = () => {
                 </p>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-5 mb-6">
-                <div>
-                  <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-1.5">
-                    Full Name
-                  </label>
-                  <input
-                    type="text"
-                    name="name"
-                    required
-                    placeholder="John Doe"
-                    className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-sm font-semibold text-slate-700 focus:outline-none focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 transition-all placeholder:text-slate-300 placeholder:font-normal"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-1.5">
-                    Email Address
-                  </label>
-                  <input
-                    type="email"
-                    name="email"
-                    required
-                    placeholder="name@company.com"
-                    className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-sm font-semibold text-slate-700 focus:outline-none focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 transition-all placeholder:text-slate-300 placeholder:font-normal"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-1.5">
-                    Password
-                  </label>
-                  <div className="relative">
+              <form onSubmit={handleSubmit} className="space-y-4 mb-6">
+                {/* Row 1: Name & Email */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-1.5">
+                      Full Name
+                    </label>
                     <input
-                      type={showPassword ? "text" : "password"}
-                      name="password"
+                      type="text"
+                      name="name"
                       required
-                      autoComplete="new-password"
-                      placeholder="••••••••"
-                      className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-sm font-semibold text-slate-700 focus:outline-none focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 transition-all placeholder:text-slate-300 placeholder:font-normal pr-10"
+                      placeholder="John Doe"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-sm font-semibold text-slate-700 focus:outline-none focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 transition-all placeholder:text-slate-300 placeholder:font-normal"
                     />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
-                    >
-                      {showPassword ? <FaEyeSlash /> : <FaEye />}
-                    </button>
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-1.5">
+                      Email Address
+                    </label>
+                    <input
+                      type="email"
+                      name="email"
+                      required
+                      placeholder="name@company.com"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-sm font-semibold text-slate-700 focus:outline-none focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 transition-all placeholder:text-slate-300 placeholder:font-normal"
+                    />
                   </div>
                 </div>
 
+                {/* Row 2: Password & Confirm Password */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-1.5">
+                      Password
+                    </label>
+                    <div className="relative">
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        name="password"
+                        required
+                        autoComplete="new-password"
+                        placeholder="••••••••"
+                        className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-sm font-semibold text-slate-700 focus:outline-none focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 transition-all placeholder:text-slate-300 placeholder:font-normal pr-10"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
+                      >
+                        {showPassword ? <FaEyeSlash /> : <FaEye />}
+                      </button>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-1.5">
+                      Confirm Password
+                    </label>
+                    <div className="relative">
+                      <input
+                        type={showConfirmPassword ? "text" : "password"}
+                        name="confirm_password"
+                        required
+                        autoComplete="new-password"
+                        placeholder="••••••••"
+                        className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-sm font-semibold text-slate-700 focus:outline-none focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 transition-all placeholder:text-slate-300 placeholder:font-normal pr-10"
+                      />
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setShowConfirmPassword(!showConfirmPassword)
+                        }
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
+                      >
+                        {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Row 3: Blood Group */}
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-1.5">
+                    Blood Group
+                  </label>
+                  <select
+                    name="blood_group"
+                    required
+                    className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-sm font-semibold text-slate-700 focus:outline-none focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 transition-all cursor-pointer"
+                  >
+                    <option value="">Select Blood Group</option>
+                    {bloodGroups.map((bg) => (
+                      <option key={bg} value={bg}>
+                        {bg}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Row 4: District & Upazila */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-1.5">
+                      District
+                    </label>
+                    <select
+                      name="district"
+                      required
+                      value={selectedDistrict}
+                      onChange={handleDistrictChange}
+                      className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-sm font-semibold text-slate-700 focus:outline-none focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 transition-all cursor-pointer"
+                    >
+                      <option value="">Select District</option>
+                      {districts.map((dist) => (
+                        <option key={dist.id} value={dist.id}>
+                          {dist.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-1.5">
+                      Upazila
+                    </label>
+                    <select
+                      name="upazila"
+                      required
+                      disabled={!selectedDistrict}
+                      className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-sm font-semibold text-slate-700 focus:outline-none focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      <option value="">Select Upazila</option>
+                      {upazilas.map((up) => (
+                        <option key={up.id} value={up.id}>
+                          {up.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                {/* Row 5: Profile Image */}
                 <div>
                   <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-1.5">
                     Profile Image
@@ -324,9 +475,10 @@ const SignUp = () => {
                     type="file"
                     name="image"
                     accept="image/*"
+                    required
                     className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-rose-50 file:text-rose-600 hover:file:bg-rose-100 transition-all cursor-pointer focus:outline-none focus:border-rose-500"
                   />
-                  <p className="mt-1 text-[10px] text-slate-400 font-medium">
+                  <p className="mt-1.5 text-[10px] text-slate-400 font-medium">
                     PNG, JPG or JPEG (max 2MB)
                   </p>
                 </div>
