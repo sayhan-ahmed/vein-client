@@ -47,7 +47,7 @@ const Navbar = () => {
       </section>
       <div className="sticky top-0 z-50 transition-all bg-white backdrop-blur-md shadow-xl py-2">
         <Container>
-          <div className="flex flex-row items-center justify-between gap-3 md:gap-0">
+          <div className="flex flex-row items-center justify-between gap-4 md:gap-0">
             {/* Logo - Always on Left */}
             <Link to="/" className="flex items-center">
               <h1 className="text-5xl font-extrabold cursor-pointer text-red-600 -mt-2.5 py-2">
@@ -56,21 +56,21 @@ const Navbar = () => {
             </Link>
 
             {/* Right Side Container (Desktop Links + Actions + User Menu) */}
-            <div className="flex items-center ml-auto gap-4 lg:gap-5">
+            <div className="flex items-center ml-auto gap-3 md:gap-4 lg:gap-6">
               {/* Desktop Links */}
-              <div className="hidden md:flex flex-row gap-4 lg:gap-8 font-medium items-center text-sm lg:text-base text-gray-600">
+              <div className="hidden md:flex flex-row gap-2 lg:gap-4 font-medium items-center text-sm lg:text-base text-gray-600">
                 {/* Home */}
                 <NavLink
                   to="/"
                   className={({ isActive }) =>
-                    `flex items-center gap-2 px-3 py-2 rounded-lg transition ${
+                    `flex items-center gap-1.5 px-3 py-2 rounded-lg transition ${
                       isActive
                         ? "bg-red-50/80 text-red-500 font-bold"
                         : "hover:bg-red-50 hover:text-red-500"
                     }`
                   }
                 >
-                  <FiHome className="text-lg" />
+                  <FiHome className="text-base lg:text-lg" />
                   <span>Home</span>
                 </NavLink>
 
@@ -78,14 +78,14 @@ const Navbar = () => {
                 <NavLink
                   to="/donation-requests"
                   className={({ isActive }) =>
-                    `flex items-center gap-2 px-3 py-2 rounded-lg transition ${
+                    `flex items-center gap-1.5 px-3 py-2 rounded-lg transition ${
                       isActive
                         ? "bg-red-50/80 text-red-500 font-bold"
                         : "hover:bg-red-50 hover:text-red-500"
                     }`
                   }
                 >
-                  <BiDonateHeart className="text-lg" />
+                  <BiDonateHeart className="text-base lg:text-lg" />
                   <span>Donation Requests</span>
                 </NavLink>
 
@@ -94,14 +94,14 @@ const Navbar = () => {
                   <NavLink
                     to="/funding"
                     className={({ isActive }) =>
-                      `flex items-center gap-2 px-3 py-2 rounded-lg transition ${
+                      `flex items-center gap-1.5 px-3 py-2 rounded-lg transition ${
                         isActive
                           ? "bg-red-50/80 text-red-500 font-bold"
                           : "hover:bg-red-50 hover:text-red-500"
                       }`
                     }
                   >
-                    <LiaDonateSolid className="text-lg" />
+                    <LiaDonateSolid className="text-base lg:text-lg" />
                     <span>Funding</span>
                   </NavLink>
                 )}
@@ -110,9 +110,9 @@ const Navbar = () => {
                 {user && (
                   <Link
                     to="/search"
-                    className="flex items-center gap-2 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition shadow-sm"
+                    className="flex items-center gap-1.5 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition shadow-sm font-semibold"
                   >
-                    <CiWarning className="text-xl" />
+                    <CiWarning className="text-lg" />
                     <span>Emergency</span>
                   </Link>
                 )}
@@ -124,13 +124,13 @@ const Navbar = () => {
                   )}
                 </div>
 
-                {/* Login (Logged Out) - Orange Button */}
+                {/* Login (Logged Out) */}
                 {!user && (
                   <Link
                     to="/login"
-                    className="flex items-center gap-2 bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition shadow-sm font-semibold"
+                    className="flex items-center gap-1.5 bg-red-600 text-white px-5 py-2 rounded-lg hover:bg-red-700 transition shadow-sm font-semibold"
                   >
-                    <FiLogIn className="text-xl" />
+                    <FiLogIn className="text-lg" />
                     <span>Login</span>
                   </Link>
                 )}
@@ -141,10 +141,10 @@ const Navbar = () => {
                 {user && (
                   <div
                     onClick={() => setIsOpen(!isOpen)}
-                    className="cursor-pointer transition ml-2"
+                    className="cursor-pointer transition hover:scale-105 duration-200"
                   >
                     <img
-                      className="rounded-full ring-2 ring-red-200 p-0.5 object-cover"
+                      className="w-12 h-12 rounded-full ring-2 ring-red-200 hover:ring-red-300 p-0.5 object-cover transition"
                       referrerPolicy="no-referrer"
                       src={user && user.photoURL ? user.photoURL : avatarImg}
                       alt="profile"
@@ -154,17 +154,19 @@ const Navbar = () => {
                   </div>
                 )}
 
-                {/* Mobile Menu Icon */}
-                <div
-                  onClick={() => setIsOpen(!isOpen)}
-                  className="md:hidden cursor-pointer p-2"
-                >
-                  <AiOutlineMenu className="text-2xl" />
-                </div>
+                {/* Mobile Menu Icon - Only show when NOT logged in */}
+                {!user && (
+                  <div
+                    onClick={() => setIsOpen(!isOpen)}
+                    className="md:hidden cursor-pointer p-2"
+                  >
+                    <AiOutlineMenu className="text-2xl" />
+                  </div>
+                )}
 
                 {/* Dropdown Menu */}
                 {isOpen && (
-                  <div className="absolute rounded-xl shadow-xl w-[300px] bg-white/90 backdrop-blur-xl overflow-hidden right-0 top-14 text-sm text-gray-700 z-50 border border-gray-100/50">
+                  <div className="absolute rounded-xl shadow-xl w-[300px] bg-white backdrop-blur-xl overflow-hidden right-0 top-14 text-sm text-gray-700 z-50 border border-gray-100/50">
                     {/* Dropdown Header */}
                     {user && (
                       <div className="p-4 border-b border-gray-200/50 bg-gray-50/30">

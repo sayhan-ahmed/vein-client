@@ -46,7 +46,7 @@ const Footer = () => {
           {/* Column 1: Brand */}
           <div>
             <Link to="/" className="flex items-center mb-4">
-              <IoWaterOutline className="text-5xl text-red-600 mb-1.5" />
+              <img src="https://i.postimg.cc/yxz0WknP/pngtree-hand-holding-red-blood-drop-clipart-png-image-13364982.png" alt="website logo" className="w-12 h-12" />
               <h1 className="text-4xl font-bold">Vein.</h1>
             </Link>
             <p className="text-gray-400 text-sm leading-relaxed">
