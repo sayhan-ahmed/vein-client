@@ -43,3 +43,4 @@
 
 1. lottie animation
 2. sweet alert
+3. react-hook-form

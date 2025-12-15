@@ -1,5 +1,6 @@
 import { Link, useLocation, useNavigate } from "react-router";
 import { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import useAuth from "../../hooks/useAuth";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
@@ -27,15 +28,25 @@ const SignUp = () => {
   const location = useLocation();
   const from = location.state || "/";
 
+  // React Hook Form
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
+
   // States
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [districts, setDistricts] = useState([]);
   const [upazilas, setUpazilas] = useState([]);
-  const [selectedDistrict, setSelectedDistrict] = useState("");
 
   // Blood Groups
   const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
+
+  // Watch district field for upazila filtering
+  const selectedDistrict = watch("district");
 
   // Load Districts on Mount
   useEffect(() => {
@@ -58,36 +69,32 @@ const SignUp = () => {
     }
   }, [selectedDistrict]);
 
-  const handleDistrictChange = (e) => {
-    setSelectedDistrict(e.target.value);
-  };
-
   // Form Submit Handler
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const form = event.target;
-
-    const name = form.name.value;
-    const email = form.email.value;
-    const password = form.password.value;
-    const confirmPassword = form.confirm_password.value;
-    const bloodGroup = form.blood_group.value;
-    const districtId = form.district.value;
-    const upazilaId = form.upazila.value;
-    const imageFile = form.image.files[0];
-
-    const districtObj = districts.find((d) => d.id === districtId);
-    const upazilaObj = upazilas.find((u) => u.id === upazilaId);
+  const onSubmit = async (data) => {
+    const {
+      name,
+      email,
+      password,
+      confirm_password,
+      blood_group,
+      district,
+      upazila,
+      image,
+    } = data;
 
     // Validation
-    if (password !== confirmPassword) {
+    if (password !== confirm_password) {
       toast.error("Passwords do not match!");
       return;
     }
-    if (!imageFile) {
+    if (!image || image.length === 0) {
       toast.error("Please upload a profile image.");
       return;
     }
+
+    const imageFile = image[0];
+    const districtObj = districts.find((d) => d.id === district);
+    const upazilaObj = upazilas.find((u) => u.id === upazila);
 
     try {
       setLoading(true);
@@ -98,25 +105,37 @@ const SignUp = () => {
       // 2. Create Firebase User
       const result = await createUser(email, password);
 
-      // 3. Update Firebase Profile
-      await updateUserProfile(name, imageUrl);
+      try {
+        // 3. Update Firebase Profile
+        await updateUserProfile(name, imageUrl);
 
-      // 4. Save User to Database
-      const userInfo = {
-        name,
-        email,
-        image: imageUrl,
-        bloodGroup,
-        district: districtObj?.name,
-        upazila: upazilaObj?.name,
-        role: "donor",
-        status: "active",
-      };
+        // 4. Save User to Database
+        const userInfo = {
+          name,
+          email,
+          image: imageUrl,
+          bloodGroup: blood_group,
+          district: districtObj?.name,
+          upazila: upazilaObj?.name,
+          role: "donor",
+          status: "active",
+        };
 
-      await axiosPublic.post("/users", userInfo);
+        await axiosPublic.post("/users", userInfo);
 
-      toast.success("Signup Successful");
-      navigate(from, { replace: true });
+        toast.success("Signup Successful");
+        navigate(from, { replace: true });
+      } catch (err) {
+        // Rollback: Delete the user from Firebase if DB/Profile update fails
+        console.error("Backend error, rolling back firebase user:", err);
+        const user = result.user; // Use the user from creation result
+        if (user) {
+          await user
+            .delete()
+            .catch((deleteErr) => console.error("Rollback failed", deleteErr));
+        }
+        throw new Error("Registration failed: Server error. Please try again.");
+      }
     } catch (err) {
       console.error(err);
       toast.error(err?.message || "Registration failed");
@@ -324,7 +343,10 @@ const SignUp = () => {
                 </p>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-4 mb-6">
+              <form
+                onSubmit={handleSubmit(onSubmit)}
+                className="space-y-4 mb-6"
+              >
                 {/* Row 1: Name & Email */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
@@ -333,11 +355,21 @@ const SignUp = () => {
                     </label>
                     <input
                       type="text"
-                      name="name"
-                      required
+                      {...register("name", {
+                        required: "Name is required",
+                        minLength: {
+                          value: 2,
+                          message: "Name must be at least 2 characters",
+                        },
+                      })}
                       placeholder="John Doe"
                       className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-sm font-semibold text-slate-700 focus:outline-none focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 transition-all placeholder:text-slate-300 placeholder:font-normal"
                     />
+                    {errors.name && (
+                      <p className="mt-1 text-xs text-red-600 font-medium">
+                        {errors.name.message}
+                      </p>
+                    )}
                   </div>
 
                   <div>
@@ -346,11 +378,21 @@ const SignUp = () => {
                     </label>
                     <input
                       type="email"
-                      name="email"
-                      required
+                      {...register("email", {
+                        required: "Email is required",
+                        pattern: {
+                          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                          message: "Invalid email address",
+                        },
+                      })}
                       placeholder="name@company.com"
                       className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-sm font-semibold text-slate-700 focus:outline-none focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 transition-all placeholder:text-slate-300 placeholder:font-normal"
                     />
+                    {errors.email && (
+                      <p className="mt-1 text-xs text-red-600 font-medium">
+                        {errors.email.message}
+                      </p>
+                    )}
                   </div>
                 </div>
 
@@ -363,8 +405,13 @@ const SignUp = () => {
                     <div className="relative">
                       <input
                         type={showPassword ? "text" : "password"}
-                        name="password"
-                        required
+                        {...register("password", {
+                          required: "Password is required",
+                          minLength: {
+                            value: 6,
+                            message: "Password must be at least 6 characters",
+                          },
+                        })}
                         autoComplete="new-password"
                         placeholder="••••••••"
                         className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-sm font-semibold text-slate-700 focus:outline-none focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 transition-all placeholder:text-slate-300 placeholder:font-normal pr-10"
@@ -377,6 +424,11 @@ const SignUp = () => {
                         {showPassword ? <FaEyeSlash /> : <FaEye />}
                       </button>
                     </div>
+                    {errors.password && (
+                      <p className="mt-1 text-xs text-red-600 font-medium">
+                        {errors.password.message}
+                      </p>
+                    )}
                   </div>
 
                   <div>
@@ -386,8 +438,9 @@ const SignUp = () => {
                     <div className="relative">
                       <input
                         type={showConfirmPassword ? "text" : "password"}
-                        name="confirm_password"
-                        required
+                        {...register("confirm_password", {
+                          required: "Please confirm your password",
+                        })}
                         autoComplete="new-password"
                         placeholder="••••••••"
                         className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-sm font-semibold text-slate-700 focus:outline-none focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 transition-all placeholder:text-slate-300 placeholder:font-normal pr-10"
@@ -402,6 +455,11 @@ const SignUp = () => {
                         {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
                       </button>
                     </div>
+                    {errors.confirm_password && (
+                      <p className="mt-1 text-xs text-red-600 font-medium">
+                        {errors.confirm_password.message}
+                      </p>
+                    )}
                   </div>
                 </div>
 
@@ -411,8 +469,9 @@ const SignUp = () => {
                     Blood Group
                   </label>
                   <select
-                    name="blood_group"
-                    required
+                    {...register("blood_group", {
+                      required: "Blood group is required",
+                    })}
                     className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-sm font-semibold text-slate-700 focus:outline-none focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 transition-all cursor-pointer"
                   >
                     <option value="">Select Blood Group</option>
@@ -422,6 +481,11 @@ const SignUp = () => {
                       </option>
                     ))}
                   </select>
+                  {errors.blood_group && (
+                    <p className="mt-1 text-xs text-red-600 font-medium">
+                      {errors.blood_group.message}
+                    </p>
+                  )}
                 </div>
 
                 {/* Row 4: District & Upazila */}
@@ -431,10 +495,9 @@ const SignUp = () => {
                       District
                     </label>
                     <select
-                      name="district"
-                      required
-                      value={selectedDistrict}
-                      onChange={handleDistrictChange}
+                      {...register("district", {
+                        required: "District is required",
+                      })}
                       className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-sm font-semibold text-slate-700 focus:outline-none focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 transition-all cursor-pointer"
                     >
                       <option value="">Select District</option>
@@ -444,6 +507,11 @@ const SignUp = () => {
                         </option>
                       ))}
                     </select>
+                    {errors.district && (
+                      <p className="mt-1 text-xs text-red-600 font-medium">
+                        {errors.district.message}
+                      </p>
+                    )}
                   </div>
 
                   <div>
@@ -451,8 +519,9 @@ const SignUp = () => {
                       Upazila
                     </label>
                     <select
-                      name="upazila"
-                      required
+                      {...register("upazila", {
+                        required: "Upazila is required",
+                      })}
                       disabled={!selectedDistrict}
                       className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-sm font-semibold text-slate-700 focus:outline-none focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                     >
@@ -463,6 +532,11 @@ const SignUp = () => {
                         </option>
                       ))}
                     </select>
+                    {errors.upazila && (
+                      <p className="mt-1 text-xs text-red-600 font-medium">
+                        {errors.upazila.message}
+                      </p>
+                    )}
                   </div>
                 </div>
 
@@ -473,14 +547,47 @@ const SignUp = () => {
                   </label>
                   <input
                     type="file"
-                    name="image"
+                    {...register("image", {
+                      required: "Profile image is required",
+                      validate: {
+                        fileSize: (files) => {
+                          if (files && files[0]) {
+                            return (
+                              files[0].size <= 2000000 ||
+                              "File size must be less than 2MB"
+                            );
+                          }
+                          return true;
+                        },
+                        fileType: (files) => {
+                          if (files && files[0]) {
+                            const validTypes = [
+                              "image/jpeg",
+                              "image/jpg",
+                              "image/png",
+                            ];
+                            return (
+                              validTypes.includes(files[0].type) ||
+                              "Only PNG, JPG, or JPEG files are allowed"
+                            );
+                          }
+                          return true;
+                        },
+                      },
+                    })}
                     accept="image/*"
-                    required
                     className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-rose-50 file:text-rose-600 hover:file:bg-rose-100 transition-all cursor-pointer focus:outline-none focus:border-rose-500"
                   />
-                  <p className="mt-1.5 text-[10px] text-slate-400 font-medium">
-                    PNG, JPG or JPEG (max 2MB)
-                  </p>
+                  {errors.image && (
+                    <p className="mt-1 text-xs text-red-600 font-medium">
+                      {errors.image.message}
+                    </p>
+                  )}
+                  {!errors.image && (
+                    <p className="mt-1.5 text-[10px] text-slate-400 font-medium">
+                      PNG, JPG or JPEG (max 2MB)
+                    </p>
+                  )}
                 </div>
 
                 <button
