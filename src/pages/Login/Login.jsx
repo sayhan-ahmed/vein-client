@@ -1,5 +1,6 @@
 import { Link, Navigate, useLocation, useNavigate } from "react-router";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import useAuth from "../../hooks/useAuth";
 import { TbDropletFilled } from "react-icons/tb";
@@ -22,15 +23,19 @@ const Login = () => {
   const [isReset, setIsReset] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = useForm();
+
   const from = location.state?.from || location.state || "/";
 
   if (user) return <Navigate to={from} replace={true} />;
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const form = event.target;
-    const email = form.email.value;
-    const password = form.password.value;
+  const onLogin = async (data) => {
+    const { email, password } = data;
 
     try {
       await signIn(email, password);
@@ -38,14 +43,27 @@ const Login = () => {
       toast.success("Login Successful");
     } catch (err) {
       console.log(err);
-      toast.error(err?.message);
       setLoading(false);
+
+      // Handle identifying specific errors
+      if (
+        err.code === "auth/wrong-password" ||
+        err.code === "auth/invalid-credential" ||
+        err.code === "auth/user-not-found" ||
+        err.code === "auth/invalid-email"
+      ) {
+        setError("password", {
+          type: "manual",
+          message: "Incorrect email or password",
+        });
+      } else {
+        toast.error(err?.message || "Login failed");
+      }
     }
   };
 
-  const handleReset = async (event) => {
-    event.preventDefault();
-    const email = event.target.email.value;
+  const onReset = async (data) => {
+    const { email } = data;
     if (!email) return toast.error("Please enter your email");
 
     try {
@@ -54,7 +72,11 @@ const Login = () => {
       setIsReset(false);
     } catch (err) {
       console.log(err);
-      toast.error(err?.message);
+      if (err.code === "auth/user-not-found") {
+        setError("email", { type: "manual", message: "User not found" });
+      } else {
+        toast.error(err?.message);
+      }
     } finally {
       setLoading(false);
     }
@@ -284,18 +306,31 @@ const Login = () => {
 
               {!isReset ? (
                 /* Login Form */
-                <form onSubmit={handleSubmit} className="space-y-5 mb-6">
+                <form
+                  onSubmit={handleSubmit(onLogin)}
+                  className="space-y-5 mb-6"
+                >
                   <div>
                     <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-1.5">
                       Email Address
                     </label>
                     <input
                       type="email"
-                      name="email"
-                      required
+                      {...register("email", {
+                        required: "Email is required",
+                        pattern: {
+                          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                          message: "Invalid email address",
+                        },
+                      })}
                       placeholder="name@company.com"
                       className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-sm font-semibold text-slate-700 focus:outline-none focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 transition-all placeholder:text-slate-300 placeholder:font-normal"
                     />
+                    {errors.email && (
+                      <p className="mt-1 text-xs text-red-600 font-medium">
+                        {errors.email.message}
+                      </p>
+                    )}
                   </div>
                   <div>
                     <div className="flex justify-between items-center mb-1.5">
@@ -313,8 +348,13 @@ const Login = () => {
                     <div className="relative">
                       <input
                         type={showPassword ? "text" : "password"}
-                        name="password"
-                        required
+                        {...register("password", {
+                          required: "Password is required",
+                          minLength: {
+                            value: 6,
+                            message: "Password must be at least 6 characters",
+                          },
+                        })}
                         autoComplete="current-password"
                         placeholder="••••••••"
                         className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-sm font-semibold text-slate-700 focus:outline-none focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 transition-all placeholder:text-slate-300 placeholder:font-normal pr-10"
@@ -327,6 +367,11 @@ const Login = () => {
                         {showPassword ? <FaEyeSlash /> : <FaEye />}
                       </button>
                     </div>
+                    {errors.password && (
+                      <p className="mt-1 text-xs text-red-600 font-medium">
+                        {errors.password.message}
+                      </p>
+                    )}
                   </div>
 
                   <div className="flex items-center gap-2 mb-6">
@@ -368,18 +413,31 @@ const Login = () => {
                 </form>
               ) : (
                 /* Reset Form */
-                <form onSubmit={handleReset} className="space-y-6 mb-6">
+                <form
+                  onSubmit={handleSubmit(onReset)}
+                  className="space-y-6 mb-6"
+                >
                   <div>
                     <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-1.5">
                       Email Address
                     </label>
                     <input
                       type="email"
-                      name="email"
-                      required
+                      {...register("email", {
+                        required: "Email is required",
+                        pattern: {
+                          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                          message: "Invalid email address",
+                        },
+                      })}
                       placeholder="name@company.com"
                       className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-sm font-semibold text-slate-700 focus:outline-none focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 transition-all placeholder:text-slate-300 placeholder:font-normal"
                     />
+                    {errors.email && (
+                      <p className="mt-1 text-xs text-red-600 font-medium">
+                        {errors.email.message}
+                      </p>
+                    )}
                   </div>
                   <button
                     type="submit"
