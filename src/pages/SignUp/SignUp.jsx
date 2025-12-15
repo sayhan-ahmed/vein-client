@@ -13,6 +13,7 @@ import {
   FaHandHoldingHeart,
   FaEye,
   FaEyeSlash,
+  FaChevronDown,
 } from "react-icons/fa6";
 import { ImSpinner9 } from "react-icons/im";
 import { FcGoogle } from "react-icons/fc";
@@ -468,19 +469,24 @@ const SignUp = () => {
                   <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-1.5">
                     Blood Group
                   </label>
-                  <select
-                    {...register("blood_group", {
-                      required: "Blood group is required",
-                    })}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-sm font-semibold text-slate-700 focus:outline-none focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 transition-all cursor-pointer"
-                  >
-                    <option value="">Select Blood Group</option>
-                    {bloodGroups.map((bg) => (
-                      <option key={bg} value={bg}>
-                        {bg}
-                      </option>
-                    ))}
-                  </select>
+                  <div className="relative">
+                    <select
+                      {...register("blood_group", {
+                        required: "Blood group is required",
+                      })}
+                      className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-sm font-semibold text-slate-700 focus:outline-none focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 transition-all cursor-pointer appearance-none"
+                    >
+                      <option value="">Select Blood Group</option>
+                      {bloodGroups.map((bg) => (
+                        <option key={bg} value={bg}>
+                          {bg}
+                        </option>
+                      ))}
+                    </select>
+                    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
+                      <FaChevronDown size={13} />
+                    </div>
+                  </div>
                   {errors.blood_group && (
                     <p className="mt-1 text-xs text-red-600 font-medium">
                       {errors.blood_group.message}
@@ -494,19 +500,24 @@ const SignUp = () => {
                     <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-1.5">
                       District
                     </label>
-                    <select
-                      {...register("district", {
-                        required: "District is required",
-                      })}
-                      className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-sm font-semibold text-slate-700 focus:outline-none focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 transition-all cursor-pointer"
-                    >
-                      <option value="">Select District</option>
-                      {districts.map((dist) => (
-                        <option key={dist.id} value={dist.id}>
-                          {dist.name}
-                        </option>
-                      ))}
-                    </select>
+                    <div className="relative">
+                      <select
+                        {...register("district", {
+                          required: "District is required",
+                        })}
+                        className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-sm font-semibold text-slate-700 focus:outline-none focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 transition-all cursor-pointer appearance-none"
+                      >
+                        <option value="">Select District</option>
+                        {districts.map((dist) => (
+                          <option key={dist.id} value={dist.id}>
+                            {dist.name}
+                          </option>
+                        ))}
+                      </select>
+                      <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
+                        <FaChevronDown size={13} />
+                      </div>
+                    </div>
                     {errors.district && (
                       <p className="mt-1 text-xs text-red-600 font-medium">
                         {errors.district.message}
@@ -518,20 +529,25 @@ const SignUp = () => {
                     <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-1.5">
                       Upazila
                     </label>
-                    <select
-                      {...register("upazila", {
-                        required: "Upazila is required",
-                      })}
-                      disabled={!selectedDistrict}
-                      className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-sm font-semibold text-slate-700 focus:outline-none focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      <option value="">Select Upazila</option>
-                      {upazilas.map((up) => (
-                        <option key={up.id} value={up.id}>
-                          {up.name}
-                        </option>
-                      ))}
-                    </select>
+                    <div className="relative">
+                      <select
+                        {...register("upazila", {
+                          required: "Upazila is required",
+                        })}
+                        disabled={!selectedDistrict}
+                        className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-sm font-semibold text-slate-700 focus:outline-none focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed appearance-none"
+                      >
+                        <option value="">Select Upazila</option>
+                        {upazilas.map((up) => (
+                          <option key={up.id} value={up.id}>
+                            {up.name}
+                          </option>
+                        ))}
+                      </select>
+                      <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
+                        <FaChevronDown size={13} />
+                      </div>
+                    </div>
                     {errors.upazila && (
                       <p className="mt-1 text-xs text-red-600 font-medium">
                         {errors.upazila.message}
