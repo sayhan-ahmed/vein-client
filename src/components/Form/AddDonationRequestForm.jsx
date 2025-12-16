@@ -1,118 +1,226 @@
-const AddDonationRequestForm = () => {
+import { useForm } from "react-hook-form";
+
+const AddDonationRequestForm = ({ onSubmit, user, loading }) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
   return (
-    <div className="w-full min-h-[calc(100vh-40px)] flex flex-col justify-center items-center text-gray-800 rounded-xl bg-gray-50">
-      <form>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-          <div className="space-y-6">
-            {/* Name */}
-            <div className="space-y-1 text-sm">
-              <label htmlFor="name" className="block text-gray-600">
-                Blood Group
-              </label>
-              <input
-                className="w-full px-4 py-3 text-gray-800 border border-lime-300 focus:outline-lime-500 rounded-md bg-white"
-                name="name"
-                id="name"
-                type="text"
-                placeholder="Blood Group"
-                required
-              />
-            </div>
-            {/* Category */}
-            <div className="space-y-1 text-sm">
-              <label htmlFor="category" className="block text-gray-600 ">
-                Category
-              </label>
-              <select
-                required
-                className="w-full px-4 py-3 border-lime-300 focus:outline-lime-500 rounded-md bg-white"
-                name="category"
-              >
-                <option value="Indoor">Whole Blood</option>
-                <option value="Outdoor">Plasma</option>
-                <option value="Succulent">Platelets</option>
-                <option value="Flowering">RBC</option>
-              </select>
-            </div>
-            {/* Description */}
-            <div className="space-y-1 text-sm">
-              <label htmlFor="description" className="block text-gray-600">
-                Description
-              </label>
-
-              <textarea
-                id="description"
-                placeholder="Write donation description here..."
-                className="block rounded-md focus:lime-300 w-full h-32 px-4 py-3 text-gray-800  border border-lime-300 bg-white focus:outline-lime-500 "
-                name="description"
-              ></textarea>
-            </div>
-          </div>
-          <div className="space-y-6 flex flex-col">
-            {/* Price & Quantity */}
-            <div className="flex justify-between gap-2">
-              {/* Price */}
-              <div className="space-y-1 text-sm">
-                <label htmlFor="price" className="block text-gray-600 ">
-                  Processing Fee
-                </label>
-                <input
-                  className="w-full px-4 py-3 text-gray-800 border border-lime-300 focus:outline-lime-500 rounded-md bg-white"
-                  name="price"
-                  id="price"
-                  type="number"
-                  placeholder="Fee per unit"
-                  required
-                />
-              </div>
-
-              {/* Quantity */}
-              <div className="space-y-1 text-sm">
-                <label htmlFor="quantity" className="block text-gray-600">
-                  Quantity
-                </label>
-                <input
-                  className="w-full px-4 py-3 text-gray-800 border border-lime-300 focus:outline-lime-500 rounded-md bg-white"
-                  name="quantity"
-                  id="quantity"
-                  type="number"
-                  placeholder="Available quantity"
-                  required
-                />
-              </div>
-            </div>
-            {/* Image */}
-            <div className=" p-4  w-full  m-auto rounded-lg grow">
-              <div className="file_upload px-5 py-3 relative border-4 border-dotted border-gray-300 rounded-lg">
-                <div className="flex flex-col w-max mx-auto text-center">
-                  <label>
-                    <input
-                      className="text-sm cursor-pointer w-36 hidden"
-                      type="file"
-                      name="image"
-                      id="image"
-                      accept="image/*"
-                      hidden
-                    />
-                    <div className="bg-lime-500 text-white border border-gray-300 rounded font-semibold cursor-pointer p-1 px-3 hover:bg-lime-500">
-                      Upload
-                    </div>
-                  </label>
-                </div>
-              </div>
-            </div>
-
-            {/* Submit Button */}
-            <button
-              type="submit"
-              className="w-full cursor-pointer p-3 mt-5 text-center font-medium text-white transition duration-200 rounded shadow-md bg-lime-500 "
-            >
-              Save & Continue
-            </button>
-          </div>
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-12">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Requester Name (Read Only) */}
+        <div className="space-y-2">
+          <label className="block text-sm font-medium">Requester Name</label>
+          <input
+            type="text"
+            defaultValue={user?.displayName}
+            readOnly
+            className="w-full px-3 py-2 border rounded-md bg-gray-200 text-gray-600 cursor-not-allowed"
+          />
         </div>
-      </form>
-    </div>
+
+        {/* Requester Email (Read Only) */}
+        <div className="space-y-2">
+          <label className="block text-sm font-medium">Requester Email</label>
+          <input
+            type="email"
+            defaultValue={user?.email}
+            readOnly
+            className="w-full px-3 py-2 border rounded-md bg-gray-200 text-gray-600 cursor-not-allowed"
+          />
+        </div>
+
+        {/* Recipient Name */}
+        <div className="space-y-2">
+          <label className="block text-sm font-medium">Recipient Name</label>
+          <input
+            type="text"
+            placeholder="Who needs blood?"
+            {...register("recipientName", {
+              required: "Recipient Name is required",
+            })}
+            className="w-full px-3 py-2 border rounded-md focus:outline-red-500 bg-white"
+          />
+          {errors.recipientName && (
+            <span className="text-red-500 text-sm">
+              {errors.recipientName.message}
+            </span>
+          )}
+        </div>
+
+        {/* Blood Group */}
+        <div className="space-y-2">
+          <label className="block text-sm font-medium">Blood Group</label>
+          <select
+            {...register("bloodGroup", { required: "Blood Group is required" })}
+            className="w-full px-3 py-2 border rounded-md focus:outline-red-500 bg-white"
+          >
+            <option value="">Select Blood Group</option>
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B-">B-</option>
+            <option value="AB+">AB+</option>
+            <option value="AB-">AB-</option>
+            <option value="O+">O+</option>
+            <option value="O-">O-</option>
+          </select>
+          {errors.bloodGroup && (
+            <span className="text-red-500 text-sm">
+              {errors.bloodGroup.message}
+            </span>
+          )}
+        </div>
+
+        {/* 🆕 Blood Type (Dropdown) */}
+        <div className="space-y-2">
+          <label className="block text-sm font-medium">Blood Type</label>
+          <select
+            {...register("bloodType", { required: "Blood Type is required" })}
+            className="w-full px-3 py-2 border rounded-md focus:outline-red-500 bg-white"
+          >
+            <option value="">Select Blood Type</option>
+            <option value="Whole Blood">Whole Blood</option>
+            <option value="Platelets">Platelets</option>
+            <option value="Plasma">Plasma</option>
+            <option value="Red Blood Cells">Red Blood Cells</option>
+          </select>
+          {errors.bloodType && (
+            <span className="text-red-500 text-sm">
+              {errors.bloodType.message}
+            </span>
+          )}
+        </div>
+
+        {/* District */}
+        <div className="space-y-2">
+          <label className="block text-sm font-medium">
+            Recipient District
+          </label>
+          <input
+            type="text"
+            placeholder="e.g., Dhaka"
+            {...register("recipientDistrict", {
+              required: "District is required",
+            })}
+            className="w-full px-3 py-2 border rounded-md focus:outline-red-500 bg-white"
+          />
+          {errors.recipientDistrict && (
+            <span className="text-red-500 text-sm">
+              {errors.recipientDistrict.message}
+            </span>
+          )}
+        </div>
+
+        {/* Upazila */}
+        <div className="space-y-2">
+          <label className="block text-sm font-medium">Recipient Upazila</label>
+          <input
+            type="text"
+            placeholder="e.g., Mirpur"
+            {...register("recipientUpazila", {
+              required: "Upazila is required",
+            })}
+            className="w-full px-3 py-2 border rounded-md focus:outline-red-500 bg-white"
+          />
+          {errors.recipientUpazila && (
+            <span className="text-red-500 text-sm">
+              {errors.recipientUpazila.message}
+            </span>
+          )}
+        </div>
+
+        {/* Hospital Name */}
+        <div className="space-y-2">
+          <label className="block text-sm font-medium">Hospital Name</label>
+          <input
+            type="text"
+            placeholder="e.g., Dhaka Medical College"
+            {...register("hospitalName", {
+              required: "Hospital Name is required",
+            })}
+            className="w-full px-3 py-2 border rounded-md focus:outline-red-500 bg-white"
+          />
+          {errors.hospitalName && (
+            <span className="text-red-500 text-sm">
+              {errors.hospitalName.message}
+            </span>
+          )}
+        </div>
+
+        {/* Full Address */}
+        <div className="space-y-2">
+          <label className="block text-sm font-medium">Full Address Line</label>
+          <input
+            type="text"
+            placeholder="e.g., Ward 4, Bed 12"
+            {...register("fullAddress", { required: "Address is required" })}
+            className="w-full px-3 py-2 border rounded-md focus:outline-red-500 bg-white"
+          />
+          {errors.fullAddress && (
+            <span className="text-red-500 text-sm">
+              {errors.fullAddress.message}
+            </span>
+          )}
+        </div>
+
+        {/* Date */}
+        <div className="space-y-2">
+          <label className="block text-sm font-medium">Donation Date</label>
+          <input
+            type="date"
+            {...register("donationDate", { required: "Date is required" })}
+            className="w-full px-3 py-2 border rounded-md focus:outline-red-500 bg-white"
+          />
+          {errors.donationDate && (
+            <span className="text-red-500 text-sm">
+              {errors.donationDate.message}
+            </span>
+          )}
+        </div>
+
+        {/* Time */}
+        <div className="space-y-2">
+          <label className="block text-sm font-medium">Donation Time</label>
+          <input
+            type="time"
+            {...register("donationTime", { required: "Time is required" })}
+            className="w-full px-3 py-2 border rounded-md focus:outline-red-500 bg-white"
+          />
+          {errors.donationTime && (
+            <span className="text-red-500 text-sm">
+              {errors.donationTime.message}
+            </span>
+          )}
+        </div>
+
+        {/* Message */}
+        <div className="col-span-1 md:col-span-2 space-y-2">
+          <label className="block text-sm font-medium">Request Message</label>
+          <textarea
+            placeholder="Any specific details? (e.g., Urgent, patient condition)"
+            rows="3"
+            {...register("requestMessage", { required: "Message is required" })}
+            className="w-full px-3 py-2 border rounded-md focus:outline-red-500 bg-white"
+          ></textarea>
+          {errors.requestMessage && (
+            <span className="text-red-500 text-sm">
+              {errors.requestMessage.message}
+            </span>
+          )}
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        disabled={loading}
+        className="w-full p-3 text-center font-medium text-white transition duration-200 rounded shadow-md bg-red-600 hover:bg-red-700 disabled:bg-gray-400"
+      >
+        {loading ? "Creating Request..." : "Request Donation"}
+      </button>
+    </form>
   );
 };
 
