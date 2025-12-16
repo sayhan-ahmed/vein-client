@@ -1,5 +1,16 @@
-import React from "react";
+import { FaUserEdit } from "react-icons/fa";
+import MenuItem from "./MenuItem";
 
-export default function VolunteerMenu() {
-  return <div>VolunteerMenu</div>;
-}
+const VolunteerMenu = () => {
+  return (
+    <>
+      <MenuItem
+        icon={FaUserEdit}
+        label="My Recipient Requests"
+        address="my-recipient-requests"
+      />
+    </>
+  );
+};
+
+export default VolunteerMenu;
