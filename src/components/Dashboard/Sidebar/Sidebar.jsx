@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Link } from "react-router";
 import useAuth from "../../../hooks/useAuth";
+import useRole from "../../../hooks/useRole";
+
 // Icons
-import { GrLogout } from "react-icons/gr";
 import { FcSettings } from "react-icons/fc";
 import { AiOutlineBars } from "react-icons/ai";
 import { BsGraphUp } from "react-icons/bs";
@@ -10,12 +11,13 @@ import { BsGraphUp } from "react-icons/bs";
 // User Menu
 import MenuItem from "./Menu/MenuItem";
 import AdminMenu from "./Menu/AdminMenu";
-import DonorMenu from "./Menu/DonorMenu";
 import VolunteerMenu from "./Menu/VolunteerMenu";
+import DonorMenu from "./Menu/DonorMenu";
 
 const Sidebar = () => {
   const { logOut } = useAuth();
   const [isActive, setActive] = useState(false);
+  const [role] = useRole();
 
   // Sidebar Responsive Handler
   const handleToggle = () => {
@@ -24,13 +26,11 @@ const Sidebar = () => {
 
   return (
     <>
-      {/* Small Screen Navbar, only visible till md breakpoint */}
+      {/* Mobile Screen Navbar */}
       <div className="bg-gray-100 text-gray-800 flex justify-between md:hidden">
         <div>
           <div className="block cursor-pointer p-4 font-bold">
-            <Link to="/">
-              <h1>Vein.</h1>
-            </Link>
+            <Link to="/">Vein.</Link>
           </div>
         </div>
 
@@ -48,52 +48,49 @@ const Sidebar = () => {
           isActive && "-translate-x-full"
         }  md:translate-x-0  transition duration-200 ease-in-out`}
       >
-        <div className="flex flex-col h-full">
-          {/* Top Content */}
+        <div>
           <div>
-            {/* Logo */}
-            <div className="w-full hidden md:flex px-4 py-2 shadow-lg rounded-lg justify-center items-center bg-lime-100 mx-auto">
+            <div className="w-full hidden md:flex px-4 py-2 shadow-lg rounded-lg justify-center items-center bg-rose-100 mx-auto">
               <Link to="/">
-                <h1>Vein.</h1>
+                <h2 className="text-2xl font-bold text-red-600">Vein.</h2>
               </Link>
             </div>
           </div>
 
-          {/* Middle Content */}
+          {/* Nav Items */}
           <div className="flex flex-col justify-between flex-1 mt-6">
-            {/*  Menu Items */}
             <nav>
-              {/* Common Menu */}
+              {/* Statistics - Visible to Everyone */}
               <MenuItem
-                icon={BsGraphUp}
                 label="Statistics"
                 address="/dashboard"
+                icon={BsGraphUp}
               />
-              {/* Role-Based Menu */}
-              <VolunteerMenu />
-              <DonorMenu />
-              <AdminMenu />
+
+              {/* Dynamic Menu Based on Role */}
+              {role === "admin" && <AdminMenu />}
+              {role === "volunteer" && <VolunteerMenu />}
+              {role === "donor" && <DonorMenu />}
             </nav>
           </div>
+        </div>
 
-          {/* Bottom Content */}
-          <div>
-            <hr />
+        <div>
+          <hr />
 
-            <MenuItem
-              icon={FcSettings}
-              label="Profile"
-              address="/dashboard/profile"
-            />
-            <button
-              onClick={logOut}
-              className="flex cursor-pointer w-full items-center px-4 py-2 mt-5 text-gray-600 hover:bg-gray-300   hover:text-gray-700 transition-colors duration-300 transform"
-            >
-              <GrLogout className="w-5 h-5" />
+          {/* Profile - Visible to Everyone */}
+          <MenuItem
+            label="Profile"
+            address="/dashboard/profile"
+            icon={FcSettings}
+          />
 
-              <span className="mx-4 font-medium">Logout</span>
-            </button>
-          </div>
+          <button
+            onClick={logOut}
+            className="flex w-full items-center px-4 py-2 mt-5 text-gray-600 hover:bg-gray-300   hover:text-gray-700 transition-colors duration-300 transform"
+          >
+            <span className="mx-4 font-medium">Logout</span>
+          </button>
         </div>
       </div>
     </>
