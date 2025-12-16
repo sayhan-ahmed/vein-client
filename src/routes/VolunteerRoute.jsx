@@ -6,7 +6,12 @@ const VolunteerRoute = ({ children }) => {
   const [role, isLoading] = useRole();
   const location = useLocation();
 
-  if (isLoading) return <Loader />;
+  if (isLoading)
+    return (
+      <div className="flex justify-center items-center min-h-[80vh]">
+        <Loader />
+      </div>
+    );
 
   if (role === "volunteer") return children;
 

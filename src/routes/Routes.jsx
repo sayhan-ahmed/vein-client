@@ -1,9 +1,9 @@
+import { createBrowserRouter } from "react-router";
 import Home from "../pages/Home/Home";
 import ErrorPage from "../pages/ErrorPage";
 import Login from "../pages/Login/Login";
 import SignUp from "../pages/SignUp/SignUp";
 import DonationRequestDetails from "../pages/DonationRequestDetails/DonationRequestDetails";
-import PrivateRoute from "./PrivateRoute";
 import DashboardLayout from "../layouts/DashboardLayout";
 import AddDonationRequest from "../pages/Dashboard/Donor/AddDonationRequest";
 import ManageUsers from "../pages/Dashboard/Admin/ManageUsers";
@@ -12,9 +12,13 @@ import Statistics from "../pages/Dashboard/Common/Statistics";
 import MainLayout from "../layouts/MainLayout";
 import MyDonationRequests from "../pages/Dashboard/Donor/MyDonationRequests";
 import MyRecipientRequests from "../pages/Dashboard/Volunteer/MyDonationRequests";
-import { createBrowserRouter } from "react-router";
 import AllDonationRequests from "../pages/AllDonationRequests/AllDonationRequests";
 import SearchPage from "../pages/Search/SearchPage";
+
+// 1. GUARDS
+import PrivateRoute from "./PrivateRoute";
+import AdminRoute from "./AdminRoute";
+import VolunteerRoute from "./VolunteerRoute";
 
 export const router = createBrowserRouter([
   {
@@ -81,9 +85,9 @@ export const router = createBrowserRouter([
       {
         path: "manage-users",
         element: (
-          <PrivateRoute>
+          <AdminRoute>
             <ManageUsers />
-          </PrivateRoute>
+          </AdminRoute>
         ),
       },
       {
@@ -97,9 +101,9 @@ export const router = createBrowserRouter([
       {
         path: "my-recipient-requests",
         element: (
-          <PrivateRoute>
+          <VolunteerRoute>
             <MyRecipientRequests />
-          </PrivateRoute>
+          </VolunteerRoute>
         ),
       },
     ],

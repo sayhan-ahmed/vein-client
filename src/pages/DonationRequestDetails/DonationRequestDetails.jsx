@@ -69,8 +69,119 @@ const DonationRequestDetails = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        <Loader />
+      <div className="min-h-screen bg-slate-50/50 py-12">
+        <Container>
+          <div className="max-w-6xl mx-auto animate-pulse">
+            {/* Header / Title Section Skeleton */}
+            <div className="flex flex-col lg:flex-row justify-between items-center gap-6 mb-10">
+              <div className="text-center lg:text-left w-full lg:w-2/3 space-y-2">
+                {/* Title */}
+                <div className="h-10 lg:h-14 bg-slate-200 rounded-lg w-3/4 mb-2 mx-auto lg:mx-0"></div>
+                {/* Subtitle */}
+                <div className="h-7 bg-slate-200 rounded-lg w-1/2 mx-auto lg:mx-0"></div>
+              </div>
+              {/* Back Button */}
+              <div className="h-10 w-32 bg-slate-200 rounded-full lg:self-start self-center"></div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
+              {/* Left Column Skeleton */}
+              <div className="lg:col-span-2 space-y-8">
+                {/* Primary Details Card Skeleton - Matches p-8 lg:p-10 */}
+                <div className="bg-white rounded-2xl border border-slate-100 p-8 lg:p-10">
+                  {/* Top Row: Title + Status Badge */}
+                  <div className="flex flex-wrap justify-between items-center mb-6 gap-4">
+                    <div className="h-7 w-48 bg-slate-200 rounded-lg"></div>
+                    <div className="h-6 w-24 bg-slate-200 rounded-full"></div>
+                  </div>
+
+                  {/* 4 Grid Items */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-10">
+                    {/* Item 1: Blood Group */}
+                    <div className="space-y-2">
+                      <div className="h-4 w-24 bg-slate-200 rounded mb-2"></div>
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 bg-slate-200 rounded-2xl"></div>
+                        <div className="space-y-1">
+                          <div className="h-6 w-20 bg-slate-200 rounded"></div>
+                          <div className="h-3 w-16 bg-slate-200 rounded"></div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Item 2: Hospital */}
+                    <div className="space-y-1">
+                      <div className="h-4 w-24 bg-slate-200 rounded mb-2"></div>
+                      <div className="flex items-start gap-3">
+                        <div className="w-10 h-10 bg-slate-200 rounded-xl shrink-0"></div>
+                        <div className="space-y-1 w-full">
+                          <div className="h-5 w-3/4 bg-slate-200 rounded"></div>
+                          <div className="h-4 w-1/2 bg-slate-200 rounded"></div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Item 3: Location */}
+                    <div className="space-y-1">
+                      <div className="h-4 w-24 bg-slate-200 rounded mb-2"></div>
+                      <div className="flex items-start gap-3">
+                        <div className="w-10 h-10 bg-slate-200 rounded-xl shrink-0"></div>
+                        <div className="space-y-1 w-full">
+                          <div className="h-5 w-24 bg-slate-200 rounded"></div>
+                          <div className="h-4 w-32 bg-slate-200 rounded"></div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Item 4: Timing */}
+                    <div className="space-y-1">
+                      <div className="h-4 w-24 bg-slate-200 rounded mb-2"></div>
+                      <div className="flex items-start gap-3">
+                        <div className="w-10 h-10 bg-slate-200 rounded-xl shrink-0"></div>
+                        <div className="space-y-1 w-full">
+                          <div className="h-5 w-28 bg-slate-200 rounded"></div>
+                          <div className="h-4 w-20 bg-slate-200 rounded"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Message Card Skeleton */}
+                <div className="bg-white rounded-2xl border border-slate-100 p-8">
+                  <div className="h-6 w-40 bg-slate-200 rounded mb-6"></div>
+                  <div className="h-24 bg-slate-200 rounded-2xl w-full"></div>
+                </div>
+              </div>
+
+              {/* Right Column Skeleton */}
+              <div className="space-y-8">
+                <div className="bg-white rounded-2xl border border-slate-100 p-8 sticky top-32">
+                  <div className="h-4 w-32 bg-slate-200 rounded mb-6"></div>
+
+                  {/* Requester Profile Row */}
+                  <div className="flex items-center gap-4 mb-8">
+                    <div className="w-16 h-16 bg-slate-200 rounded-full border-2 border-slate-100"></div>
+                    <div>
+                      <div className="h-5 w-32 bg-slate-200 rounded mb-2"></div>
+                      <div className="h-4 w-24 bg-slate-200 rounded"></div>
+                    </div>
+                  </div>
+
+                  {/* Email Box */}
+                  <div className="h-14 w-full bg-slate-200 rounded-2xl mb-8"></div>
+
+                  {/* Donate Button */}
+                  <div className="h-10 w-full bg-slate-200 rounded-xl mb-4"></div>
+
+                  {/* Fine Print */}
+                  <div className="h-3 w-3/4 mx-auto bg-slate-200 rounded"></div>
+                  <div className="h-3 w-1/2 mx-auto bg-slate-200 rounded mt-2"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Container>
       </div>
     );
   }
