@@ -13,7 +13,7 @@ import useAuth from "../../../hooks/useAuth";
 import avatarImg from "../../../assets/images/placeholder.jpg";
 
 const Navbar = () => {
-  const { user, logOut } = useAuth();
+  const { user, logOut, loading } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const dropdownRef = useRef(null);
@@ -125,7 +125,7 @@ const Navbar = () => {
                 </div>
 
                 {/* Login (Logged Out) */}
-                {!user && (
+                {!user && !loading && (
                   <Link
                     to="/login"
                     className="flex items-center gap-1.5 bg-red-600 text-white px-5 py-2 rounded-lg hover:bg-red-700 transition shadow-sm font-semibold"
@@ -138,7 +138,12 @@ const Navbar = () => {
 
               {/* User Menu / Dropdown Toggle */}
               <div className="relative" ref={dropdownRef}>
-                {user && (
+                {/* Loading */}
+                {loading && (
+                  <div className="w-12 h-12 rounded-full bg-gray-200 animate-pulse border border-gray-300"></div>
+                )}
+                {/* User Avatar */}
+                {user && !loading && (
                   <div
                     onClick={() => setIsOpen(!isOpen)}
                     className="cursor-pointer transition hover:scale-105 duration-200"
@@ -155,7 +160,7 @@ const Navbar = () => {
                 )}
 
                 {/* Mobile Menu Icon - Only show when NOT logged in */}
-                {!user && (
+                {!user && !loading && (
                   <div
                     onClick={() => setIsOpen(!isOpen)}
                     className="md:hidden cursor-pointer p-2"
