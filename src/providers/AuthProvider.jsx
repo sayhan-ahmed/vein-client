@@ -10,12 +10,14 @@ import {
 } from "firebase/auth";
 import { app } from "../firebase/firebase.config";
 import { AuthContext } from "./AuthContext";
+import useAxiosPublic from "../hooks/useAxiosPublic";
 
 const auth = getAuth(app);
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const axiosPublic = useAxiosPublic();
 
   const createUser = (email, password) => {
     setLoading(true);
@@ -48,11 +50,36 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       // console.log("CurrentUser-->", currentUser?.email);
-      setUser(currentUser);
+
+      if (currentUser) {
+        // User is Logged In
+        setUser(currentUser);
+
+        // 1. Get Token from Backend
+        const userInfo = { email: currentUser.email };
+        try {
+          await axiosPublic.post("/jwt", userInfo);
+          console.log("Token Generated");
+        } catch (err) {
+          console.error("Token Error:", err);
+        }
+      } else {
+        // User is Logged Out
+        setUser(null);
+
+        // 2. Clear Token from Backend
+        try {
+          await axiosPublic.post("/logout");
+          console.log("Token Cleared");
+        } catch (err) {
+          console.error("Logout Error:", err);
+        }
+      }
+
       setLoading(false);
     });
     return () => unsubscribe();
-  }, []);
+  }, [axiosPublic]);
 
   const authInfo = {
     user,
