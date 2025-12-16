@@ -11,7 +11,6 @@ import Profile from "../pages/Dashboard/Common/Profile";
 import Statistics from "../pages/Dashboard/Common/Statistics";
 import MainLayout from "../layouts/MainLayout";
 import MyDonationRequests from "../pages/Dashboard/Donor/MyDonationRequests";
-import ManageRequests from "../pages/Dashboard/Donor/ManageRequests";
 import MyRecipientRequests from "../pages/Dashboard/Volunteer/MyDonationRequests";
 import { createBrowserRouter } from "react-router";
 import AllDonationRequests from "../pages/AllDonationRequests/AllDonationRequests";
@@ -102,10 +101,6 @@ export const router = createBrowserRouter([
             <MyRecipientRequests />
           </PrivateRoute>
         ),
-      },
-      {
-        path: "manage-requests",
-        element: <ManageRequests />,
       },
     ],
   },

@@ -46,7 +46,11 @@ const Footer = () => {
           {/* Column 1: Brand */}
           <div>
             <Link to="/" className="flex items-center mb-4">
-              <img src="https://i.postimg.cc/yxz0WknP/pngtree-hand-holding-red-blood-drop-clipart-png-image-13364982.png" alt="website logo" className="w-12 h-12" />
+              <img
+                src="https://i.postimg.cc/yxz0WknP/pngtree-hand-holding-red-blood-drop-clipart-png-image-13364982.png"
+                alt="website logo"
+                className="w-12 h-12"
+              />
               <h1 className="text-4xl font-bold">Vein.</h1>
             </Link>
             <p className="text-gray-400 text-sm leading-relaxed">
@@ -63,7 +67,7 @@ const Footer = () => {
             </h3>
             <ul className="space-y-3 text-sm text-gray-400">
               {quickLinks.map((item) => (
-                <li key={item}>
+                <li key={item.name}>
                   <Link
                     to={item.href}
                     className="hover:text-red-500 transition-all hover:scale-105 duration-300 flex items-center gap-2"
@@ -78,7 +82,9 @@ const Footer = () => {
 
           {/* Column 3: Contact Info */}
           <div>
-            <h3 className="text-lg font-bold mb-6 text-white uppercase">Contact Info</h3>
+            <h3 className="text-lg font-bold mb-6 text-white uppercase">
+              Contact Info
+            </h3>
             <ul className="space-y-4 text-sm text-gray-400">
               <li className="flex items-start gap-2">
                 <FaPhone className="mt-0.5" />
@@ -97,7 +103,9 @@ const Footer = () => {
 
           {/* Column 4: Newsletter */}
           <div>
-            <h3 className="text-lg font-bold mb-6 text-white uppercase">Newsletter</h3>
+            <h3 className="text-lg font-bold mb-6 text-white uppercase">
+              Newsletter
+            </h3>
             <p className="text-gray-400 text-sm mb-4">
               Subscribe to Our Newsletter to receive the newest updates and
               info.
@@ -145,7 +153,9 @@ const Footer = () => {
           <p className="text-gray-400 text-sm">
             Copyright © 2025 Vein, All rights reserved. Present by{" "}
             <Link to="https://sayhan-portfolio.vercel.app/">
-              <span className="font-bold text-white hover:text-red-500 transition-colors duration-300">Sayhan Ahmed</span>
+              <span className="font-bold text-white hover:text-red-500 transition-colors duration-300">
+                Sayhan Ahmed
+              </span>
             </Link>
           </p>
         </div>

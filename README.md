@@ -24,6 +24,7 @@
 7. Fixed location state in Login.jsx
 8. Fixed All Donation Requests page sticky header
 9. Routes link for Volunteer on Routes.jsx
+10. Unused import removed from Routes.jsx and Sidebar.jsx (ManageRequests)
 
 # TODO:
 
@@ -46,3 +47,5 @@
 1. lottie animation
 2. sweet alert
 3. react-hook-form
+4. @tanstack/react-query
+

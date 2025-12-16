@@ -11,7 +11,7 @@ import { BsGraphUp } from "react-icons/bs";
 import MenuItem from "./Menu/MenuItem";
 import AdminMenu from "./Menu/AdminMenu";
 import DonorMenu from "./Menu/DonorMenu";
-import RecipientMenu from "./Menu/RecipientMenu";
+import VolunteerMenu from "./Menu/VolunteerMenu";
 
 const Sidebar = () => {
   const { logOut } = useAuth();
@@ -70,7 +70,7 @@ const Sidebar = () => {
                 address="/dashboard"
               />
               {/* Role-Based Menu */}
-              <RecipientMenu />
+              <VolunteerMenu />
               <DonorMenu />
               <AdminMenu />
             </nav>
