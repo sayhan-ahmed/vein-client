@@ -1,77 +1,85 @@
-import { useState } from "react";
-import DeleteModal from "../../Modal/DeleteModal";
-import UpdateDonationRequestModal from "../../Modal/UpdateDonationRequestModal";
+import PropTypes from "prop-types";
+import { Link } from "react-router";
+import { FaEdit, FaTrash, FaEye } from "react-icons/fa";
 
-const DonationRequestDataRow = () => {
-  let [isOpen, setIsOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-
-  function openModal() {
-    setIsOpen(true);
-  }
-  function closeModal() {
-    setIsOpen(false);
-  }
+const DonationRequestDataRow = ({ request, handleDelete }) => {
+  const {
+    _id,
+    recipientName,
+    recipientDistrict,
+    recipientUpazila,
+    donationDate,
+    donationTime,
+    donationStatus,
+  } = request;
 
   return (
     <tr>
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-        <div className="flex items-center">
-          <div className="shrink-0">
-            <div className="block relative">
-              <img
-                alt="profile"
-                src="https://ssbhealthcare.com/wp-content/uploads/2023/06/close-up-patient-with-tubes-her-arm-squeezing-ball-her-hand-while-donating-blood_1200x800.jpg"
-                className="mx-auto object-cover rounded h-10 w-15 "
-              />
-            </div>
-          </div>
-        </div>
+        <p className="text-gray-900 whitespace-no-wrap">{recipientName}</p>
       </td>
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-        <p className="text-gray-900 ">A+ Blood</p>
+        <p className="text-gray-900 whitespace-no-wrap">
+          {recipientUpazila}, {recipientDistrict}
+        </p>
       </td>
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-        <p className="text-gray-900 ">Whole Blood</p>
+        <p className="text-gray-900 whitespace-no-wrap">
+          {donationDate} <br /> {donationTime}
+        </p>
       </td>
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-        <p className="text-gray-900 ">$10</p>
+        <span
+          className={`relative inline-block px-3 py-1 font-semibold leading-tight text-white rounded-full ${
+            donationStatus === "inprogress"
+              ? "bg-yellow-500"
+              : donationStatus === "done"
+              ? "bg-green-500"
+              : donationStatus === "canceled"
+              ? "bg-red-500"
+              : "bg-blue-400"
+          }`}
+        >
+          <span className="relative">{donationStatus}</span>
+        </span>
       </td>
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-        <p className="text-gray-900 ">5</p>
-      </td>
+        <div className="flex items-center gap-2">
+          {/* Edit Button */}
+          <Link
+            to={`/dashboard/update-donation-request/${_id}`}
+            className="btn btn-xs btn-neutral text-white"
+            title="Edit"
+          >
+            <FaEdit />
+          </Link>
 
-      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-        <span
-          onClick={openModal}
-          className="relative cursor-pointer inline-block px-3 py-1 font-semibold text-green-900 leading-tight"
-        >
-          <span
-            aria-hidden="true"
-            className="absolute inset-0 bg-red-200 opacity-50 rounded-full"
-          ></span>
-          <span className="relative">Delete</span>
-        </span>
-        <DeleteModal isOpen={isOpen} closeModal={closeModal} />
-      </td>
-      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-        <span
-          onClick={() => setIsEditModalOpen(true)}
-          className="relative cursor-pointer inline-block px-3 py-1 font-semibold text-green-900 leading-tight"
-        >
-          <span
-            aria-hidden="true"
-            className="absolute inset-0 bg-green-200 opacity-50 rounded-full"
-          ></span>
-          <span className="relative">Update</span>
-        </span>
-        <UpdateDonationRequestModal
-          isOpen={isEditModalOpen}
-          setIsEditModalOpen={setIsEditModalOpen}
-        />
+          {/* Delete Button */}
+          <button
+            onClick={() => handleDelete(_id)}
+            className="btn btn-xs btn-error text-white"
+            title="Delete"
+          >
+            <FaTrash />
+          </button>
+
+          {/* View Details Button */}
+          <Link
+            to={`/donation-requests/${_id}`}
+            className="btn btn-xs btn-info text-white"
+            title="View"
+          >
+            <FaEye />
+          </Link>
+        </div>
       </td>
     </tr>
   );
+};
+
+DonationRequestDataRow.propTypes = {
+  request: PropTypes.object,
+  handleDelete: PropTypes.func,
 };
 
 export default DonationRequestDataRow;

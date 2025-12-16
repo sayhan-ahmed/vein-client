@@ -48,4 +48,5 @@
 2. sweet alert
 3. react-hook-form
 4. @tanstack/react-query
+5. prop-types
 
