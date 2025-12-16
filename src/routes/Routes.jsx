@@ -12,7 +12,7 @@ import Statistics from "../pages/Dashboard/Common/Statistics";
 import MainLayout from "../layouts/MainLayout";
 import MyDonationRequests from "../pages/Dashboard/Donor/MyDonationRequests";
 import ManageRequests from "../pages/Dashboard/Donor/ManageRequests";
-import MyRecipientRequests from "../pages/Dashboard/Recipient/MyDonationRequests";
+import MyRecipientRequests from "../pages/Dashboard/Volunteer/MyDonationRequests";
 import { createBrowserRouter } from "react-router";
 import AllDonationRequests from "../pages/AllDonationRequests/AllDonationRequests";
 import SearchPage from "../pages/Search/SearchPage";

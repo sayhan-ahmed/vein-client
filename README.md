@@ -11,6 +11,7 @@
 9. Shared button hover color and scale effect
 10. Shared button disabled hover bg color
 11. Donors image in search page from avatar to image
+12. Dashboard: rename Recipient folder to Volunteer
 
 # Fixed:
 
@@ -22,6 +23,7 @@
 6. Removed FcGoogle icon import from Login.jsx
 7. Fixed location state in Login.jsx
 8. Fixed All Donation Requests page sticky header
+9. Routes link for Volunteer on Routes.jsx
 
 # TODO:
 
