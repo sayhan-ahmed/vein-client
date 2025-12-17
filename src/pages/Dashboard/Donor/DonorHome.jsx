@@ -103,8 +103,8 @@ const DonorHome = () => {
   if (isLoading) return <DonorHomeSkeleton />;
 
   return (
-    <div className="min-h-screen font-sans text-gray-900 w-full overflow-hidden">
-      <div className="max-w-[1600px] mx-auto space-y-6">
+    <div className="min-h-screen font-sans text-gray-900 w-full overflow-hidden mt-2">
+      <div className="mx-auto space-y-6">
         {/* Header */}
         <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100 relative overflow-hidden">
           <div className="absolute -top-24 -right-24 w-64 h-64 bg-red-500/5 rounded-full blur-3xl pointer-events-none"></div>
@@ -130,7 +130,7 @@ const DonorHome = () => {
               </p>
             </div>
 
-            <div className="flex items-center gap-4">
+            <div className="flex justify-between md:justify-normal items-center gap-4">
               <Link
                 to="/dashboard/create-donation-request"
                 className="flex items-center justify-center gap-2 px-5 h-10 bg-[#1D3557] hover:bg-red-700 text-white rounded-xl font-bold text-xs transition-all shadow-lg shadow-blue-900/20 hover:shadow-blue-900/30 hover:-translate-y-0.5 duration-300"
@@ -249,7 +249,7 @@ const DonorHome = () => {
           )}
 
           {requests.length > 3 && (
-            <div className="flex justify-center">
+            <div className="flex justify-center mt-5">
               <Link
                 to="/dashboard/my-donation-requests"
                 className="px-5 py-2.5 bg-[#1D3657] hover:bg-red-700 text-white font-bold rounded-xl text-xs transition-all hover:scale-105 duration-300"

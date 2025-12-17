@@ -120,8 +120,8 @@ const MyDonationRequests = () => {
   ];
 
   return (
-    <div className="min-h-screen font-sans text-gray-900 w-full overflow-hidden">
-      <div className="max-w-[1600px] mx-auto space-y-8">
+    <div className="min-h-screen font-sans text-gray-900 w-full overflow-hidden mt-2">
+      <div className="mx-auto space-y-8">
         {/* Header Section - Matched to DonorHome style */}
         <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100 relative overflow-hidden">
           {/* Subtle decorative background similar to DonorHome but red-themed */}

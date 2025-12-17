@@ -29,6 +29,7 @@
 10. Unused import removed from Routes.jsx and Sidebar.jsx (ManageRequests)
 11. User role text change to capitalize in DonationRequestDetails.jsx
 12. DonationRequestDetails.jsx: donationStatus and it's color change based on status
+13. Max width for donor dashboard pages
 
 # TODO:
 

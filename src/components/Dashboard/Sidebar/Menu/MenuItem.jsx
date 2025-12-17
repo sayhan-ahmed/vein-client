@@ -6,13 +6,15 @@ const MenuItem = ({ label, address, icon: Icon }) => {
       to={address}
       end
       className={({ isActive }) =>
-        `flex items-center px-4 py-2 my-5  transition-colors duration-300 transform  hover:bg-gray-300   hover:text-gray-700 ${
-          isActive ? "bg-gray-300  text-gray-700" : "text-gray-600"
+        `flex items-center px-4 py-3 mx-3 my-1 rounded-xl transition-all duration-300 group ${
+          isActive
+            ? "bg-red-600 text-white shadow-lg shadow-red-600/20 font-bold"
+            : "text-gray-400 hover:text-white hover:bg-white/5 font-medium"
         }`
       }
     >
-      <Icon className="w-5 h-5" />
-      <span className="mx-4 font-medium">{label}</span>
+      <Icon className={`w-5 h-5 transition-transform group-hover:scale-110`} />
+      <span className="mx-4 text-sm tracking-wide">{label}</span>
     </NavLink>
   );
 };

@@ -4,9 +4,10 @@ import useAuth from "../../../hooks/useAuth";
 import useRole from "../../../hooks/useRole";
 
 // Icons
-import { FcSettings } from "react-icons/fc";
+import { FaUserGear } from "react-icons/fa6";
 import { AiOutlineBars } from "react-icons/ai";
-import { BsGraphUp } from "react-icons/bs";
+import { ImStatsBars } from "react-icons/im";
+import { VscSignOut } from "react-icons/vsc";
 
 // User Menu
 import MenuItem from "./Menu/MenuItem";
@@ -27,44 +28,66 @@ const Sidebar = () => {
   return (
     <>
       {/* Mobile Screen Navbar */}
-      <div className="bg-gray-100 text-gray-800 flex justify-between md:hidden">
-        <div>
-          <div className="block cursor-pointer p-4 font-bold">
-            <Link to="/">Vein.</Link>
-          </div>
+      <div className="bg-white text-gray-800 flex justify-between md:hidden shadow-sm sticky top-0 z-50">
+        <div className="cursor-pointer p-4 font-bold text-xl text-[#1D3557]">
+          <Link to="/" className="flex items-center gap-px">
+            <img
+              src="https://i.postimg.cc/yxz0WknP/pngtree-hand-holding-red-blood-drop-clipart-png-image-13364982.png"
+              alt="Vein Logo"
+              className="w-9 h-9 mb-1.5"
+            />
+            <span>Vein.</span>
+          </Link>
         </div>
 
         <button
           onClick={handleToggle}
-          className="mobile-menu-button p-4 focus:outline-none focus:bg-gray-200"
+          className="p-4 focus:outline-none focus:bg-gray-50 text-[#1D3557]"
         >
-          <AiOutlineBars className="h-5 w-5" />
+          <AiOutlineBars className="h-6 w-6" />
         </button>
       </div>
 
-      {/* Sidebar */}
+      {/* Sidebar Overlay for Mobile */}
+      {!isActive && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 md:hidden backdrop-blur-sm"
+          onClick={handleToggle}
+        ></div>
+      )}
+
+      {/* Sidebar Container */}
       <div
-        className={`z-10 md:fixed flex flex-col justify-between overflow-x-hidden bg-gray-100 w-64 space-y-6 px-2 py-4 absolute inset-y-0 left-0 transform ${
+        className={`z-50 md:fixed flex flex-col justify-between overflow-x-hidden bg-[#1D3557] w-64 space-y-6 px-2 py-6 absolute inset-y-0 left-0 transform ${
           isActive && "-translate-x-full"
-        }  md:translate-x-0  transition duration-200 ease-in-out`}
+        }  md:translate-x-0 transition-all duration-300 ease-in-out border-r border-white/5 shadow-2xl h-screen sticky`}
       >
-        <div>
-          <div>
-            <div className="w-full hidden md:flex px-4 py-2 shadow-lg rounded-lg justify-center items-center bg-rose-100 mx-auto">
-              <Link to="/">
-                <h2 className="text-2xl font-bold text-red-600">Vein.</h2>
-              </Link>
-            </div>
+        <div className="flex flex-col h-full">
+          {/* Logo Area */}
+          <div className="px-6 mb-8">
+            <Link to="/" className="flex items-center gap-1 group">
+              <img
+                src="https://i.postimg.cc/yxz0WknP/pngtree-hand-holding-red-blood-drop-clipart-png-image-13364982.png"
+                alt="Vein Logo"
+                className="w-11 h-11 mb-1"
+              />
+              <span className="text-3xl font-black text-white tracking-tight group-hover:text-red-500 transition-colors">
+                Vein.
+              </span>
+            </Link>
           </div>
 
           {/* Nav Items */}
-          <div className="flex flex-col justify-between flex-1 mt-6">
-            <nav>
+          <div className="flex flex-col flex-1 px-2">
+            <div className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4 px-4 mt-2">
+              Menu
+            </div>
+            <nav className="space-y-1">
               {/* Statistics - Visible to Everyone */}
               <MenuItem
                 label="Statistics"
                 address="/dashboard"
-                icon={BsGraphUp}
+                icon={ImStatsBars}
               />
 
               {/* Dynamic Menu Based on Role */}
@@ -73,24 +96,37 @@ const Sidebar = () => {
               {role === "donor" && <DonorMenu />}
             </nav>
           </div>
-        </div>
 
-        <div>
-          <hr />
+          {/* Bottom Section */}
+          <div className="px-4 mt-auto">
+            <div className="bg-white/5 rounded-2xl p-2 mb-4 flex flex-col">
+              <MenuItem
+                label="Profile"
+                address="/dashboard/profile"
+                icon={FaUserGear}
+              />
+              <div className="h-px bg-white/10 my-1 mx-3"></div>
+              <button
+                onClick={logOut}
+                className="flex items-center px-4 py-3 mx-3 my-1 text-gray-400 hover:text-white hover:bg-red-600/10 rounded-xl transition-all duration-300 group"
+              >
+                <VscSignOut
+                  size={20}
+                  className="transition-transform group-hover:scale-110"
+                />
+                <span className="mx-4 text-sm tracking-wide font-medium">
+                  Logout
+                </span>
+              </button>
+            </div>
 
-          {/* Profile - Visible to Everyone */}
-          <MenuItem
-            label="Profile"
-            address="/dashboard/profile"
-            icon={FcSettings}
-          />
-
-          <button
-            onClick={logOut}
-            className="flex w-full items-center px-4 py-2 mt-5 text-gray-600 hover:bg-gray-300   hover:text-gray-700 transition-colors duration-300 transform"
-          >
-            <span className="mx-4 font-medium">Logout</span>
-          </button>
+            {/* User Info Micro-view */}
+            <div className="flex justify-center py-2 opacity-60">
+              <div className="text-[10px] text-gray-400 leading-tight">
+                &copy; 2025 Vein. All rights reserved.
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </>

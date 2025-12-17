@@ -80,7 +80,7 @@ const UpdateDonationRequest = () => {
 
   return (
     <div className="min-h-screen bg-[#F8F9FD] relative py-12 px-4 sm:px-6 lg:px-8 font-sans overflow-hidden selection:bg-red-500/30">
-      <div className="max-w-4xl mx-auto relative z-10 animate-fade-in-up">
+      <div className="max-w-5xl mx-auto relative z-10 animate-fade-in-up">
         <div className="text-center mb-12 relative">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full  bg-red-50/50 backdrop-blur-md border border-red-100/50 shadow-sm mb-6 ring-1 ring-red-50/50">
             <span className="flex h-2 w-2 relative">
