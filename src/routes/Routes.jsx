@@ -8,7 +8,7 @@ import DashboardLayout from "../layouts/DashboardLayout";
 import AddDonationRequest from "../pages/Dashboard/Donor/AddDonationRequest";
 import ManageUsers from "../pages/Dashboard/Admin/ManageUsers";
 import Profile from "../pages/Dashboard/Common/Profile";
-import Statistics from "../pages/Dashboard/Common/Statistics";
+import DashboardHome from "../pages/Dashboard/Common/DashboardHome";
 import MainLayout from "../layouts/MainLayout";
 import MyDonationRequests from "../pages/Dashboard/Donor/MyDonationRequests";
 import MyRecipientRequests from "../pages/Dashboard/Volunteer/MyDonationRequests";
@@ -60,27 +60,15 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: (
-          <PrivateRoute>
-            <Statistics />
-          </PrivateRoute>
-        ),
+        element: <DashboardHome />,
       },
       {
         path: "add-donation-request",
-        element: (
-          <PrivateRoute>
-            <AddDonationRequest />
-          </PrivateRoute>
-        ),
+        element: <AddDonationRequest />,
       },
       {
         path: "my-donation-requests",
-        element: (
-          <PrivateRoute>
-            <MyDonationRequests />
-          </PrivateRoute>
-        ),
+        element: <MyDonationRequests />,
       },
       {
         path: "manage-users",
@@ -92,11 +80,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "profile",
-        element: (
-          <PrivateRoute>
-            <Profile />
-          </PrivateRoute>
-        ),
+        element: <Profile />,
       },
       {
         path: "my-recipient-requests",

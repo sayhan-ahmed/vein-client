@@ -277,7 +277,7 @@ export default function AllDonationRequests() {
                           className={`w-12 h-12 rounded-2xl rotate-45 flex items-center justify-center shadow-inner relative z-10 transition-transform duration-300 group-hover:scale-110 ${
                             request.bloodGroup.includes("+")
                               ? "bg-linear-to-br from-red-500 to-rose-600"
-                              : "bg-linear-to-br from-rose-500 to-pink-600"
+                              : "bg-linear-to-br from-[#194887] to-[#153D74]"
                           }`}
                         >
                           <span className="-rotate-45 text-white font-black text-sm">

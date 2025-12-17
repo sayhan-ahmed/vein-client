@@ -381,7 +381,7 @@ const DonationRequestDetails = () => {
                     <h3 className="text-lg font-bold text-[#1D3657]">
                       {request.requesterName}
                     </h3>
-                    <p className="text-sm text-slate-500 font-medium">
+                    <p className="text-sm text-slate-500 font-medium capitalize">
                       {request.requesterRole}
                     </p>
                   </div>

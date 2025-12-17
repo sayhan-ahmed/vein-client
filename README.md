@@ -25,6 +25,7 @@
 8. Fixed All Donation Requests page sticky header
 9. Routes link for Volunteer on Routes.jsx
 10. Unused import removed from Routes.jsx and Sidebar.jsx (ManageRequests)
+11. User role text change to capitalize in DonationRequestDetails.jsx
 
 # TODO:
 

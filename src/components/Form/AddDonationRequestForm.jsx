@@ -1,11 +1,62 @@
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import districtsData from "../../assets/data/districts.json";
+import upazilasData from "../../assets/data/upazilas.json";
 
-const AddDonationRequestForm = ({ onSubmit, user, loading }) => {
+const AddDonationRequestForm = ({ onSubmit, user, loading, isBlocked }) => {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm();
+
+  const [districts, setDistricts] = useState([]);
+  const [upazilas, setUpazilas] = useState([]);
+  const [selectedDistrict, setSelectedDistrict] = useState("");
+
+  useEffect(() => {
+    // Load Districts
+    if (districtsData && districtsData[2] && districtsData[2].data) {
+      setDistricts(districtsData[2].data);
+    }
+  }, []);
+
+  useEffect(() => {
+    // Filter Upazilas based on selected district
+    if (selectedDistrict) {
+      const allUpazilas = upazilasData[2]?.data || [];
+      const filteredUpazilas = allUpazilas.filter(
+        (upazila) => upazila.district_id === selectedDistrict
+      );
+      setUpazilas(filteredUpazilas);
+    } else {
+      setUpazilas([]);
+    }
+  }, [selectedDistrict]);
+
+  const handleDistrictChange = (e) => {
+    setSelectedDistrict(e.target.value);
+    setValue(
+      "recipientDistrict",
+      e.target.options[e.target.selectedIndex].text
+    );
+    setValue("recipientUpazila", "");
+  };
+
+  if (isBlocked) {
+    return (
+      <div className="flex flex-col items-center justify-center p-8 bg-red-50 border border-red-200 rounded-lg text-center">
+        <h3 className="text-xl font-bold text-red-600 mb-2">
+          Access Restricted
+        </h3>
+        <p className="text-gray-700">
+          Your account has been blocked. You cannot create new donation
+          requests.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-12">
@@ -74,7 +125,7 @@ const AddDonationRequestForm = ({ onSubmit, user, loading }) => {
           )}
         </div>
 
-        {/* 🆕 Blood Type (Dropdown) */}
+        {/* Blood Type */}
         <div className="space-y-2">
           <label className="block text-sm font-medium">Blood Type</label>
           <select
@@ -94,18 +145,29 @@ const AddDonationRequestForm = ({ onSubmit, user, loading }) => {
           )}
         </div>
 
-        {/* District */}
+        {/* Recipient District */}
         <div className="space-y-2">
           <label className="block text-sm font-medium">
             Recipient District
           </label>
+          <select
+            onChange={handleDistrictChange}
+            required
+            className="w-full px-3 py-2 border rounded-md focus:outline-red-500 bg-white"
+          >
+            <option value="">Select District</option>
+            {districts.map((dist) => (
+              <option key={dist.id} value={dist.id}>
+                {dist.name}
+              </option>
+            ))}
+          </select>
+          {/* Hidden input to register value in hook form */}
           <input
-            type="text"
-            placeholder="e.g., Dhaka"
+            type="hidden"
             {...register("recipientDistrict", {
               required: "District is required",
             })}
-            className="w-full px-3 py-2 border rounded-md focus:outline-red-500 bg-white"
           />
           {errors.recipientDistrict && (
             <span className="text-red-500 text-sm">
@@ -114,17 +176,23 @@ const AddDonationRequestForm = ({ onSubmit, user, loading }) => {
           )}
         </div>
 
-        {/* Upazila */}
+        {/* Recipient Upazila */}
         <div className="space-y-2">
           <label className="block text-sm font-medium">Recipient Upazila</label>
-          <input
-            type="text"
-            placeholder="e.g., Mirpur"
+          <select
             {...register("recipientUpazila", {
               required: "Upazila is required",
             })}
             className="w-full px-3 py-2 border rounded-md focus:outline-red-500 bg-white"
-          />
+            disabled={!selectedDistrict}
+          >
+            <option value="">Select Upazila</option>
+            {upazilas.map((upazila) => (
+              <option key={upazila.id} value={upazila.name}>
+                {upazila.name}
+              </option>
+            ))}
+          </select>
           {errors.recipientUpazila && (
             <span className="text-red-500 text-sm">
               {errors.recipientUpazila.message}
@@ -155,7 +223,7 @@ const AddDonationRequestForm = ({ onSubmit, user, loading }) => {
           <label className="block text-sm font-medium">Full Address Line</label>
           <input
             type="text"
-            placeholder="e.g., Ward 4, Bed 12"
+            placeholder="e.g., Zahir Raihan Rd"
             {...register("fullAddress", { required: "Address is required" })}
             className="w-full px-3 py-2 border rounded-md focus:outline-red-500 bg-white"
           />
@@ -200,7 +268,7 @@ const AddDonationRequestForm = ({ onSubmit, user, loading }) => {
         <div className="col-span-1 md:col-span-2 space-y-2">
           <label className="block text-sm font-medium">Request Message</label>
           <textarea
-            placeholder="Any specific details? (e.g., Urgent, patient condition)"
+            placeholder="Why do you need blood?"
             rows="3"
             {...register("requestMessage", { required: "Message is required" })}
             className="w-full px-3 py-2 border rounded-md focus:outline-red-500 bg-white"

@@ -14,6 +14,7 @@ const useRole = () => {
       const { data } = await axiosSecure.get(`/users/role/${user?.email}`);
       return data.role;
     },
+    staleTime: Infinity, 
   });
 
   return [role, isLoading];

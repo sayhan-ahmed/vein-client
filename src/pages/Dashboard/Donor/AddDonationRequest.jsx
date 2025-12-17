@@ -1,62 +1,104 @@
 import { useState } from "react";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
-import toast from "react-hot-toast";
 import { useNavigate } from "react-router";
 import AddDonationRequestForm from "../../../components/Form/AddDonationRequestForm";
-
+import Swal from "sweetalert2";
+import { useQuery } from "@tanstack/react-query";
+import Loader from "../../../components/Shared/Loader";
 
 const AddDonationRequest = () => {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const axiosSecure = useAxiosSecure();
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
 
-  const handleCreateRequest = async (data) => {
-    setLoading(true);
+  // Fetch User Status from DB
+  const { data: dbUser, isLoading: userLoading } = useQuery({
+    queryKey: ["user", user?.email],
+    enabled: !!user?.email,
+    queryFn: async () => {
+      const { data } = await axiosSecure.get(`/users/${user?.email}`);
+      return data;
+    },
+  });
 
-    // Merge Form Data with User Data & Status
+  const isBlocked = dbUser?.status === "blocked";
+  const loading = authLoading || userLoading;
+
+  const onSubmit = async (data) => {
+    if (isBlocked) {
+      Swal.fire({
+        icon: "error",
+        title: "Access Denied",
+        text: "You are blocked and cannot create donation requests.",
+      });
+      return;
+    }
+
     const requestData = {
-      ...data, // includes recipient info, bloodGroup, AND the new bloodType
       requesterName: user?.displayName,
       requesterEmail: user?.email,
       requesterImage: user?.photoURL,
+      requesterRole: dbUser?.role,
+      recipientName: data.recipientName,
+      recipientDistrict: data.recipientDistrict,
+      recipientUpazila: data.recipientUpazila,
+      hospitalName: data.hospitalName,
+      fullAddress: data.fullAddress,
+      bloodGroup: data.bloodGroup,
+      bloodType: data.bloodType,
+      donationDate: data.donationDate,
+      donationTime: data.donationTime,
+      requestMessage: data.requestMessage,
       donationStatus: "pending",
-      createdAt: new Date().toISOString(),
     };
 
     try {
-      const { data: responseData } = await axiosSecure.post(
-        "/donation-request",
+      const response = await axiosSecure.post(
+        "/donation-requests",
         requestData
       );
-
-      if (responseData.insertedId) {
-        toast.success("Donation request added successfully!");
+      if (response.data.insertedId) {
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Request Created Successfully",
+          showConfirmButton: false,
+          timer: 1500,
+        });
         navigate("/dashboard/my-donation-requests");
       }
-    } catch (err) {
-      console.log(err);
-      toast.error(err.message);
-    } finally {
-      setLoading(false);
+    } catch (error) {
+      console.error(error);
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text:
+          error?.response?.data?.message ||
+          error.message ||
+          "Something went wrong!",
+      });
     }
   };
 
-  return (
-    <div className="flex justify-center items-center min-h-screen pt-12">
-      <div className="flex flex-col max-w-4xl p-6 rounded-md sm:p-10 bg-gray-50 text-gray-800 shadow-xl w-full">
-        <div className="mb-8 text-center">
-          <h1 className="text-4xl font-bold">Create Donation Request</h1>
-          <p className="text-sm text-gray-600 mt-2">
-            Fill out the details below to request blood for a patient.
-          </p>
-        </div>
+  if (loading)
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Loader />
+      </div>
+    );
 
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <h2 className="text-3xl font-bold text-center mb-8 text-gray-800">
+        Create Donation Request
+      </h2>
+      <div className="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow-lg border border-gray-100">
         <AddDonationRequestForm
-          onSubmit={handleCreateRequest}
+          onSubmit={onSubmit}
           user={user}
           loading={loading}
+          isBlocked={isBlocked}
         />
       </div>
     </div>
