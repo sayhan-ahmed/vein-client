@@ -13,6 +13,7 @@
 11. Donors image in search page from avatar to image
 12. Dashboard: rename Recipient folder to Volunteer
 13. Rename "Add donation request" to "Create donation request" everywhere.
+14. 
 
 # Fixed:
 
