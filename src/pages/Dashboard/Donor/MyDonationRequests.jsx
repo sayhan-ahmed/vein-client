@@ -4,7 +4,9 @@ import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import DonationRequestDataRow from "../../../components/Dashboard/TableRows/DonationRequestDataRow";
 import Swal from "sweetalert2";
-import Loader from "../../../components/Shared/Loader";
+import DonorHomeSkeleton from "../../../components/Shared/DonorHomeSkeleton";
+import { FaHandHoldingHeart, FaPlus } from "react-icons/fa";
+import { Link } from "react-router";
 
 const MyDonationRequests = () => {
   const { user } = useAuth();
@@ -14,7 +16,7 @@ const MyDonationRequests = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
-  // Fetch Requests specific to the logged-in user email
+  // Fetch Requests
   const {
     data: requests = [],
     isLoading,
@@ -29,22 +31,27 @@ const MyDonationRequests = () => {
     },
   });
 
-  // Handle Delete Action
+  // Action Handlers
   const handleDelete = async (id) => {
     Swal.fire({
       title: "Are you sure?",
-      text: "You won't be able to revert this!",
+      text: "This action cannot be undone.",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
+      confirmButtonColor: "#111827",
+      cancelButtonColor: "#EF4444",
+      confirmButtonText: "Delete",
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
           const { data } = await axiosSecure.delete(`/donation-requests/${id}`);
           if (data.deletedCount > 0) {
-            Swal.fire("Deleted!", "Your request has been deleted.", "success");
+            Swal.fire({
+              title: "Deleted",
+              text: "Request removed.",
+              icon: "success",
+              confirmButtonColor: "#111827",
+            });
             await refetch();
             queryClient.invalidateQueries([
               "my-recent-donation-requests",
@@ -76,10 +83,7 @@ const MyDonationRequests = () => {
           confirmButtonColor: "#111827",
         });
         await refetch();
-        queryClient.invalidateQueries([
-          "my-recent-donation-requests",
-          user?.email,
-        ]);
+        queryClient.invalidateQueries(["my-donation-requests", user?.email]);
       }
     } catch (err) {
       Swal.fire("Error!", err.message, "error");
@@ -102,128 +106,162 @@ const MyDonationRequests = () => {
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  if (isLoading)
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <Loader />
-      </div>
-    );
+  if (isLoading) return <DonorHomeSkeleton />;
+
+  const tabs = [
+    { id: "all", label: "All Requests" },
+    { id: "pending", label: "Pending" },
+    { id: "inprogress", label: "In Progress" },
+    { id: "done", label: "Done" },
+    { id: "canceled", label: "Canceled" },
+  ];
 
   return (
-    <div className="container mx-auto px-4 sm:px-8">
-      <div className="py-8">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
-          <h2 className="text-2xl font-semibold leading-tight text-gray-800">
-            My Donation Requests
-          </h2>
+    <div className="min-h-screen font-sans text-gray-900 w-full overflow-hidden">
+      <div className="max-w-[1600px] mx-auto space-y-8">
+        {/* Header Section - Matched to DonorHome style */}
+        <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100 relative overflow-hidden">
+          {/* Subtle decorative background similar to DonorHome but red-themed */}
+          <div className="absolute -top-24 -right-24 w-64 h-64 bg-red-500/5 rounded-full blur-3xl pointer-events-none"></div>
 
-          {/* Filter Dropdown */}
-          <div className="relative">
-            <select
-              onChange={(e) => {
-                setFilterStatus(e.target.value);
-                setCurrentPage(1);
-              }}
-              value={filterStatus}
-              className="appearance-none h-full rounded-md border border-gray-300 border-b block pl-8 pr-6 py-2 w-full bg-white text-sm placeholder-gray-400 text-gray-700 focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none focus:ring-1 focus:ring-red-500"
-            >
-              <option value="all">All Status</option>
-              <option value="pending">Pending</option>
-              <option value="inprogress">In Progress</option>
-              <option value="done">Done</option>
-              <option value="canceled">Canceled</option>
-            </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-              <svg className="fill-current h-4 w-4" viewBox="0 0 20 20">
-                <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
-              </svg>
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
+            <div>
+              <h1 className="text-2xl sm:text-4xl font-extrabold text-gray-900 tracking-tight">
+                My <span className="text-red-600">Donation</span> Requests
+              </h1>
+              <p className="text-sm text-gray-500 mt-2 font-medium max-w-lg">
+                View and manage your history of blood donation requests.
+              </p>
             </div>
+
+            <Link
+              to="/dashboard/create-donation-request"
+              className="flex items-center justify-center gap-2 px-6 h-12 bg-[#1D3557] hover:bg-red-700 text-white rounded-full font-bold text-sm transition-all shadow-lg shadow-blue-900/20 hover:shadow-blue-900/30 hover:-translate-y-0.5 duration-300 w-full md:w-auto"
+            >
+              <div className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center">
+                <FaPlus size={10} />
+              </div>
+              <span>New Request</span>
+            </Link>
           </div>
         </div>
 
-        <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
-          <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
-            <table className="min-w-full leading-normal">
-              <thead>
-                <tr>
-                  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Recipient Name
-                  </th>
-                  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Location
-                  </th>
-                  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Date & Time
-                  </th>
-                  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Status
-                  </th>
-                  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Action
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {/* Map through currentData instead of requests */}
-                {currentData.length > 0 ? (
-                  currentData.map((request) => (
-                    <DonationRequestDataRow
-                      key={request._id}
-                      request={request}
-                      handleDelete={handleDelete}
-                      handleStatusUpdate={handleStatusUpdate}
-                    />
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="5" className="text-center py-4 text-gray-500">
-                      No donation requests found.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+        {/* Content Card */}
+        <div className="bg-white rounded-4xl p-1 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.05)] border border-gray-100 flex flex-col relative overflow-hidden">
+          {/* Segmented Control Tabs */}
+          <div className="bg-gray-50/80 p-1.5 rounded-[1.7rem] inline-flex flex-wrap w-full sm:w-auto mb-6 sticky left-0 top-0 z-10 mx-6 mt-6 border border-gray-100">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => {
+                  setFilterStatus(tab.id);
+                  setCurrentPage(1);
+                }}
+                className={`relative px-6 py-2.5 rounded-3xl text-sm font-bold transition-all duration-300 flex-1 sm:flex-none text-center z-10 ${
+                  filterStatus === tab.id
+                    ? "text-[#1D3657] shadow-sm ring-1 ring-black/5 bg-white"
+                    : "text-gray-500 hover:text-[#1D3657] hover:bg-gray-100"
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
 
-            {/* Pagination Controls */}
+          {/* Table Container */}
+          <div className="px-6 pb-8">
+            <div className="rounded-2xl border border-gray-100 overflow-hidden bg-white shadow-xs">
+              <div className="overflow-x-auto">
+                <table className="w-full whitespace-nowrap">
+                  <thead>
+                    <tr className="bg-gray-50/50 border-b border-gray-100 text-left text-[11px] font-extrabold text-gray-500 uppercase tracking-widest">
+                      <th className="px-6 py-5">Recipient</th>
+                      <th className="px-6 py-5">Location</th>
+                      <th className="px-6 py-5">Date & Time</th>
+                      <th className="px-6 py-5 text-center">Group</th>
+                      <th className="px-6 py-5 text-center">Status</th>
+                      <th className="px-6 py-5">Donor Info</th>
+                      <th className="px-6 py-5 text-right">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-50">
+                    {currentData.length > 0 ? (
+                      currentData.map((request) => (
+                        <DonationRequestDataRow
+                          key={request._id}
+                          request={request}
+                          handleDelete={handleDelete}
+                          handleStatusUpdate={handleStatusUpdate}
+                        />
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan="7" className="px-6 py-32 text-center">
+                          <div className="flex flex-col items-center justify-center gap-4">
+                            <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center text-gray-300">
+                              <FaHandHoldingHeart size={32} />
+                            </div>
+                            <div>
+                              <h3 className="text-gray-900 font-bold text-lg">
+                                No requests found
+                              </h3>
+                              <p className="text-gray-400 text-sm mt-1">
+                                No {filterStatus !== "all" ? filterStatus : ""}{" "}
+                                requests to show.
+                              </p>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Pagination */}
             {filteredRequests.length > itemsPerPage && (
-              <div className="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between">
-                <span className="text-xs xs:text-sm text-gray-900">
-                  Showing {startIndex + 1} to{" "}
+              <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <span className="text-xs font-semibold text-gray-400">
+                  Showing {startIndex + 1}-
                   {Math.min(startIndex + itemsPerPage, filteredRequests.length)}{" "}
-                  of {filteredRequests.length} Entries
+                  of {filteredRequests.length}
                 </span>
-                <div className="inline-flex mt-2 xs:mt-0">
+
+                <div className="bg-white p-1 rounded-xl border border-gray-100 shadow-sm inline-flex items-center gap-1">
                   <button
                     onClick={() =>
                       handlePageChange(Math.max(currentPage - 1, 1))
                     }
                     disabled={currentPage === 1}
-                    className="text-sm bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded-l disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-3 py-2 text-xs font-bold text-gray-500 rounded-lg disabled:opacity-30 disabled:cursor-not-allowed hover:bg-gray-100 transition-all hover:text-gray-900"
                   >
                     Prev
                   </button>
-                  {/* Page Numbers */}
+                  <div className="w-px h-4 bg-gray-100 mx-1"></div>
                   {[...Array(totalPages)].map((_, i) => (
                     <button
                       key={i}
                       onClick={() => handlePageChange(i + 1)}
-                      className={`text-sm font-semibold py-2 px-4 ${
+                      className={`w-8 h-8 rounded-lg text-xs font-bold transition-all flex items-center justify-center ${
                         currentPage === i + 1
-                          ? "bg-red-600 text-white"
-                          : "bg-gray-200 hover:bg-gray-300 text-gray-800"
+                          ? "bg-[#1D3657] text-white shadow-md shadow-gray-900/20 scale-105"
+                          : "text-gray-400 hover:text-gray-900 hover:bg-gray-100"
                       }`}
                     >
                       {i + 1}
                     </button>
                   ))}
+                  <div className="w-px h-4 bg-gray-100 mx-1"></div>
                   <button
                     onClick={() =>
                       handlePageChange(Math.min(currentPage + 1, totalPages))
                     }
                     disabled={currentPage === totalPages}
-                    className="text-sm bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded-r disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-3 py-2 text-xs font-bold text-gray-500 rounded-lg disabled:opacity-30 disabled:cursor-not-allowed hover:bg-gray-100 transition-all hover:text-gray-900"
                   >
                     Next
                   </button>

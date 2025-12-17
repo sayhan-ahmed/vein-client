@@ -104,7 +104,7 @@ const DonationRequestDataRow = ({
             </span>
           </div>
         ) : (
-          <span className="text-[11px] text-gray-400 italic">--</span>
+          <span className="text-[11px] text-gray-400 italic">N/A</span>
         )}
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-right">
@@ -137,13 +137,23 @@ const DonationRequestDataRow = ({
             >
               <FaEye className="w-3.5 h-3.5" />
             </Link>
-            <Link
-              to={`/dashboard/update-donation-request/${_id}`}
-              className="hover:text-gray-900 hover:bg-gray-100 p-2 rounded-lg transition-all text-gray-400"
-              title="Edit"
-            >
-              <FaEdit className="w-3.5 h-3.5" />
-            </Link>
+            {["done", "canceled"].includes(donationStatus) ? (
+              <button
+                disabled
+                className="p-2 rounded-lg text-gray-300 cursor-not-allowed"
+                title="Completed or canceled requests cannot be edited"
+              >
+                <FaEdit className="w-3.5 h-3.5" />
+              </button>
+            ) : (
+              <Link
+                to={`/dashboard/update-donation-request/${_id}`}
+                className="hover:text-gray-900 hover:bg-gray-100 p-2 rounded-lg transition-all text-gray-400"
+                title="Edit"
+              >
+                <FaEdit className="w-3.5 h-3.5" />
+              </Link>
+            )}
             <button
               onClick={() => handleDelete(_id)}
               className="hover:text-red-600 hover:bg-red-50 p-2 rounded-lg transition-all text-gray-400"
