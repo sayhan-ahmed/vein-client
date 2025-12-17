@@ -2,7 +2,7 @@ const DonationRequestSkeleton = () => {
   return (
     <div className="min-h-screen bg-[#F8F9FD] relative py-12 px-4 sm:px-6 lg:px-8 font-sans overflow-hidden">
       <div className="max-w-4xl mx-auto relative z-10">
-        <div className="text-center mb-12 relative animate-pulse">
+        <div className="text-center mb-12 relative">
           {/* Badge Skeleton */}
           <div className="mx-auto w-48 h-8 rounded-full bg-gray-200 mb-6"></div>
 
@@ -14,7 +14,7 @@ const DonationRequestSkeleton = () => {
         </div>
 
         {/* Card Skeleton */}
-        <div className="bg-white/60 backdrop-blur-2xl backdrop-saturate-150 rounded-[2.5rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.08)] border border-white/60 relative overflow-hidden ring-1 ring-black/5">
+        <div className="bg-white/60 backdrop-blur-2xl backdrop-saturate-150 rounded-[2.5rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.08)] border border-white/60 relative overflow-hidden ring-1 ring-black/5 animate-pulse">
           {/* Top Accent Skeleton */}
           <div className="absolute top-0 inset-x-0 h-1.5 bg-gray-200 opacity-80"></div>
 
@@ -81,7 +81,7 @@ const DonationRequestSkeleton = () => {
 
             {/* Button Skeleton */}
             <div className="pt-6">
-              <div className="w-full h-14 bg-gray-200 rounded-xl animate-pulse"></div>
+              <div className="w-full h-14 bg-gray-200 rounded-xl"></div>
             </div>
           </div>
         </div>

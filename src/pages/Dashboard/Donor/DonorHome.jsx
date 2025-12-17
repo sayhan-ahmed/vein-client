@@ -13,6 +13,7 @@ import {
   FaHeart,
 } from "react-icons/fa";
 import { useState } from "react";
+import DonorHomeSkeleton from "../../../components/Shared/DonorHomeSkeleton";
 
 const DonorHome = () => {
   const { user } = useAuth();
@@ -118,20 +119,7 @@ const DonorHome = () => {
     }
   };
 
-  if (isLoading)
-    return (
-      <div className="min-h-screen bg-[#F4F5FA] p-4 sm:p-8 space-y-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {[...Array(4)].map((_, i) => (
-            <div
-              key={i}
-              className="h-40 bg-white rounded-3xl animate-pulse"
-            ></div>
-          ))}
-        </div>
-        <div className="h-96 bg-white rounded-3xl animate-pulse"></div>
-      </div>
-    );
+  if (isLoading) return <DonorHomeSkeleton />;
 
   return (
     <div className="min-h-screen font-sans text-gray-900 w-full overflow-hidden">
