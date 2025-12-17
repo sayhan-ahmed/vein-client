@@ -5,7 +5,6 @@ import Container from "../../components/Shared/Container";
 import Button from "../../components/Shared/Button/Button";
 import DonationModal from "../../components/Modal/DonationModal";
 import toast from "react-hot-toast";
-import Loader from "../../components/Shared/Loader";
 import {
   FaHospital,
   FaCalendarAlt,
@@ -247,6 +246,8 @@ const DonationRequestDetails = () => {
                       className={`inline-flex items-center gap-2 py-1 px-3 rounded-full text-xs font-bold uppercase tracking-wider border ${
                         request.donationStatus === "inprogress"
                           ? "bg-yellow-100 text-yellow-800 border-yellow-200"
+                          : request.donationStatus === "done"
+                          ? "bg-green-100 text-green-800 border-green-200"
                           : "bg-red-100 text-red-600 border-red-200"
                       }`}
                     >
@@ -254,11 +255,17 @@ const DonationRequestDetails = () => {
                         className={`w-2.5 h-2.5 rounded-full ${
                           request.donationStatus === "inprogress"
                             ? "bg-yellow-500"
+                            : request.donationStatus === "done"
+                            ? "bg-green-500"
                             : "bg-red-500"
                         }`}
                       ></span>
                       {request.donationStatus === "inprogress"
                         ? "In Progress"
+                        : request.donationStatus === "done"
+                        ? "Completed"
+                        : request.donationStatus === "canceled"
+                        ? "Canceled"
                         : "Pending"}
                     </span>
                   </div>
@@ -408,9 +415,17 @@ const DonationRequestDetails = () => {
                   label={
                     request.donationStatus === "inprogress"
                       ? "In Progress"
+                      : request.donationStatus === "done"
+                      ? "Completed"
+                      : request.donationStatus === "canceled"
+                      ? "Canceled"
                       : "Donate"
                   }
-                  disabled={request.donationStatus === "inprogress"}
+                  disabled={
+                    request.donationStatus === "inprogress" ||
+                    request.donationStatus === "done" ||
+                    request.donationStatus === "canceled"
+                  }
                 />
 
                 <p className="text-xs text-center text-slate-400 mt-4 leading-relaxed px-4">

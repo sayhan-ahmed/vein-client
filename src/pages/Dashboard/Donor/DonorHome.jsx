@@ -12,11 +12,13 @@ import {
   FaHourglassHalf,
   FaHeart,
 } from "react-icons/fa";
+import { useState } from "react";
 
 const DonorHome = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
   const queryClient = useQueryClient();
+  const [searchTerm, setSearchTerm] = useState("");
 
   const {
     data: requests = [],
@@ -33,7 +35,16 @@ const DonorHome = () => {
   });
 
   const recentRequests = requests
-    .filter((r) => ["pending", "inprogress"].includes(r.donationStatus))
+    .filter((r) => {
+      const lowerSearch = searchTerm.toLowerCase();
+      return (
+        ["pending", "inprogress"].includes(r.donationStatus) &&
+        (r.recipientName?.toLowerCase().includes(lowerSearch) ||
+          r.recipientDistrict?.toLowerCase().includes(lowerSearch) ||
+          r.recipientUpazila?.toLowerCase().includes(lowerSearch) ||
+          r.bloodGroup?.toLowerCase().includes(lowerSearch))
+      );
+    })
     .slice(0, 3);
   const totalRequests = requests.length;
   const pendingRequests = requests.filter(
@@ -127,7 +138,6 @@ const DonorHome = () => {
       <div className="max-w-[1600px] mx-auto space-y-6">
         {/* Header */}
         <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100 relative overflow-hidden">
-
           <div className="absolute -top-24 -right-24 w-64 h-64 bg-red-500/5 rounded-full blur-3xl pointer-events-none"></div>
 
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
@@ -350,6 +360,8 @@ const DonorHome = () => {
               <input
                 type="text"
                 placeholder="Search"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-9 pr-4 py-2 bg-[#F4F5FA] rounded-xl text-xs font-medium text-gray-600 focus:outline-none focus:ring-2 focus:ring-red-100 w-full md:w-56 border border-transparent focus:border-red-200 transition-all placeholder:text-gray-400"
               />
             </div>

@@ -3,13 +3,21 @@ import { useForm } from "react-hook-form";
 import districtsData from "../../assets/data/districts.json";
 import upazilasData from "../../assets/data/upazilas.json";
 
-const AddDonationRequestForm = ({ onSubmit, user, loading, isBlocked }) => {
+const AddDonationRequestForm = ({
+  onSubmit,
+  user,
+  loading,
+  isBlocked,
+  initialData,
+}) => {
   const {
     register,
     handleSubmit,
     setValue,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: initialData || {},
+  });
 
   const [districts, setDistricts] = useState([]);
   const [upazilas, setUpazilas] = useState([]);
@@ -21,6 +29,16 @@ const AddDonationRequestForm = ({ onSubmit, user, loading, isBlocked }) => {
       setDistricts(districtsData[2].data);
     }
   }, []);
+
+  // Pre-select district for edit mode
+  useEffect(() => {
+    if (initialData?.recipientDistrict && districts.length > 0) {
+      const dist = districts.find(
+        (d) => d.name === initialData.recipientDistrict
+      );
+      if (dist) setSelectedDistrict(dist.id);
+    }
+  }, [initialData, districts]);
 
   useEffect(() => {
     // Filter Upazilas based on selected district
@@ -286,7 +304,13 @@ const AddDonationRequestForm = ({ onSubmit, user, loading, isBlocked }) => {
         disabled={loading}
         className="w-full p-3 text-center font-medium text-white transition duration-200 rounded shadow-md bg-red-600 hover:bg-red-700 disabled:bg-gray-400"
       >
-        {loading ? "Creating Request..." : "Request Donation"}
+        {loading
+          ? initialData
+            ? "Updating..."
+            : "Creating Request..."
+          : initialData
+          ? "Update Request"
+          : "Request Donation"}
       </button>
     </form>
   );
