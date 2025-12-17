@@ -54,4 +54,5 @@
 3. react-hook-form
 4. @tanstack/react-query
 5. prop-types
+6. recharts
 

@@ -58,9 +58,9 @@ const Sidebar = () => {
 
       {/* Sidebar Container */}
       <div
-        className={`z-50 md:fixed flex flex-col justify-between overflow-x-hidden bg-[#1D3557] w-64 space-y-6 px-2 py-6 absolute inset-y-0 left-0 transform ${
+        className={`z-50 fixed flex flex-col justify-between overflow-x-hidden bg-[#1D3557] w-64 space-y-6 px-2 py-6 inset-y-0 left-0 transform ${
           isActive && "-translate-x-full"
-        }  md:translate-x-0 transition-all duration-300 ease-in-out border-r border-white/5 shadow-2xl h-screen sticky`}
+        }  md:translate-x-0 transition-all duration-300 ease-in-out border-r border-white/5 shadow-2xl`}
       >
         <div className="flex flex-col h-full">
           {/* Logo Area */}
