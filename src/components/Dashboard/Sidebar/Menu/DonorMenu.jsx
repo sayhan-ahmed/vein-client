@@ -6,8 +6,8 @@ const DonorMenu = () => {
     <>
       <MenuItem
         icon={FaFingerprint}
-        label="Add Donation Request"
-        address="add-donation-request"
+        label="Create Donation Request"
+        address="create-donation-request"
       />
       <MenuItem
         icon={FaUserEdit}

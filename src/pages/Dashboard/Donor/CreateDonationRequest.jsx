@@ -1,34 +1,46 @@
-import { useEffect } from "react";
+import { useState } from "react";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate } from "react-router";
 import AddDonationRequestForm from "../../../components/Form/AddDonationRequestForm";
 import Swal from "sweetalert2";
 import { useQuery } from "@tanstack/react-query";
 import DonationRequestSkeleton from "../../../components/Shared/DonationRequestSkeleton";
 import { VscWorkspaceTrusted } from "react-icons/vsc";
 
-const UpdateDonationRequest = () => {
-  const { id } = useParams();
-  const { user } = useAuth();
+const CreateDonationRequest = () => {
+  const { user, loading: authLoading } = useAuth();
   const axiosSecure = useAxiosSecure();
   const navigate = useNavigate();
 
-  // Fetch Request Data
-  const {
-    data: requestData,
-    isLoading: dataLoading,
-    refetch,
-  } = useQuery({
-    queryKey: ["donation-request", id],
+  // Fetch User Status from DB
+  const { data: dbUser, isLoading: userLoading } = useQuery({
+    queryKey: ["user", user?.email],
+    enabled: !!user?.email,
     queryFn: async () => {
-      const { data } = await axiosSecure.get(`/donation-requests/${id}`);
+      const { data } = await axiosSecure.get(`/users/${user?.email}`);
       return data;
     },
   });
 
+  const isBlocked = dbUser?.status === "blocked";
+  const loading = authLoading || userLoading;
+
   const onSubmit = async (data) => {
-    const updateData = {
+    if (isBlocked) {
+      Swal.fire({
+        icon: "error",
+        title: "Access Denied",
+        text: "You are blocked and cannot create donation requests.",
+      });
+      return;
+    }
+
+    const requestData = {
+      requesterName: user?.displayName,
+      requesterEmail: user?.email,
+      requesterImage: user?.photoURL,
+      requesterRole: dbUser?.role,
       recipientName: data.recipientName,
       recipientDistrict: data.recipientDistrict,
       recipientUpazila: data.recipientUpazila,
@@ -39,35 +51,29 @@ const UpdateDonationRequest = () => {
       donationDate: data.donationDate,
       donationTime: data.donationTime,
       requestMessage: data.requestMessage,
+      donationStatus: "pending",
     };
 
     try {
-      const response = await axiosSecure.patch(
-        `/donation-requests/${id}`,
-        updateData
+      const response = await axiosSecure.post(
+        "/donation-requests",
+        requestData
       );
-      if (response.data.modifiedCount > 0) {
+      if (response.data.insertedId) {
         Swal.fire({
           position: "top-end",
           icon: "success",
-          title: "Request Updated Successfully",
+          title: "Request Created Successfully",
           showConfirmButton: false,
           timer: 1500,
         });
-        refetch();
         navigate("/dashboard/my-donation-requests");
-      } else {
-        Swal.fire({
-          icon: "info",
-          title: "No Changes",
-          text: "You did not make any changes to the request.",
-        });
       }
     } catch (error) {
       console.error(error);
       Swal.fire({
         icon: "error",
-        title: "Update Failed",
+        title: "Oops...",
         text:
           error?.response?.data?.message ||
           error.message ||
@@ -76,13 +82,13 @@ const UpdateDonationRequest = () => {
     }
   };
 
-  if (dataLoading) return <DonationRequestSkeleton />;
+  if (loading) return <DonationRequestSkeleton />;
 
   return (
     <div className="min-h-screen bg-[#F8F9FD] relative py-12 px-4 sm:px-6 lg:px-8 font-sans overflow-hidden selection:bg-red-500/30">
       <div className="max-w-4xl mx-auto relative z-10 animate-fade-in-up">
         <div className="text-center mb-12 relative">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full  bg-red-50/50 backdrop-blur-md border border-red-100/50 shadow-sm mb-6 ring-1 ring-red-50/50">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-50/50 backdrop-blur-md border border-red-100/50 shadow-sm mb-6 ring-1 ring-red-50/50">
             <span className="flex h-2 w-2 relative">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
@@ -93,11 +99,11 @@ const UpdateDonationRequest = () => {
           </div>
 
           <h1 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight leading-tight mb-3">
-            Update <span className="text-red-600">Blood Donation</span> Request
+            New <span className="text-red-600">Blood Donation</span> Request
           </h1>
           <p className="text-lg text-slate-500 max-w-lg mx-auto leading-relaxed font-medium">
-            Modify your request details below. Timely updates help coordinate
-            donors more effectively.
+            Precision matters. Complete the form below to activate our donor
+            network instantly.
           </p>
         </div>
 
@@ -110,9 +116,8 @@ const UpdateDonationRequest = () => {
             <AddDonationRequestForm
               onSubmit={onSubmit}
               user={user}
-              loading={false}
-              isBlocked={false}
-              initialData={requestData}
+              loading={loading}
+              isBlocked={isBlocked}
             />
           </div>
         </div>
@@ -129,4 +134,4 @@ const UpdateDonationRequest = () => {
   );
 };
 
-export default UpdateDonationRequest;
+export default CreateDonationRequest;
