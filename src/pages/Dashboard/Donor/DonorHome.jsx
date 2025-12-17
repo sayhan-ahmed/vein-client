@@ -152,7 +152,7 @@ const DonorHome = () => {
             <div className="flex items-center gap-4">
               <Link
                 to="/dashboard/create-donation-request"
-                className="flex items-center justify-center gap-2 px-5 h-10 bg-[#1D3557] hover:bg-red-700 text-white rounded-xl font-bold text-xs transition-all shadow-lg shadow-blue-900/20 hover:shadow-blue-900/30 hover:-translate-y-0.5 active:translate-y-0"
+                className="flex items-center justify-center gap-2 px-5 h-10 bg-[#1D3557] hover:bg-red-700 text-white rounded-xl font-bold text-xs transition-all shadow-lg shadow-blue-900/20 hover:shadow-blue-900/30 hover:-translate-y-0.5 duration-300"
                 title="New Request"
               >
                 <div className="w-5 h-5 rounded-full bg-white/10 flex items-center justify-center">
@@ -160,13 +160,13 @@ const DonorHome = () => {
                 </div>
                 <span>New Request</span>
               </Link>
-              <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-white shadow-lg ring-2 ring-gray-50 cursor-pointer hover:ring-red-100 transition-all">
+              <Link to="/dashboard/profile" className="w-14 h-14 rounded-full overflow-hidden border-2 border-white shadow-lg ring-2 ring-gray-50 cursor-pointer hover:ring-red-300 hover:scale-105 duration-400 transition-all">
                 <img
                   src={user?.photoURL || "https://i.pravatar.cc/150?img=32"}
                   alt="User"
                   className="w-full h-full object-cover"
                 />
-              </div>
+              </Link>
             </div>
           </div>
         </div>
@@ -230,7 +230,7 @@ const DonorHome = () => {
               </div>
               <Link
                 to="/dashboard/my-donation-requests"
-                className="w-8 h-8 rounded-full bg-[#1D3557] text-white flex items-center justify-center hover:scale-105 transition-transform shadow-lg"
+                className="w-8 h-8 rounded-full bg-[#1D3557] hover:bg-red-600 text-white flex items-center justify-center hover:scale-105 transition-transform shadow-lg"
               >
                 <FaArrowRight size={10} />
               </Link>
@@ -384,14 +384,33 @@ const DonorHome = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-50">
-                  {recentRequests.map((request) => (
-                    <DonationRequestDataRow
-                      key={request._id}
-                      request={request}
-                      handleDelete={handleDelete}
-                      handleStatusUpdate={handleStatusUpdate}
-                    />
-                  ))}
+                  {recentRequests.length > 0 ? (
+                    recentRequests.map((request) => (
+                      <DonationRequestDataRow
+                        key={request._id}
+                        request={request}
+                        handleDelete={handleDelete}
+                        handleStatusUpdate={handleStatusUpdate}
+                      />
+                    ))
+                  ) : (
+                    <tr>
+                      <td
+                        colSpan="7"
+                        className="px-6 py-12 text-center text-gray-500"
+                      >
+                        <div className="flex flex-col items-center justify-center gap-2">
+                          <FaHandHoldingHeart className="text-gray-300 text-2xl" />
+                          <p className="text-gray-900 font-bold">
+                            No requests found
+                          </p>
+                          <p className="text-gray-500 text-sm">
+                            You have no pending or in-progress requests.
+                          </p>
+                        </div>
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>
@@ -400,20 +419,20 @@ const DonorHome = () => {
               <div className="w-12 h-12 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-3 text-gray-300">
                 <FaSearch size={18} />
               </div>
-              <h3 className="text-gray-900 font-bold mb-1 text-sm">
+              <h3 className="text-gray-900 font-bold mb-1">
                 No requests found
               </h3>
-              <p className="text-gray-400 text-xs">
+              <p className="text-gray-400 text-sm">
                 You haven't made any donation requests yet.
               </p>
             </div>
           )}
 
           {requests.length > 3 && (
-            <div className="mt-6 flex justify-center">
+            <div className="flex justify-center">
               <Link
                 to="/dashboard/my-donation-requests"
-                className="px-5 py-2.5 bg-[#F4F5FA] hover:bg-gray-100 text-gray-700 font-bold rounded-xl text-[11px] transition-colors border border-gray-100 hover:border-gray-200"
+                className="px-5 py-2.5 bg-[#1D3657] hover:bg-red-700 text-white font-bold rounded-xl text-xs transition-all hover:scale-105 duration-300"
               >
                 View All Requests
               </Link>
