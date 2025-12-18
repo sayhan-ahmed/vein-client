@@ -17,8 +17,8 @@ const useRole = () => {
     staleTime: Infinity, 
   });
 
-  return [role, isLoading];
-  // return ["admin", false]; //(for testing admin dashboard)
+  // return [role, isLoading];
+  return ["admin", false]; //(for testing admin dashboard)
   // return ["volunteer", false]; //(for testing volunteer dashboard)
 };
 

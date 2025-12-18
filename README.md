@@ -30,6 +30,7 @@
 11. User role text change to capitalize in DonationRequestDetails.jsx
 12. DonationRequestDetails.jsx: donationStatus and it's color change based on status
 13. Max width for donor dashboard pages
+14. changed manage-users route as all-users
 
 # TODO:
 

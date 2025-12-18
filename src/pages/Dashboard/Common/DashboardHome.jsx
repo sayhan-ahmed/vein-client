@@ -1,5 +1,5 @@
 import useRole from "../../../hooks/useRole";
-import AdminStatistics from "../../../components/Dashboard/Statistics/AdminStatistics";
+import AdminHome from "../Admin/AdminHome";
 import DonorHome from "../Donor/DonorHome";
 import DonorHomeSkeleton from "../../../components/Shared/DonorHomeSkeleton";
 
@@ -12,12 +12,12 @@ const DashboardHome = () => {
     return <DonorHome />;
   }
 
-  // Default to Admin Stats (or Volunteer if applicable in future)
-  return (
-    <div>
-      <AdminStatistics />
-    </div>
-  );
+  if (role === "admin") {
+    return <AdminHome />;
+  }
+
+  // Default fallback (e.g., for volunteers or others)
+  return <DonorHome />;
 };
 
 export default DashboardHome;

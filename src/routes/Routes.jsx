@@ -76,7 +76,7 @@ export const router = createBrowserRouter([
         element: <MyDonationRequests />,
       },
       {
-        path: "manage-users",
+        path: "all-users",
         element: (
           <AdminRoute>
             <ManageUsers />
