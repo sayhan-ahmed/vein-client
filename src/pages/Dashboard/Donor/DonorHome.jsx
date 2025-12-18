@@ -6,7 +6,7 @@ import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
 import { FaPlus, FaSearch, FaHandHoldingHeart } from "react-icons/fa";
 import DonationRequestDataRow from "../../../components/Dashboard/TableRows/DonationRequestDataRow";
-import DonorHomeSkeleton from "../../../components/Shared/DonorHomeSkeleton";
+import DonorHomeSkeleton from "./components/DonorHomeSkeleton";
 import DonorStatistics from "../../../components/Dashboard/Statistics/DonorStatistics";
 
 const DonorHome = () => {

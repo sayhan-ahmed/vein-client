@@ -3,7 +3,7 @@ import { Link } from "react-router";
 import { FaSearch, FaBell, FaCalendarAlt } from "react-icons/fa";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
-import DonorHomeSkeleton from "../../../components/Shared/DonorHomeSkeleton";
+import AdminHomeSkeleton from "./components/AdminHomeSkeleton";
 import AdminStats from "./components/AdminStats";
 import AdminAnalytics from "./components/AdminAnalytics";
 import AdminRecentActivity from "./components/AdminRecentActivity";
@@ -30,7 +30,7 @@ const AdminHome = () => {
     },
   });
 
-  if (isUsersLoading || isRequestsLoading) return <DonorHomeSkeleton />;
+  if (isUsersLoading || isRequestsLoading) return <AdminHomeSkeleton />;
 
   // Calculate Stats
   const donorCount = users.filter((u) => u.role === "donor").length;

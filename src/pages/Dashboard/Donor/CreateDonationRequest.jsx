@@ -5,7 +5,7 @@ import { useNavigate } from "react-router";
 import AddDonationRequestForm from "../../../components/Form/AddDonationRequestForm";
 import Swal from "sweetalert2";
 import { useQuery } from "@tanstack/react-query";
-import DonationRequestSkeleton from "../../../components/Shared/DonationRequestSkeleton";
+import DonationRequestSkeleton from "./components/DonationRequestSkeleton";
 import { VscWorkspaceTrusted } from "react-icons/vsc";
 
 const CreateDonationRequest = () => {

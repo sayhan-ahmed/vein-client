@@ -4,7 +4,7 @@ import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import DonationRequestDataRow from "../../../components/Dashboard/TableRows/DonationRequestDataRow";
 import Swal from "sweetalert2";
-import DonorHomeSkeleton from "../../../components/Shared/DonorHomeSkeleton";
+import DonorHomeSkeleton from "./components/DonorHomeSkeleton";
 import { FaHandHoldingHeart, FaPlus } from "react-icons/fa";
 import { Link } from "react-router";
 

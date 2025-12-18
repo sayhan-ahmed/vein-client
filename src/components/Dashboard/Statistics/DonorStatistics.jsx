@@ -8,7 +8,7 @@ import {
   FaArrowRight,
   FaHeart,
 } from "react-icons/fa";
-import DonorHomeSkeleton from "../../Shared/DonorHomeSkeleton";
+import DonorHomeSkeleton from "../../../pages/Dashboard/Donor/components/DonorHomeSkeleton";
 
 const DonorStatistics = () => {
   const { user } = useAuth();

@@ -1,7 +1,7 @@
 import useRole from "../../../hooks/useRole";
 import AdminHome from "../Admin/AdminHome";
 import DonorHome from "../Donor/DonorHome";
-import DonorHomeSkeleton from "../../../components/Shared/DonorHomeSkeleton";
+import DonorHomeSkeleton from "../Donor/components/DonorHomeSkeleton";
 
 const DashboardHome = () => {
   const [role, isLoading] = useRole();
