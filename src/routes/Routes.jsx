@@ -88,6 +88,10 @@ export const router = createBrowserRouter([
         element: <Profile />,
       },
       {
+        path: "profile/:email",
+        element: <Profile />,
+      },
+      {
         path: "my-recipient-requests",
         element: (
           <VolunteerRoute>

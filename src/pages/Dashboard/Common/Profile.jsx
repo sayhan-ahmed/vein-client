@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useParams } from "react-router";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 import { imageUpload } from "../../../utils/imageUpload";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
-import { ImSpinner9 } from "react-icons/im";
 
 // Modular Components
 import ProfileHeader from "../../../components/Dashboard/Profile/ProfileHeader";
@@ -23,10 +23,15 @@ import upazilasJson from "../../../assets/data/upazilas.json";
 
 const Profile = () => {
   const { user, updateUserProfile } = useAuth();
+  const { email } = useParams();
   const axiosSecure = useAxiosSecure();
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
+
+  // Determine which user's profile to view
+  const targetEmail = email || user?.email;
+  const isOwnProfile = !email || email === user?.email;
 
   // Location Data States
   const [districts, setDistricts] = useState([]);
@@ -51,12 +56,12 @@ const Profile = () => {
     refetch,
     isLoading: isDataLoading,
   } = useQuery({
-    queryKey: ["userProfile", user?.email],
+    queryKey: ["userProfile", targetEmail],
     queryFn: async () => {
-      const res = await axiosSecure.get(`/users/${user?.email}`);
+      const res = await axiosSecure.get(`/users/${targetEmail}`);
       return res.data;
     },
-    enabled: !!user?.email,
+    enabled: !!targetEmail,
   });
 
   // Fetch All Donation Requests for Stats
@@ -70,16 +75,16 @@ const Profile = () => {
 
   // Calculate Real Stats
   const myDonations = allRequests.filter(
-    (req) => req.donorEmail === user?.email && req.donationStatus === "done"
+    (req) => req.donorEmail === targetEmail && req.donationStatus === "done"
   );
 
   const myRequests = allRequests.filter(
-    (req) => req.requesterEmail === user?.email
+    (req) => req.requesterEmail === targetEmail
   );
 
   const totalDonations = myDonations.length;
   const totalRequests = myRequests.length;
-  const impactScore = totalDonations * 15 + totalRequests * 5; 
+  const impactScore = totalDonations * 15 + totalRequests * 5;
 
   // Process Data for Graph
   const processActivityData = () => {
@@ -258,6 +263,7 @@ const Profile = () => {
           user={user}
           isEditing={isEditing}
           handleEditToggle={handleEditToggle}
+          isOwnProfile={isOwnProfile}
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">

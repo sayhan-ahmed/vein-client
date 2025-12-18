@@ -1,29 +1,37 @@
 import { FaCamera, FaTint, FaUser, FaMapMarkerAlt } from "react-icons/fa";
 import { MdEdit, MdCancel } from "react-icons/md";
 
-const ProfileHeader = ({ userData, user, isEditing, handleEditToggle }) => {
+const ProfileHeader = ({
+  userData,
+  user,
+  isEditing,
+  handleEditToggle,
+  isOwnProfile,
+}) => {
   return (
     <div className="bg-white rounded-3xl p-8 shadow-xl shadow-slate-200/50 border border-white/50 relative overflow-hidden group">
-      <div className="absolute top-0 right-0 p-6 z-20">
-        <button
-          onClick={handleEditToggle}
-          className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-bold text-sm transition-all shadow-lg active:scale-95 ${
-            isEditing
-              ? "bg-red-50 text-red-600 hover:bg-red-100 ring-1 ring-red-200"
-              : "bg-[#1D3557] text-white hover:bg-[#2a4d7d] hover:shadow-blue-900/20"
-          }`}
-        >
-          {isEditing ? (
-            <>
-              <MdCancel size={18} /> Cancel
-            </>
-          ) : (
-            <>
-              <MdEdit size={16} /> Edit Profile
-            </>
-          )}
-        </button>
-      </div>
+      {isOwnProfile && (
+        <div className="absolute top-0 right-0 p-6 z-20">
+          <button
+            onClick={handleEditToggle}
+            className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-bold text-sm transition-all shadow-lg active:scale-95 ${
+              isEditing
+                ? "bg-red-50 text-red-600 hover:bg-red-100 ring-1 ring-red-200"
+                : "bg-[#1D3557] text-white hover:bg-[#2a4d7d] hover:shadow-blue-900/20"
+            }`}
+          >
+            {isEditing ? (
+              <>
+                <MdCancel size={18} /> Cancel
+              </>
+            ) : (
+              <>
+                <MdEdit size={16} /> Edit Profile
+              </>
+            )}
+          </button>
+        </div>
+      )}
 
       <div className="absolute top-0 left-0 w-full h-32 bg-[#1D3557]/20 flex items-center justify-center"></div>
       <div className="absolute top-0 right-0 w-64 h-64 bg-red-500/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>

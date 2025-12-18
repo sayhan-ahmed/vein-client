@@ -90,18 +90,44 @@ const DonationRequestDataRow = ({
           ></span>
           {donationStatus === "inprogress"
             ? "In Progress"
+            : donationStatus === "done"
+            ? "Completed"
             : donationStatus.charAt(0).toUpperCase() + donationStatus.slice(1)}
         </span>
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
         {donationStatus !== "pending" ? (
-          <div className="flex flex-col">
-            <span className="text-gray-900 font-semibold text-xs">
-              {donorName || "Unknown"}
-            </span>
-            <span className="text-[10px] text-gray-400">
-              {donorEmail || "No Email"}
-            </span>
+          <div className="flex items-center gap-4">
+            <div className="flex flex-col">
+              <Link
+                to={`/dashboard/profile/${donorEmail}`}
+                className="text-gray-900 font-semibold text-xs hover:text-red-600 hover:underline transition-all"
+              >
+                {donorName || "Unknown"}
+              </Link>
+              <span className="text-[10px] text-gray-400">
+                {donorEmail || "No Email"}
+              </span>
+            </div>
+
+            {donationStatus === "inprogress" && (
+              <div className="flex items-center gap-1.5 ml-2 pl-4 border-l border-gray-100">
+                <button
+                  onClick={() => handleStatusUpdate(_id, "done", request)}
+                  className="px-2.5 py-1.5 rounded-lg bg-emerald-50 text-emerald-600 text-[10px] font-bold border border-emerald-100 hover:bg-emerald-500 hover:text-white hover:border-emerald-500 transition-all shadow-sm active:scale-95"
+                  title="Mark as Done"
+                >
+                  Done
+                </button>
+                <button
+                  onClick={() => handleStatusUpdate(_id, "canceled", request)}
+                  className="px-2.5 py-1.5 rounded-lg bg-red-50 text-red-600 text-[10px] font-bold border border-red-100 hover:bg-red-500 hover:text-white hover:border-red-500 transition-all shadow-sm active:scale-95"
+                  title="Cancel Request"
+                >
+                  Cancel
+                </button>
+              </div>
+            )}
           </div>
         ) : (
           <span className="text-[11px] text-gray-400 italic">N/A</span>
@@ -109,26 +135,6 @@ const DonationRequestDataRow = ({
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-right">
         <div className="flex items-center justify-end gap-2 opacity-80 group-hover:opacity-100 transition-opacity">
-          {donationStatus === "inprogress" && (
-            <div className="flex items-center gap-1 mr-2">
-              <button
-                onClick={() => handleStatusUpdate(_id, "done", request)}
-                className="px-2 py-1 rounded-md bg-emerald-50 text-emerald-600 text-[10px] font-bold border border-emerald-100 hover:bg-emerald-100 transition-colors"
-                title="Mark as Done"
-              >
-                Done
-              </button>
-              <button
-                onClick={() => handleStatusUpdate(_id, "canceled", request)}
-                className="px-2 py-1 rounded-md bg-red-50 text-red-600 text-[10px] font-bold border border-red-100 hover:bg-red-100 transition-colors"
-                title="Cancel Request"
-              >
-                Cancel
-              </button>
-              <div className="w-px h-3 bg-gray-200 mx-1"></div>
-            </div>
-          )}
-
           <div className="flex items-center gap-1">
             <Link
               to={`/donation-requests/${_id}`}

@@ -27,7 +27,17 @@ const MyDonationRequests = () => {
       const { data } = await axiosSecure.get(
         `/donation-requests/my?email=${user?.email}`
       );
-      return data;
+      // Priority: pending > inprogress > done > canceled
+      const statusPriority = {
+        pending: 1,
+        inprogress: 2,
+        done: 3,
+        canceled: 4,
+      };
+      return data.sort(
+        (a, b) =>
+          statusPriority[a.donationStatus] - statusPriority[b.donationStatus]
+      );
     },
   });
 
