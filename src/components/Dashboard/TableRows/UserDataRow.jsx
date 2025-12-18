@@ -1,38 +1,205 @@
-import { useState } from "react";
-import UpdateUserRoleModal from "../../Modal/UpdateUserRoleModal";
+import { Menu, Transition } from "@headlessui/react";
+import { Fragment } from "react";
+import {
+  FaEllipsisV,
+  FaUserEdit,
+  FaUserSlash,
+  FaUserCheck,
+  FaUserShield,
+  FaUserGraduate,
+} from "react-icons/fa";
 
-const UserDataRow = () => {
-  let [isOpen, setIsOpen] = useState(false);
-  const closeModal = () => setIsOpen(false);
-  return (
-    <tr>
-      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-        <p className="text-gray-900 ">abc@gmail.com</p>
-      </td>
-      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-        <p className="text-gray-900 ">Recipient</p>
-      </td>
-      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-        <p className="">Unavailable</p>
-      </td>
+const UserDataRow = ({ user, handleUpdate }) => {
+  const { _id, image, name, email, role, status, createdAt } = user;
 
-      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-        <span
-          onClick={() => setIsOpen(true)}
-          className="relative cursor-pointer inline-block px-3 py-1 font-semibold text-green-900 leading-tight"
-        >
-          <span
-            aria-hidden="true"
-            className="absolute inset-0 bg-green-200 opacity-50 rounded-full"
-          ></span>
-          <span className="relative">Update Role</span>
+  const formatDate = (dateString) => {
+    if (!dateString) return "N/A";
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+  };
+
+  const getRoleBadge = (role) => {
+    switch (role?.toLowerCase()) {
+      case "admin":
+        return (
+          <span className="bg-red-50 text-red-600 border border-red-100 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider">
+            Admin
+          </span>
+        );
+      case "volunteer":
+        return (
+          <span className="bg-blue-50 text-blue-600 border border-blue-100 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider">
+            Volunteer
+          </span>
+        );
+      default:
+        return (
+          <span className="bg-slate-50 text-slate-600 border border-slate-100 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider">
+            Donor
+          </span>
+        );
+    }
+  };
+
+  const getStatusBadge = (status) => {
+    return status === "active" ? (
+      <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-green-50 border border-green-100 w-fit mx-auto">
+        <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
+        <span className="text-[10px] font-black text-green-700 uppercase tracking-widest">
+          Active
         </span>
-        {/* Modal */}
-        <UpdateUserRoleModal
-          isOpen={isOpen}
-          closeModal={closeModal}
-          role="customer"
-        />
+      </div>
+    ) : (
+      <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-50 border border-red-100 w-fit mx-auto">
+        <span className="w-1.5 h-1.5 rounded-full bg-red-400"></span>
+        <span className="text-[10px] font-black text-red-700 uppercase tracking-widest">
+          Blocked
+        </span>
+      </div>
+    );
+  };
+
+  return (
+    <tr className="hover:bg-slate-50/50 transition-colors duration-200">
+      <td className="px-8 py-5">
+        <div className="flex items-center gap-4">
+          <div className="relative group">
+            <img
+              src={image || "https://i.ibb.co/5GzXkwq/user.png"}
+              alt={name}
+              className="w-11 h-11 rounded-2xl object-cover ring-2 ring-white shadow-sm group-hover:shadow-md transition-all duration-300"
+            />
+            {status === "active" && (
+              <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-white shadow-sm"></div>
+            )}
+          </div>
+          <div className="flex flex-col">
+            <span className="text-sm font-black text-slate-800 tracking-tight leading-none mb-1">
+              {name}
+            </span>
+            <span className="text-xs font-bold text-slate-400 lowercase">
+              {email}
+            </span>
+          </div>
+        </div>
+      </td>
+
+      <td className="px-6 py-5 text-center">{getRoleBadge(role)}</td>
+
+      <td className="px-6 py-5 text-center">{getStatusBadge(status)}</td>
+
+      <td className="px-6 py-5 text-center">
+        <span className="text-xs font-black text-slate-700 tracking-tight">
+          {formatDate(createdAt)}
+        </span>
+      </td>
+
+      <td className="px-8 py-5 text-right">
+        <Menu as="div" className="relative inline-block text-left">
+          <Menu.Button className="w-9 h-9 flex items-center justify-center rounded-xl bg-white border border-slate-100 text-slate-400 hover:text-red-600 hover:border-red-100 hover:shadow-sm transition-all active:scale-90">
+            <FaEllipsisV size={14} />
+          </Menu.Button>
+
+          <Transition
+            as={Fragment}
+            enter="transition ease-out duration-200"
+            enterFrom="transform opacity-0 scale-95"
+            enterTo="transform opacity-100 scale-100"
+            leave="transition ease-in duration-75"
+            leaveFrom="transform opacity-100 scale-100"
+            leaveTo="transform opacity-0 scale-95"
+          >
+            <Menu.Items className="absolute right-0 mt-2 w-52 origin-top-right divide-y divide-slate-50 rounded-2xl bg-white shadow-[0_20px_40px_-10px_rgba(0,0,0,0.12)] ring-1 ring-black/5 focus:outline-none z-50 overflow-hidden">
+              <div className="px-1.5 py-1.5">
+                {/* Status Actions */}
+                <Menu.Item>
+                  {({ active }) => (
+                    <button
+                      onClick={() =>
+                        handleUpdate(
+                          _id,
+                          {
+                            status: status === "active" ? "blocked" : "active",
+                          },
+                          status === "active" ? "blocked" : "active"
+                        )
+                      }
+                      className={`${
+                        active ? "bg-slate-50 text-slate-900" : "text-slate-600"
+                      } group flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-xs font-bold transition-colors`}
+                    >
+                      {status === "active" ? (
+                        <>
+                          <div className="w-7 h-7 flex items-center justify-center rounded-lg bg-red-50 text-red-500">
+                            <FaUserSlash size={12} />
+                          </div>
+                          Block User
+                        </>
+                      ) : (
+                        <>
+                          <div className="w-7 h-7 flex items-center justify-center rounded-lg bg-green-50 text-green-500">
+                            <FaUserCheck size={12} />
+                          </div>
+                          Unblock User
+                        </>
+                      )}
+                    </button>
+                  )}
+                </Menu.Item>
+              </div>
+
+              <div className="px-1.5 py-1.5">
+                {/* Role Actions */}
+                <Menu.Item disabled={role === "volunteer"}>
+                  {({ active }) => (
+                    <button
+                      onClick={() =>
+                        handleUpdate(_id, { role: "volunteer" }, "role")
+                      }
+                      disabled={role === "volunteer"}
+                      className={`${
+                        active ? "bg-slate-50 text-slate-900" : "text-slate-600"
+                      } ${
+                        role === "volunteer"
+                          ? "opacity-50 cursor-not-allowed"
+                          : ""
+                      } group flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-xs font-bold transition-colors`}
+                    >
+                      <div className="w-7 h-7 flex items-center justify-center rounded-lg bg-blue-50 text-blue-500">
+                        <FaUserGraduate size={12} />
+                      </div>
+                      Make Volunteer
+                    </button>
+                  )}
+                </Menu.Item>
+                <Menu.Item disabled={role === "admin"}>
+                  {({ active }) => (
+                    <button
+                      onClick={() =>
+                        handleUpdate(_id, { role: "admin" }, "role")
+                      }
+                      disabled={role === "admin"}
+                      className={`${
+                        active ? "bg-slate-50 text-slate-900" : "text-slate-600"
+                      } ${
+                        role === "admin" ? "opacity-50 cursor-not-allowed" : ""
+                      } group flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-xs font-bold transition-colors`}
+                    >
+                      <div className="w-7 h-7 flex items-center justify-center rounded-lg bg-red-50 text-red-600">
+                        <FaUserShield size={12} />
+                      </div>
+                      Make Admin
+                    </button>
+                  )}
+                </Menu.Item>
+              </div>
+            </Menu.Items>
+          </Transition>
+        </Menu>
       </td>
     </tr>
   );

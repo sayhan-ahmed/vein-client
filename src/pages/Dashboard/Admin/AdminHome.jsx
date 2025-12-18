@@ -3,6 +3,7 @@ import { Link } from "react-router";
 import { FaSearch, FaBell, FaCalendarAlt } from "react-icons/fa";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import useRole from "../../../hooks/useRole";
 import AdminHomeSkeleton from "./components/AdminHomeSkeleton";
 import AdminStats from "./components/AdminStats";
 import AdminAnalytics from "./components/AdminAnalytics";
@@ -11,6 +12,7 @@ import AdminRecentActivity from "./components/AdminRecentActivity";
 const AdminHome = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
+  const [role, isRoleLoading] = useRole();
 
   // Fetch Stats Data
   const { data: users = [], isLoading: isUsersLoading } = useQuery({
@@ -30,7 +32,8 @@ const AdminHome = () => {
     },
   });
 
-  if (isUsersLoading || isRequestsLoading) return <AdminHomeSkeleton />;
+  if (isRoleLoading || isUsersLoading || isRequestsLoading)
+    return <AdminHomeSkeleton />;
 
   // Calculate Stats
   const donorCount = users.filter((u) => u.role === "donor").length;

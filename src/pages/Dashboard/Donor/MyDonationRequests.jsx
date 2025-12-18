@@ -4,7 +4,7 @@ import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import DonationRequestDataRow from "../../../components/Dashboard/TableRows/DonationRequestDataRow";
 import Swal from "sweetalert2";
-import DonorHomeSkeleton from "./components/DonorHomeSkeleton";
+import MyDonationRequestsSkeleton from "./components/MyDonationRequestsSkeleton";
 import { FaHandHoldingHeart, FaPlus } from "react-icons/fa";
 import { Link } from "react-router";
 
@@ -119,7 +119,7 @@ const MyDonationRequests = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  if (isLoading) return <DonorHomeSkeleton />;
+  if (isLoading) return <MyDonationRequestsSkeleton />;
 
   const tabs = [
     { id: "all", label: "All Requests" },

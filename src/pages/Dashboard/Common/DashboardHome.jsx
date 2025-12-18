@@ -6,7 +6,7 @@ import DonorHomeSkeleton from "../Donor/components/DonorHomeSkeleton";
 const DashboardHome = () => {
   const [role, isLoading] = useRole();
 
-  if (isLoading) return <DonorHomeSkeleton />;
+  if (isLoading) return null;
 
   if (role === "donor") {
     return <DonorHome />;
