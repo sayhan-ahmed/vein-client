@@ -92,7 +92,7 @@ const ManageUsers = () => {
   ];
 
   return (
-    <div className="min-h-screen font-sans text-gray-900 w-full overflow-hidden mt-2 pb-10">
+    <div className="min-h-screen font-sans text-gray-900 w-full mt-2 pb-10">
       <div className="mx-auto space-y-8">
         {/* Header Section */}
         <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100 relative overflow-hidden group">
@@ -127,10 +127,10 @@ const ManageUsers = () => {
         </div>
 
         {/* Content Card */}
-        <div className="bg-white rounded-4xl p-1 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.05)] border border-gray-100 flex flex-col relative overflow-hidden min-h-[600px]">
+        <div className="bg-white rounded-4xl p-1 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.05)] border border-gray-100 flex flex-col relative min-h-[600px]">
           {/* Controls Bar */}
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 px-6 mt-6 mb-6">
-            <div className="bg-gray-50/80 p-1.5 rounded-full inline-flex border border-gray-100 shadow-inner">
+            <div className="bg-gray-50/80 p-1 rounded-2xl md:rounded-full flex overflow-x-auto no-scrollbar whitespace-nowrap border border-gray-100 shadow-inner gap-1 scroll-smooth w-full md:w-auto">
               {filterTabs.map((tab) => (
                 <button
                   key={tab.id}
@@ -138,7 +138,7 @@ const ManageUsers = () => {
                     setFilterStatus(tab.id);
                     setCurrentPage(1);
                   }}
-                  className={`relative px-5 py-2 rounded-full text-xs font-bold transition-all duration-300 flex items-center gap-2 z-10 ${
+                  className={`relative px-5 md:px-6 py-2 md:py-2.5 rounded-xl md:rounded-full text-xs font-bold transition-all duration-300 flex items-center gap-2 shrink-0 z-10 ${
                     filterStatus === tab.id
                       ? "text-white shadow-lg bg-[#1D3657] scale-105"
                       : "text-gray-500 hover:text-[#1D3657] hover:bg-white/50"
@@ -159,17 +159,25 @@ const ManageUsers = () => {
           </div>
 
           {/* Table Container */}
-          <div className="px-6 pb-8">
-            <div className="rounded-4xl border border-gray-100 overflow-hidden bg-white shadow-[0_4px_20px_-4px_rgba(0,0,0,0.02)]">
+          <div className="px-2 sm:px-6 pb-8">
+            <div className="rounded-3xl md:rounded-4xl border border-gray-100 overflow-hidden bg-white shadow-[0_4px_20px_-4px_rgba(0,0,0,0.02)]">
               <div className="overflow-x-auto">
                 <table className="w-full whitespace-nowrap">
                   <thead>
                     <tr className="bg-slate-50/80 border-b border-gray-100 text-left text-[11px] font-black text-slate-500 uppercase tracking-widest">
-                      <th className="px-8 py-6">Identity & Profile</th>
-                      <th className="px-6 py-6 text-center">Designation</th>
-                      <th className="px-6 py-6 text-center">Status</th>
-                      <th className="px-6 py-6 text-center">Account Created</th>
-                      <th className="px-8 py-6 text-right">Settings</th>
+                      <th className="px-4 sm:px-8 py-6 min-w-[200px]">
+                        Identity & Profile
+                      </th>
+                      <th className="px-3 sm:px-6 py-6 text-center min-w-[120px]">
+                        Designation
+                      </th>
+                      <th className="px-3 sm:px-6 py-5 text-center min-w-[120px]">
+                        Status
+                      </th>
+                      <th className="px-3 sm:px-6 py-6 text-center min-w-[140px]">
+                        Account Created
+                      </th>
+                      <th className="px-4 sm:px-8 py-6 text-right">Settings</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-50/80">

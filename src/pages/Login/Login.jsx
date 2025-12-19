@@ -42,9 +42,6 @@ const Login = () => {
       navigate(from, { replace: true });
       toast.success("Login Successful");
     } catch (err) {
-      console.log(err);
-      setLoading(false);
-
       // Handle identifying specific errors
       if (
         err.code === "auth/wrong-password" ||
@@ -59,6 +56,8 @@ const Login = () => {
       } else {
         toast.error(err?.message || "Login failed");
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -71,7 +70,6 @@ const Login = () => {
       toast.success("Reset link sent! Check your email & spams.");
       setIsReset(false);
     } catch (err) {
-      console.log(err);
       if (err.code === "auth/user-not-found") {
         setError("email", { type: "manual", message: "User not found" });
       } else {

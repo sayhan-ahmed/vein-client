@@ -30,7 +30,6 @@ const AuthProvider = ({ children }) => {
   };
 
   const logOut = async () => {
-    setLoading(true);
     return signOut(auth);
   };
 
@@ -49,8 +48,6 @@ const AuthProvider = ({ children }) => {
   // onAuthStateChange
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      // console.log("CurrentUser-->", currentUser?.email);
-
       if (currentUser) {
         // User is Logged In
         setUser(currentUser);
@@ -59,7 +56,6 @@ const AuthProvider = ({ children }) => {
         const userInfo = { email: currentUser.email };
         try {
           await axiosPublic.post("/jwt", userInfo);
-          console.log("Token Generated");
         } catch (err) {
           console.error("Token Error:", err);
         }
@@ -70,12 +66,12 @@ const AuthProvider = ({ children }) => {
         // 2. Clear Token from Backend
         try {
           await axiosPublic.post("/logout");
-          console.log("Token Cleared");
         } catch (err) {
           console.error("Logout Error:", err);
+        } finally {
+          // setLoading(false) will be handled after the if/else
         }
       }
-
       setLoading(false);
     });
     return () => unsubscribe();

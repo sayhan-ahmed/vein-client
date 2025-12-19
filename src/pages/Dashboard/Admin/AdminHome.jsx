@@ -19,7 +19,6 @@ const AdminHome = () => {
     queryKey: ["all-users-stats"],
     queryFn: async () => {
       const { data } = await axiosSecure.get("/users");
-      console.log(data);
       return data;
     },
   });

@@ -52,6 +52,7 @@
 # Removed:
 
 1. Card component from Home page
+2. all console.log
 
 # Installation:
 

@@ -126,7 +126,7 @@ const AllDonationRequests = () => {
   ];
 
   return (
-    <div className="min-h-screen font-sans text-gray-900 w-full overflow-hidden mt-2 pb-10">
+    <div className="min-h-screen font-sans text-gray-900 w-full mt-2 pb-10">
       <div className="mx-auto space-y-8">
         {/* Header Section */}
         <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100 relative overflow-hidden group">
@@ -161,10 +161,10 @@ const AllDonationRequests = () => {
         </div>
 
         {/* Content Card */}
-        <div className="bg-white rounded-4xl p-1 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.05)] border border-gray-100 flex flex-col relative overflow-hidden min-h-[600px]">
+        <div className="bg-white rounded-4xl p-1 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.05)] border border-gray-100 flex flex-col relative min-h-[600px]">
           {/* Controls Bar */}
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 px-6 mt-6 mb-6">
-            <div className="bg-gray-50/80 p-1.5 rounded-full inline-flex border border-gray-100 shadow-inner">
+            <div className="bg-gray-50/80 p-1.5 rounded-2xl md:rounded-full grid grid-cols-3 sm:flex sm:flex-wrap border border-gray-100 shadow-inner gap-1.5 w-full md:w-auto">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
@@ -172,13 +172,13 @@ const AllDonationRequests = () => {
                     setFilterStatus(tab.id);
                     setCurrentPage(1);
                   }}
-                  className={`relative px-5 py-2.5 rounded-full text-xs font-bold transition-all duration-300 flex items-center z-10 ${
+                  className={`relative px-2 sm:px-6 py-2.5 rounded-xl md:rounded-full text-[10px] sm:text-xs font-black uppercase tracking-tight sm:tracking-normal transition-all duration-300 flex items-center justify-center z-10 ${
                     filterStatus === tab.id
-                      ? "text-white shadow-lg bg-[#1D3657] scale-105 px-6"
-                      : "text-gray-500 hover:text-[#1D3657] hover:bg-white/50 px-5"
+                      ? "text-white shadow-lg bg-[#1D3657] scale-105"
+                      : "text-gray-400 hover:text-[#1D3657] hover:bg-white/50"
                   }`}
                 >
-                  {tab.label}
+                  {tab.label.split(" ")[0]}
                 </button>
               ))}
             </div>
@@ -193,19 +193,29 @@ const AllDonationRequests = () => {
           </div>
 
           {/* Table Container */}
-          <div className="px-6 pb-8">
-            <div className="rounded-4xl border border-gray-100 overflow-hidden bg-white shadow-[0_4px_20px_-4px_rgba(0,0,0,0.02)]">
-              <div className="overflow-x-auto">
-                <table className="w-full whitespace-nowrap">
-                  <thead>
+          <div className="px-0 sm:px-6 pb-8">
+            <div className="rounded-none sm:rounded-3xl md:rounded-4xl border-y sm:border border-gray-100 overflow-hidden bg-white/50 sm:bg-white">
+              <div className="overflow-x-auto no-scrollbar">
+                <table className="w-full border-collapse">
+                  <thead className="hidden md:table-header-group">
                     <tr className="bg-slate-50/80 border-b border-gray-100 text-left text-[11px] font-black text-slate-500 uppercase tracking-widest">
-                      <th className="px-6 py-6">Recipient</th>
-                      <th className="px-6 py-6">Location</th>
-                      <th className="px-6 py-6 text-center">Date & Time</th>
-                      <th className="px-6 py-6 text-center">Group</th>
-                      <th className="px-6 py-6 text-center">Status</th>
-                      <th className="px-6 py-6">Donor Info</th>
-                      <th className="px-6 py-6 text-right pr-10">Action</th>
+                      <th className="px-3 sm:px-6 py-6 min-w-[140px]">
+                        Recipient
+                      </th>
+                      <th className="px-3 sm:px-6 py-6 min-w-[140px]">
+                        Location
+                      </th>
+                      <th className="px-3 sm:px-6 py-6 text-center min-w-[160px]">
+                        Date & Time
+                      </th>
+                      <th className="px-3 sm:px-6 py-6 text-center">Group</th>
+                      <th className="px-3 sm:px-6 py-6 text-center">Status</th>
+                      <th className="px-3 sm:px-6 py-6 min-w-[180px]">
+                        Donor Info
+                      </th>
+                      <th className="px-3 sm:px-6 py-6 text-right pr-10">
+                        Action
+                      </th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-50/80">
