@@ -13,6 +13,7 @@ import DashboardHome from "../pages/Dashboard/Common/DashboardHome";
 import MainLayout from "../layouts/MainLayout";
 import MyDonationRequests from "../pages/Dashboard/Donor/MyDonationRequests";
 import MyRecipientRequests from "../pages/Dashboard/Volunteer/MyDonationRequests";
+import AdminAllDonationRequests from "../pages/Dashboard/Admin/AllDonationRequests";
 import AllDonationRequests from "../pages/AllDonationRequests/AllDonationRequests";
 import SearchPage from "../pages/Search/SearchPage";
 
@@ -80,6 +81,14 @@ export const router = createBrowserRouter([
         element: (
           <AdminRoute>
             <ManageUsers />
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "all-blood-donation-request",
+        element: (
+          <AdminRoute>
+            <AdminAllDonationRequests />
           </AdminRoute>
         ),
       },
