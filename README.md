@@ -31,6 +31,10 @@
 12. DonationRequestDetails.jsx: donationStatus and it's color change based on status
 13. Max width for donor dashboard pages
 14. changed manage-users route as all-users
+15. activity trends y-axis to integer
+16. profile heading spacing for md device
+17. activity trends chart margin
+18. all users avatar size responsiveness on all devices
 
 # TODO:
 

@@ -2,12 +2,14 @@ import PropTypes from "prop-types";
 import { Link } from "react-router";
 import { FaEdit, FaTrash, FaEye } from "react-icons/fa";
 import useRole from "../../../hooks/useRole";
+import useAuth from "../../../hooks/useAuth";
 
 const DonationRequestDataRow = ({
   request,
   handleDelete,
   handleStatusUpdate,
 }) => {
+  const { user } = useAuth();
   const {
     _id,
     recipientName,
@@ -19,6 +21,7 @@ const DonationRequestDataRow = ({
     bloodGroup,
     donorName,
     donorEmail,
+    requesterEmail,
   } = request;
 
   // Format time to AM/PM
@@ -146,7 +149,8 @@ const DonationRequestDataRow = ({
             >
               <FaEye className="w-3.5 h-3.5" />
             </Link>
-            {role === "admin" && (
+            {/* Show Edit/Delete for Admin or the original Requester */}
+            {(role === "admin" || user?.email === requesterEmail) && (
               <>
                 {["done", "canceled"].includes(donationStatus) ? (
                   <button

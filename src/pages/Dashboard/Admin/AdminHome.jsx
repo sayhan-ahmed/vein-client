@@ -75,14 +75,14 @@ const AdminHome = () => {
         {/* Top Greeting Bar */}
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 bg-white/70 backdrop-blur-xl border border-white/50 p-6 rounded-4xl shadow-sm md:sticky top-0 z-50">
           <div>
-            <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">
+            <h1 className="text-4xl text-center md:text-start font-extrabold text-gray-900 tracking-tight">
               Welcome back,{" "}
               <span className="text-red-600">
                 {user?.displayName?.split(" ")[0] ||
                   (role === "admin" ? "Admin" : "Volunteer")}
               </span>
             </h1>
-            <p className="text-xs text-gray-400 font-bold tracking-widest mt-2 uppercase flex items-center gap-2">
+            <p className="text-xs justify-center md:justify-start text-gray-400 font-bold tracking-widest mt-2 uppercase flex items-center gap-2">
               <FaCalendarAlt />
               {new Date().toLocaleDateString("en-US", {
                 weekday: "long",

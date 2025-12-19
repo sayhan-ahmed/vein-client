@@ -85,6 +85,7 @@ const AdminAnalytics = ({ roleData, requestData, totalUsers }) => {
                 axisLine={false}
                 tickLine={false}
                 tick={{ fill: "#9ca3af", fontSize: 10, fontWeight: 600 }}
+                allowDecimals={false}
               />
               <Tooltip
                 cursor={{ fill: "#f9fafb" }}

@@ -67,17 +67,22 @@ const UserDataRow = ({ user, handleUpdate }) => {
     <tr className="hover:bg-slate-50/50 transition-colors duration-200">
       <td className="px-8 py-5">
         <div className="flex items-center gap-4">
-          <div className="relative group">
-            <img
-              src={image || "https://i.ibb.co/5GzXkwq/user.png"}
-              alt={name}
-              className="w-11 h-11 rounded-2xl object-cover ring-2 ring-white shadow-sm group-hover:shadow-md transition-all duration-300"
-            />
+          <div className="relative group shrink-0">
+            <div className="w-11 h-11 rounded-full overflow-hidden ring-2 ring-white shadow-sm group-hover:shadow-md transition-all duration-300 bg-slate-100 flex items-center justify-center">
+              <img
+                src={image || "https://i.ibb.co/5GzXkwq/user.png"}
+                alt={name}
+                className="w-full h-full object-cover"
+              />
+            </div>
             {status === "active" && (
-              <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-white shadow-sm"></div>
+              <div
+                className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-white shadow-sm"
+                title="Active User"
+              ></div>
             )}
           </div>
-          <div className="flex flex-col">
+          <div className="flex flex-col min-w-0">
             <span className="text-sm font-black text-slate-800 tracking-tight leading-none mb-1">
               {name}
             </span>

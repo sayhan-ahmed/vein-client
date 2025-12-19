@@ -11,7 +11,7 @@ const ProfileHeader = ({
   return (
     <div className="bg-white rounded-3xl p-8 shadow-xl shadow-slate-200/50 border border-white/50 relative overflow-hidden group">
       {isOwnProfile && (
-        <div className="absolute top-0 right-0 p-6 z-20">
+        <div className="absolute top-0 right-0 p-4 sm:p-6 z-20">
           <button
             onClick={handleEditToggle}
             className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-bold text-sm transition-all shadow-lg active:scale-95 ${
@@ -36,7 +36,7 @@ const ProfileHeader = ({
       <div className="absolute top-0 left-0 w-full h-32 bg-[#1D3557]/20 flex items-center justify-center"></div>
       <div className="absolute top-0 right-0 w-64 h-64 bg-red-500/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
 
-      <div className="relative z-10 flex flex-col md:flex-row items-center md:items-end gap-8 mt-4">
+      <div className="relative z-10 flex flex-col md:flex-row items-center md:items-end gap-8 mt-12 md:mt-14 lg:mt-5">
         <div className="relative group/avatar">
           <div className="w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-white shadow-2xl overflow-hidden bg-gray-100 relative">
             <img
