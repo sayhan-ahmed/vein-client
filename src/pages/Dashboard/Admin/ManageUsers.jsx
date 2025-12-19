@@ -50,7 +50,10 @@ const ManageUsers = () => {
   // Mutations for Role and Status
   const updateMutation = useMutation({
     mutationFn: async ({ id, updateData }) => {
-      const { data } = await axiosSecure.patch(`/users/${id}`, updateData);
+      const { data } = await axiosSecure.patch(
+        `/users/update/${id}`,
+        updateData
+      );
       return data;
     },
     onSuccess: (data, variables) => {

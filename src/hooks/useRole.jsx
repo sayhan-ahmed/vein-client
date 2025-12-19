@@ -14,12 +14,10 @@ const useRole = () => {
       const { data } = await axiosSecure.get(`/users/role/${user?.email}`);
       return data.role;
     },
-    staleTime: Infinity, 
+    staleTime: Infinity,
   });
 
   return [role, isLoading];
-  // return ["admin", false]; //(for testing admin dashboard)
-  // return ["volunteer", false]; //(for testing volunteer dashboard)
 };
 
 export default useRole;

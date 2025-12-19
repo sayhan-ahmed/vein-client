@@ -154,6 +154,7 @@ const AdminAnalytics = ({ roleData, requestData, totalUsers }) => {
                 iconType="circle"
                 iconSize={8}
                 wrapperStyle={{
+                  paddingTop: "20px",
                   fontSize: "10px",
                   fontWeight: "bold",
                   color: "#6b7280",

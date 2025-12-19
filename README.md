@@ -35,6 +35,7 @@
 16. profile heading spacing for md device
 17. activity trends chart margin
 18. all users avatar size responsiveness on all devices
+19. ecosystem pie chart's legend padding
 
 # TODO:
 

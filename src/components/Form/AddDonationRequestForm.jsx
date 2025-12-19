@@ -82,6 +82,13 @@ const AddDonationRequestForm = ({
           Your account has been blocked. You cannot create new donation
           requests.
         </p>
+        <p className="text-gray-500 text-xs mt-5">
+          Please contact the{" "}
+          <a href="mailto:admin@vein.com" className="font-semibold hover:text-red-600 hover:underline transition-colors">
+            admin
+          </a>{" "}
+          for more information.
+        </p>
       </div>
     );
   }
