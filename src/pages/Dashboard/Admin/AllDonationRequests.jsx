@@ -118,11 +118,11 @@ const AllDonationRequests = () => {
   if (isRoleLoading || isDataLoading) return <AllDonationRequestsSkeleton />;
 
   const tabs = [
-    { id: "all", label: "All Requests" },
+    { id: "all", label: "All" },
     { id: "pending", label: "Pending" },
-    { id: "inprogress", label: "In Progress" },
+    { id: "inprogress", label: "Progress" },
     { id: "done", label: "Done" },
-    { id: "canceled", label: "Canceled" },
+    { id: "canceled", label: "Cancel" },
   ];
 
   return (
@@ -178,7 +178,7 @@ const AllDonationRequests = () => {
                       : "text-gray-400 hover:text-[#1D3657] hover:bg-white/50"
                   }`}
                 >
-                  {tab.label.split(" ")[0]}
+                  {tab.label}
                 </button>
               ))}
             </div>
@@ -198,7 +198,7 @@ const AllDonationRequests = () => {
               <div className="overflow-x-auto no-scrollbar">
                 <table className="w-full border-collapse">
                   <thead className="hidden md:table-header-group">
-                    <tr className="bg-slate-50/80 border-b border-gray-100 text-left text-[11px] font-black text-slate-500 uppercase tracking-widest">
+                    <tr className="hidden md:table-row bg-slate-50/80 border-b border-gray-100 text-left text-[11px] font-black text-slate-500 uppercase tracking-widest">
                       <th className="px-3 sm:px-6 py-6 min-w-[140px]">
                         Recipient
                       </th>

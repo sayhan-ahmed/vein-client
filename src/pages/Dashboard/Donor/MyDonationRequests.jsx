@@ -122,11 +122,11 @@ const MyDonationRequests = () => {
   if (isLoading) return <MyDonationRequestsSkeleton />;
 
   const tabs = [
-    { id: "all", label: "All Requests" },
+    { id: "all", label: "All" },
     { id: "pending", label: "Pending" },
-    { id: "inprogress", label: "In Progress" },
+    { id: "inprogress", label: "Progress" },
     { id: "done", label: "Done" },
-    { id: "canceled", label: "Canceled" },
+    { id: "canceled", label: "Cancel" },
   ];
 
   return (
@@ -170,13 +170,13 @@ const MyDonationRequests = () => {
                   setFilterStatus(tab.id);
                   setCurrentPage(1);
                 }}
-                className={`relative px-2 sm:px-6 py-2.5 rounded-xl md:rounded-3xl text-[10px] sm:text-sm font-black uppercase tracking-tight sm:tracking-normal transition-all duration-300 z-10 ${
+                className={`relative px-2 sm:px-6 py-2.5 rounded-xl md:rounded-3xl text-[10px] sm:text-xs font-black uppercase tracking-tight sm:tracking-normal transition-all duration-300 z-10 ${
                   filterStatus === tab.id
                     ? "text-[#1D3657] shadow-sm ring-1 ring-black/5 bg-white scale-105"
                     : "text-gray-400 hover:text-[#1D3657] hover:bg-white/50"
                 }`}
               >
-                {tab.label.split(" ")[0]}
+                {tab.label}
               </button>
             ))}
           </div>
@@ -187,7 +187,7 @@ const MyDonationRequests = () => {
               <div className="overflow-x-auto no-scrollbar">
                 <table className="w-full border-collapse">
                   <thead className="hidden md:table-header-group">
-                    <tr className="bg-gray-50/50 border-b border-gray-100 text-left text-[11px] font-extrabold text-gray-500 uppercase tracking-widest">
+                    <tr className="hidden md:table-row bg-gray-50/50 border-b border-gray-100 text-left text-[11px] font-extrabold text-gray-500 uppercase tracking-widest">
                       <th className="px-3 sm:px-6 py-5 min-w-[140px]">
                         Recipient
                       </th>

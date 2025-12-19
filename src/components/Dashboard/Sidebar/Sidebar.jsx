@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link } from "react-router";
+import { useLocation, Link } from "react-router";
+import { useEffect, useState } from "react";
 import useAuth from "../../../hooks/useAuth";
 import useRole from "../../../hooks/useRole";
 
@@ -17,8 +17,14 @@ import DonorMenu from "./Menu/DonorMenu";
 
 const Sidebar = () => {
   const { logOut } = useAuth();
-  const [isActive, setActive] = useState(false);
+  const [isActive, setActive] = useState(true);
   const [role] = useRole();
+  const location = useLocation();
+
+  // Auto-close sidebar on mobile when route changes
+  useEffect(() => {
+    setActive(true);
+  }, [location.pathname]);
 
   // Sidebar Responsive Handler
   const handleToggle = () => {
@@ -65,7 +71,11 @@ const Sidebar = () => {
         <div className="flex flex-col h-full">
           {/* Logo Area */}
           <div className="px-6 mb-8">
-            <Link to="/" className="flex items-center gap-1 group">
+            <Link
+              to="/"
+              className="flex items-center gap-1 group"
+              onClick={() => setActive(true)}
+            >
               <img
                 src="https://i.postimg.cc/yxz0WknP/pngtree-hand-holding-red-blood-drop-clipart-png-image-13364982.png"
                 alt="Vein Logo"
@@ -82,7 +92,7 @@ const Sidebar = () => {
             <div className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4 px-4 mt-2">
               Menu
             </div>
-            <nav className="space-y-1">
+            <nav className="space-y-1" onClick={() => setActive(true)}>
               {/* Statistics - Visible to Everyone */}
               <MenuItem
                 label="Statistics"
@@ -99,7 +109,10 @@ const Sidebar = () => {
 
           {/* Bottom Section */}
           <div className="px-4 mt-auto">
-            <div className="bg-white/5 rounded-2xl p-2 mb-4 flex flex-col">
+            <div
+              className="bg-white/5 rounded-2xl p-2 mb-4 flex flex-col"
+              onClick={() => setActive(true)}
+            >
               <MenuItem
                 label="Profile"
                 address="/dashboard/profile"

@@ -272,18 +272,18 @@ const UserDataRow = ({ user, handleUpdate }) => {
                     status === "active" ? "blocked" : "active"
                   )
                 }
-                className={`flex-1 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-sm active:scale-95 transition-all ${
+                className={`flex-1 py-3 rounded-2xl text-[10px] font-black uppercase tracking-tight sm:tracking-widest shadow-sm active:scale-95 transition-all ${
                   status === "active"
                     ? "bg-red-50 text-red-600 border border-red-100"
                     : "bg-green-50 text-green-700 border border-green-100"
                 }`}
               >
-                {status === "active" ? "Block Access" : "Unblock Access"}
+                {status === "active" ? "Block" : "Unblock"}
               </button>
 
               <div className="relative group">
                 <Menu as="div" className="relative">
-                  <Menu.Button className="w-12 h-full flex items-center justify-center rounded-2xl bg-slate-900 text-white shadow-lg shadow-slate-200 active:scale-95 transition-all">
+                  <Menu.Button className="w-12 h-11 flex items-center justify-center rounded-2xl bg-slate-50 text-slate-400 border border-slate-100 hover:bg-slate-100 transition-all active:scale-95 shadow-sm">
                     <FaEllipsisV size={14} />
                   </Menu.Button>
                   <Transition

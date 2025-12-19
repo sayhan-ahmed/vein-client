@@ -267,9 +267,9 @@ const DonationRequestDataRow = ({
             >
               <Link
                 to={`/donation-requests/${_id}`}
-                className="flex-1 py-2.5 rounded-2xl bg-slate-50 text-slate-600 text-xs font-bold text-center border border-slate-100 hover:bg-slate-100 transition-colors"
+                className="flex-2 py-3 rounded-2xl bg-slate-900 text-white text-[10px] font-black uppercase tracking-widest text-center shadow-lg shadow-slate-200 active:scale-95 transition-all"
               >
-                Details
+                View Details
               </Link>
               {(role === "admin" || user?.email === requesterEmail) && (
                 <>
@@ -279,17 +279,17 @@ const DonationRequestDataRow = ({
                         ? "#"
                         : `/dashboard/update-donation-request/${_id}`
                     }
-                    className={`p-2.5 rounded-2xl border transition-all ${
+                    className={`p-3 rounded-2xl border transition-all ${
                       ["done", "canceled"].includes(donationStatus)
                         ? "bg-gray-50 text-gray-200 border-gray-50 cursor-not-allowed"
-                        : "bg-slate-50 text-slate-600 border-slate-100 hover:bg-gray-100"
+                        : "bg-amber-50 text-amber-600 border-amber-100 hover:bg-amber-100"
                     }`}
                   >
                     <FaEdit size={14} />
                   </Link>
                   <button
                     onClick={() => handleDelete(_id)}
-                    className="p-2.5 rounded-2xl bg-red-50 text-red-500 border border-red-100 hover:bg-red-500 hover:text-white transition-all shadow-sm shadow-red-100"
+                    className="p-3 rounded-2xl bg-red-50 text-red-500 border border-red-100 hover:bg-red-500 hover:text-white transition-all shadow-sm shadow-red-100"
                   >
                     <FaTrash size={14} />
                   </button>

@@ -130,7 +130,7 @@ const ManageUsers = () => {
         <div className="bg-white rounded-4xl p-1 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.05)] border border-gray-100 flex flex-col relative min-h-[600px]">
           {/* Controls Bar */}
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 px-6 mt-6 mb-6">
-            <div className="bg-gray-50/80 p-1 rounded-2xl md:rounded-full flex overflow-x-auto no-scrollbar whitespace-nowrap border border-gray-100 shadow-inner gap-1 scroll-smooth w-full md:w-auto">
+            <div className="bg-gray-50/80 p-1.5 rounded-2xl md:rounded-full grid grid-cols-3 sm:flex sm:flex-wrap border border-gray-100 shadow-inner gap-1.5 w-full md:w-auto">
               {filterTabs.map((tab) => (
                 <button
                   key={tab.id}
@@ -138,14 +138,14 @@ const ManageUsers = () => {
                     setFilterStatus(tab.id);
                     setCurrentPage(1);
                   }}
-                  className={`relative px-5 md:px-6 py-2 md:py-2.5 rounded-xl md:rounded-full text-xs font-bold transition-all duration-300 flex items-center gap-2 shrink-0 z-10 ${
+                  className={`relative px-2 sm:px-6 py-2.5 rounded-xl md:rounded-full text-[10px] sm:text-xs font-black uppercase tracking-tight sm:tracking-normal transition-all duration-300 flex items-center justify-center gap-2 z-10 ${
                     filterStatus === tab.id
                       ? "text-white shadow-lg bg-[#1D3657] scale-105"
-                      : "text-gray-500 hover:text-[#1D3657] hover:bg-white/50"
+                      : "text-gray-400 hover:text-[#1D3657] hover:bg-white/50"
                   }`}
                 >
                   {tab.icon}
-                  {tab.label}
+                  {tab.label.split(" ")[0]}
                 </button>
               ))}
             </div>
@@ -159,12 +159,12 @@ const ManageUsers = () => {
           </div>
 
           {/* Table Container */}
-          <div className="px-2 sm:px-6 pb-8">
-            <div className="rounded-3xl md:rounded-4xl border border-gray-100 overflow-hidden bg-white shadow-[0_4px_20px_-4px_rgba(0,0,0,0.02)]">
-              <div className="overflow-x-auto">
-                <table className="w-full whitespace-nowrap">
-                  <thead>
-                    <tr className="bg-slate-50/80 border-b border-gray-100 text-left text-[11px] font-black text-slate-500 uppercase tracking-widest">
+          <div className="px-0 sm:px-6 pb-8">
+            <div className="rounded-none sm:rounded-3xl md:rounded-4xl border-y sm:border border-gray-100 overflow-hidden bg-white/50 sm:bg-white">
+              <div className="overflow-x-auto no-scrollbar">
+                <table className="w-full border-collapse">
+                  <thead className="hidden md:table-header-group">
+                    <tr className="hidden md:table-row bg-slate-50/80 border-b border-gray-100 text-left text-[11px] font-black text-slate-500 uppercase tracking-widest">
                       <th className="px-4 sm:px-8 py-6 min-w-[200px]">
                         Identity & Profile
                       </th>
