@@ -12,7 +12,6 @@ import Profile from "../pages/Dashboard/Common/Profile";
 import DashboardHome from "../pages/Dashboard/Common/DashboardHome";
 import MainLayout from "../layouts/MainLayout";
 import MyDonationRequests from "../pages/Dashboard/Donor/MyDonationRequests";
-import MyRecipientRequests from "../pages/Dashboard/Volunteer/MyDonationRequests";
 import AdminAllDonationRequests from "../pages/Dashboard/Admin/AllDonationRequests";
 import AllDonationRequests from "../pages/AllDonationRequests/AllDonationRequests";
 import SearchPage from "../pages/Search/SearchPage";
@@ -21,6 +20,7 @@ import SearchPage from "../pages/Search/SearchPage";
 import PrivateRoute from "./PrivateRoute";
 import AdminRoute from "./AdminRoute";
 import VolunteerRoute from "./VolunteerRoute";
+import AdminVolunteerRoute from "./AdminVolunteerRoute";
 
 export const router = createBrowserRouter([
   {
@@ -87,9 +87,9 @@ export const router = createBrowserRouter([
       {
         path: "all-blood-donation-request",
         element: (
-          <AdminRoute>
+          <AdminVolunteerRoute>
             <AdminAllDonationRequests />
-          </AdminRoute>
+          </AdminVolunteerRoute>
         ),
       },
       {
@@ -99,14 +99,6 @@ export const router = createBrowserRouter([
       {
         path: "profile/:email",
         element: <Profile />,
-      },
-      {
-        path: "my-recipient-requests",
-        element: (
-          <VolunteerRoute>
-            <MyRecipientRequests />
-          </VolunteerRoute>
-        ),
       },
     ],
   },

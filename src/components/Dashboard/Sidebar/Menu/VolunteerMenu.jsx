@@ -1,13 +1,13 @@
-import { FaUserEdit } from "react-icons/fa";
+import { FaInbox } from "react-icons/fa";
 import MenuItem from "./MenuItem";
 
 const VolunteerMenu = () => {
   return (
     <>
       <MenuItem
-        icon={FaUserEdit}
-        label="My Recipient Requests"
-        address="my-recipient-requests"
+        icon={FaInbox}
+        label="All Requests"
+        address="all-blood-donation-request"
       />
     </>
   );
