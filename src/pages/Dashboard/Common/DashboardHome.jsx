@@ -12,11 +12,11 @@ const DashboardHome = () => {
     return <DonorHome />;
   }
 
-  if (role === "admin") {
+  if (role === "admin" || role === "volunteer") {
     return <AdminHome />;
   }
 
-  // Default fallback (e.g., for volunteers or others)
+  // Default fallback (e.g., for others)
   return <DonorHome />;
 };
 

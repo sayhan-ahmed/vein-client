@@ -78,7 +78,8 @@ const AdminHome = () => {
             <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">
               Welcome back,{" "}
               <span className="text-red-600">
-                {user?.displayName?.split(" ")[0] || "Admin"}
+                {user?.displayName?.split(" ")[0] ||
+                  (role === "admin" ? "Admin" : "Volunteer")}
               </span>
             </h1>
             <p className="text-xs text-gray-400 font-bold tracking-widest mt-2 uppercase flex items-center gap-2">
@@ -99,7 +100,7 @@ const AdminHome = () => {
                 <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
               </span>
               <span className="text-xs font-bold text-gray-600 uppercase tracking-wider">
-                Admin Panel
+                {role === "admin" ? "Admin Panel" : "Volunteer Panel"}
               </span>
             </div>
 

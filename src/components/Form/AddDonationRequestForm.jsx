@@ -180,7 +180,7 @@ const AddDonationRequestForm = ({
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1.5">
               <label className="text-[11px] font-bold text-slate-500 uppercase tracking-widest ml-1">
-                Group
+                Blood Group
               </label>
               <div className="relative group/input">
                 <select
@@ -212,7 +212,7 @@ const AddDonationRequestForm = ({
 
             <div className="space-y-1.5">
               <label className="text-[11px] font-bold text-slate-500 uppercase tracking-widest ml-1">
-                Type
+                Blood Type
               </label>
               <div className="relative group/input">
                 <select
