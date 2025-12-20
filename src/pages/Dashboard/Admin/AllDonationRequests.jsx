@@ -44,10 +44,22 @@ const AllDonationRequests = () => {
       title: "Are you sure?",
       text: "This action cannot be undone.",
       icon: "warning",
+      iconColor: "#DC2626",
+      position: "center",
       showCancelButton: true,
-      confirmButtonColor: "#111827",
-      cancelButtonColor: "#EF4444",
       confirmButtonText: "Delete",
+      cancelButtonText: "Cancel",
+      confirmButtonColor: "#DC2626",
+      cancelButtonColor: "#1D3658",
+      customClass: {
+        popup: "rounded-3xl shadow-2xl",
+        title: "text-2xl font-bold text-gray-900",
+        htmlContainer: "text-gray-600",
+        confirmButton:
+          "px-6 py-3 rounded-xl font-bold shadow-lg transition-all hover:scale-105",
+        cancelButton:
+          "px-6 py-3 rounded-xl font-bold shadow-lg transition-all hover:scale-105",
+      },
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
@@ -55,16 +67,41 @@ const AllDonationRequests = () => {
           if (data.deletedCount > 0) {
             Swal.fire({
               title: "Deleted",
-              text: "Request removed.",
+              text: "Request removed successfully.",
               icon: "success",
-              confirmButtonColor: "#111827",
+              iconColor: "#10B981",
+              position: "center",
+              confirmButtonText: "Great!",
+              confirmButtonColor: "#1D3658",
+              customClass: {
+                popup: "rounded-3xl shadow-2xl",
+                title: "text-2xl font-bold text-gray-900",
+                htmlContainer: "text-gray-600",
+                confirmButton:
+                  "px-6 py-3 rounded-xl font-bold shadow-lg transition-all hover:scale-105",
+              },
             });
             await refetch();
             queryClient.invalidateQueries(["all-donation-requests-admin"]);
             queryClient.invalidateQueries(["all-requests-stats"]);
           }
         } catch (err) {
-          Swal.fire("Error!", err.message, "error");
+          Swal.fire({
+            title: "Error!",
+            text: err.message,
+            icon: "error",
+            iconColor: "#DC2626",
+            position: "center",
+            confirmButtonText: "Okay",
+            confirmButtonColor: "#1D3658",
+            customClass: {
+              popup: "rounded-3xl shadow-2xl",
+              title: "text-2xl font-bold text-gray-900",
+              htmlContainer: "text-gray-600",
+              confirmButton:
+                "px-6 py-3 rounded-xl font-bold shadow-lg transition-all hover:scale-105",
+            },
+          });
         }
       }
     });
@@ -83,16 +120,41 @@ const AllDonationRequests = () => {
       if (data.modifiedCount > 0) {
         Swal.fire({
           title: "Updated",
-          text: `Status changed to ${status}.`,
+          text: `Status changed to ${status} successfully.`,
           icon: "success",
-          confirmButtonColor: "#111827",
+          iconColor: "#10B981",
+          position: "center",
+          confirmButtonText: "Great!",
+          confirmButtonColor: "#1D3658",
+          customClass: {
+            popup: "rounded-3xl shadow-2xl",
+            title: "text-2xl font-bold text-gray-900",
+            htmlContainer: "text-gray-600",
+            confirmButton:
+              "px-6 py-3 rounded-xl font-bold shadow-lg transition-all hover:scale-105",
+          },
         });
         await refetch();
         queryClient.invalidateQueries(["all-donation-requests-admin"]);
         queryClient.invalidateQueries(["all-requests-stats"]);
       }
     } catch (err) {
-      Swal.fire("Error!", err.message, "error");
+      Swal.fire({
+        title: "Error!",
+        text: err.message,
+        icon: "error",
+        iconColor: "#DC2626",
+        position: "center",
+        confirmButtonText: "Okay",
+        confirmButtonColor: "#1D3658",
+        customClass: {
+          popup: "rounded-3xl shadow-2xl",
+          title: "text-2xl font-bold text-gray-900",
+          htmlContainer: "text-gray-600",
+          confirmButton:
+            "px-6 py-3 rounded-xl font-bold shadow-lg transition-all hover:scale-105",
+        },
+      });
     }
   };
 

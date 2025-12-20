@@ -29,9 +29,20 @@ const CreateDonationRequest = () => {
   const onSubmit = async (data) => {
     if (isBlocked) {
       Swal.fire({
-        icon: "error",
         title: "Access Denied",
         text: "You are blocked and cannot create donation requests.",
+        icon: "error",
+        iconColor: "#DC2626",
+        position: "center",
+        confirmButtonText: "Okay",
+        confirmButtonColor: "#1D3658",
+        customClass: {
+          popup: "rounded-3xl shadow-2xl",
+          title: "text-2xl font-bold text-gray-900",
+          htmlContainer: "text-gray-600",
+          confirmButton:
+            "px-6 py-3 rounded-xl font-bold shadow-lg transition-all hover:scale-105",
+        },
       });
       return;
     }
@@ -61,23 +72,44 @@ const CreateDonationRequest = () => {
       );
       if (response.data.insertedId) {
         Swal.fire({
-          position: "top-end",
+          title: "Request Created Successfully!",
+          text: "Your donation request has been submitted.",
           icon: "success",
-          title: "Request Created Successfully",
-          showConfirmButton: false,
-          timer: 1500,
+          iconColor: "#10B981",
+          position: "center",
+          confirmButtonText: "Great!",
+          confirmButtonColor: "#1D3658",
+          timer: 2000,
+          customClass: {
+            popup: "rounded-3xl shadow-2xl",
+            title: "text-2xl font-bold text-gray-900",
+            htmlContainer: "text-gray-600",
+            confirmButton:
+              "px-6 py-3 rounded-xl font-bold shadow-lg transition-all hover:scale-105",
+          },
         });
         navigate("/dashboard/my-donation-requests");
       }
     } catch (error) {
       console.error(error);
       Swal.fire({
-        icon: "error",
         title: "Oops...",
         text:
           error?.response?.data?.message ||
           error.message ||
           "Something went wrong!",
+        icon: "error",
+        iconColor: "#DC2626",
+        position: "center",
+        confirmButtonText: "Okay",
+        confirmButtonColor: "#1D3658",
+        customClass: {
+          popup: "rounded-3xl shadow-2xl",
+          title: "text-2xl font-bold text-gray-900",
+          htmlContainer: "text-gray-600",
+          confirmButton:
+            "px-6 py-3 rounded-xl font-bold shadow-lg transition-all hover:scale-105",
+        },
       });
     }
   };

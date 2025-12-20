@@ -1,5 +1,11 @@
 import { Link } from "react-router";
-import { Menu, Transition } from "@headlessui/react";
+import {
+  Menu,
+  MenuButton,
+  MenuItems,
+  MenuItem,
+  Transition,
+} from "@headlessui/react";
 import { Fragment } from "react";
 import {
   FaEllipsisV,
@@ -120,9 +126,9 @@ const UserDataRow = ({ user, handleUpdate }) => {
 
         <td className="px-8 py-5 text-right">
           <Menu as="div" className="relative inline-block text-left">
-            <Menu.Button className="w-9 h-9 flex items-center justify-center rounded-xl bg-white border border-slate-100 text-slate-400 hover:text-red-600 hover:border-red-100 hover:shadow-sm transition-all active:scale-90">
+            <MenuButton className="w-9 h-9 flex items-center justify-center rounded-xl bg-white border border-slate-100 text-slate-400 hover:text-red-600 hover:border-red-100 hover:shadow-sm transition-all active:scale-90">
               <FaEllipsisV size={14} />
-            </Menu.Button>
+            </MenuButton>
 
             <Transition
               as={Fragment}
@@ -133,9 +139,9 @@ const UserDataRow = ({ user, handleUpdate }) => {
               leaveFrom="transform opacity-100 scale-100"
               leaveTo="transform opacity-0 scale-95"
             >
-              <Menu.Items className="absolute right-0 mt-2 w-52 origin-top-right divide-y divide-slate-50 rounded-2xl bg-white shadow-[0_20px_40px_-10px_rgba(0,0,0,0.12)] ring-1 ring-black/5 focus:outline-none z-50 overflow-hidden">
+              <MenuItems className="absolute right-0 mt-2 w-52 origin-top-right divide-y divide-slate-50 rounded-2xl bg-white shadow-[0_20px_40px_-10px_rgba(0,0,0,0.12)] ring-1 ring-black/5 focus:outline-none z-50 overflow-hidden">
                 <div className="px-1.5 py-1.5">
-                  <Menu.Item>
+                  <MenuItem>
                     {({ active }) => (
                       <button
                         onClick={() =>
@@ -171,11 +177,11 @@ const UserDataRow = ({ user, handleUpdate }) => {
                         )}
                       </button>
                     )}
-                  </Menu.Item>
+                  </MenuItem>
                 </div>
 
                 <div className="px-1.5 py-1.5">
-                  <Menu.Item disabled={role === "volunteer"}>
+                  <MenuItem disabled={role === "volunteer"}>
                     {({ active }) => (
                       <button
                         onClick={() =>
@@ -198,8 +204,8 @@ const UserDataRow = ({ user, handleUpdate }) => {
                         Make Volunteer
                       </button>
                     )}
-                  </Menu.Item>
-                  <Menu.Item disabled={role === "admin"}>
+                  </MenuItem>
+                  <MenuItem disabled={role === "admin"}>
                     {({ active }) => (
                       <button
                         onClick={() =>
@@ -222,9 +228,9 @@ const UserDataRow = ({ user, handleUpdate }) => {
                         Make Admin
                       </button>
                     )}
-                  </Menu.Item>
+                  </MenuItem>
                 </div>
-              </Menu.Items>
+              </MenuItems>
             </Transition>
           </Menu>
         </td>
@@ -302,9 +308,9 @@ const UserDataRow = ({ user, handleUpdate }) => {
 
               <div className="relative group">
                 <Menu as="div" className="relative">
-                  <Menu.Button className="w-12 h-11 flex items-center justify-center rounded-2xl bg-slate-50 text-slate-400 border border-slate-100 hover:bg-slate-100 transition-all active:scale-95 shadow-sm">
+                  <MenuButton className="w-12 h-11 flex items-center justify-center rounded-2xl bg-slate-50 text-slate-400 border border-slate-100 hover:bg-slate-100 transition-all active:scale-95 shadow-sm">
                     <FaEllipsisV size={14} />
-                  </Menu.Button>
+                  </MenuButton>
                   <Transition
                     as={Fragment}
                     enter="transition ease-out duration-200"
@@ -314,9 +320,9 @@ const UserDataRow = ({ user, handleUpdate }) => {
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                   >
-                    <Menu.Items className="absolute right-0 bottom-full mb-2 w-52 origin-bottom-right divide-y divide-slate-50 rounded-2xl bg-white shadow-2xl ring-1 ring-black/5 focus:outline-none z-50 overflow-hidden">
+                    <MenuItems className="absolute right-0 bottom-full mb-2 w-52 origin-bottom-right divide-y divide-slate-50 rounded-2xl bg-white shadow-2xl ring-1 ring-black/5 focus:outline-none z-50 overflow-hidden">
                       <div className="px-1.5 py-1.5">
-                        <Menu.Item disabled={role === "volunteer"}>
+                        <MenuItem disabled={role === "volunteer"}>
                           {({ active }) => (
                             <button
                               onClick={() =>
@@ -330,8 +336,8 @@ const UserDataRow = ({ user, handleUpdate }) => {
                               Make Volunteer
                             </button>
                           )}
-                        </Menu.Item>
-                        <Menu.Item disabled={role === "admin"}>
+                        </MenuItem>
+                        <MenuItem disabled={role === "admin"}>
                           {({ active }) => (
                             <button
                               onClick={() =>
@@ -345,9 +351,9 @@ const UserDataRow = ({ user, handleUpdate }) => {
                               Make Admin
                             </button>
                           )}
-                        </Menu.Item>
+                        </MenuItem>
                       </div>
-                    </Menu.Items>
+                    </MenuItems>
                   </Transition>
                 </Menu>
               </div>

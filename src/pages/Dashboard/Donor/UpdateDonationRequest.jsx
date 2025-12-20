@@ -48,30 +48,62 @@ const UpdateDonationRequest = () => {
       );
       if (response.data.modifiedCount > 0) {
         Swal.fire({
-          position: "top-end",
+          title: "Request Updated Successfully!",
+          text: "Your donation request has been updated.",
           icon: "success",
-          title: "Request Updated Successfully",
-          showConfirmButton: false,
-          timer: 1500,
+          iconColor: "#10B981",
+          position: "center",
+          confirmButtonText: "Great!",
+          confirmButtonColor: "#1D3658",
+          timer: 2000,
+          customClass: {
+            popup: "rounded-3xl shadow-2xl",
+            title: "text-2xl font-bold text-gray-900",
+            htmlContainer: "text-gray-600",
+            confirmButton:
+              "px-6 py-3 rounded-xl font-bold shadow-lg transition-all hover:scale-105",
+          },
         });
         refetch();
         navigate("/dashboard/my-donation-requests");
       } else {
         Swal.fire({
-          icon: "info",
           title: "No Changes",
           text: "You did not make any changes to the request.",
+          icon: "info",
+          iconColor: "#F59E0B",
+          position: "center",
+          confirmButtonText: "Okay",
+          confirmButtonColor: "#1D3658",
+          customClass: {
+            popup: "rounded-3xl shadow-2xl",
+            title: "text-2xl font-bold text-gray-900",
+            htmlContainer: "text-gray-600",
+            confirmButton:
+              "px-6 py-3 rounded-xl font-bold shadow-lg transition-all hover:scale-105",
+          },
         });
       }
     } catch (error) {
       console.error(error);
       Swal.fire({
-        icon: "error",
         title: "Update Failed",
         text:
           error?.response?.data?.message ||
           error.message ||
           "Something went wrong!",
+        icon: "error",
+        iconColor: "#DC2626",
+        position: "center",
+        confirmButtonText: "Okay",
+        confirmButtonColor: "#1D3658",
+        customClass: {
+          popup: "rounded-3xl shadow-2xl",
+          title: "text-2xl font-bold text-gray-900",
+          htmlContainer: "text-gray-600",
+          confirmButton:
+            "px-6 py-3 rounded-xl font-bold shadow-lg transition-all hover:scale-105",
+        },
       });
     }
   };

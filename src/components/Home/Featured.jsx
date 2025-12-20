@@ -166,7 +166,7 @@ const Featured = () => {
         {/* Educational Note */}
         {selectedBloodType && (
           <div className="mt-12 max-w-4xl mx-auto bg-linear-to-r from-blue-50 to-cyan-50 rounded-2xl p-6 border border-blue-100">
-            <p className="text-center text-gray-700">
+            <div className="text-center text-gray-700">
               <div className="flex items-center justify-center gap-2">
                 <HiOutlineLightBulb size={24} className="-mt-1 text-red-600" />
                 <span className="font-bold text-red-600">
@@ -178,7 +178,7 @@ const Featured = () => {
                   ? "You're a universal recipient! You can receive blood from any type."
                   : `As ${selectedBloodType}, you can help ${compatibility.canDonateTo.length} blood types.`}
               </div>
-            </p>
+            </div>
           </div>
         )}
       </Container>

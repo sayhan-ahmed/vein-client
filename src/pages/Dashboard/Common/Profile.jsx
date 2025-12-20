@@ -229,7 +229,17 @@ const Profile = () => {
           title: "Success!",
           text: "Profile updated successfully.",
           icon: "success",
-          confirmButtonColor: "#1D3557",
+          iconColor: "#10B981",
+          position: "center",
+          confirmButtonText: "Great!",
+          confirmButtonColor: "#1D3658",
+          customClass: {
+            popup: "rounded-3xl shadow-2xl",
+            title: "text-2xl font-bold text-gray-900",
+            htmlContainer: "text-gray-600",
+            confirmButton:
+              "px-6 py-3 rounded-xl font-bold shadow-lg transition-all hover:scale-105",
+          },
         });
       }
     } catch (err) {

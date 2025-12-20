@@ -17,14 +17,16 @@ const Footer = () => {
       title: "Successfully Subscribed!",
       html: `<p style="color: #666;">Thank you for subscribing to our newsletter with <strong>${email}</strong></p>`,
       icon: "success",
-      iconColor: "#E53935",
+      iconColor: "#10B981",
+      position: "center",
       confirmButtonText: "Great!",
-      confirmButtonColor: "#E53935",
-      background: "#fff",
+      confirmButtonColor: "#1D3658",
       customClass: {
-        popup: "rounded-2xl",
-        title: "text-2xl font-bold",
-        confirmButton: "px-6 py-3 rounded-lg font-semibold",
+        popup: "rounded-3xl shadow-2xl",
+        title: "text-2xl font-bold text-gray-900",
+        htmlContainer: "text-gray-600",
+        confirmButton:
+          "px-6 py-3 rounded-xl font-bold shadow-lg transition-all hover:scale-105",
       },
     });
 
@@ -152,7 +154,7 @@ const Footer = () => {
           {/* Copyright */}
           <p className="text-gray-400 text-sm">
             Copyright © 2025 Vein, All rights reserved. Present by{" "}
-            <Link to="https://sayhan-portfolio.vercel.app/">
+            <Link to="https://sayhan-portfolio.vercel.app/" target="_blank">
               <span className="font-bold text-white hover:text-red-500 transition-colors duration-300">
                 Sayhan Ahmed
               </span>

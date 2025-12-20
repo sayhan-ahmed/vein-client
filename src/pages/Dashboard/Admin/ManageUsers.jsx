@@ -62,12 +62,37 @@ const ManageUsers = () => {
         title: "Success!",
         text: `User ${variables.type} updated successfully.`,
         icon: "success",
-        confirmButtonColor: "#1d3557",
-        timer: 1500,
+        iconColor: "#10B981",
+        position: "center",
+        confirmButtonText: "Great!",
+        confirmButtonColor: "#1D3658",
+        timer: 2000,
+        customClass: {
+          popup: "rounded-3xl shadow-2xl",
+          title: "text-2xl font-bold text-gray-900",
+          htmlContainer: "text-gray-600",
+          confirmButton:
+            "px-6 py-3 rounded-xl font-bold shadow-lg transition-all hover:scale-105",
+        },
       });
     },
     onError: (error) => {
-      Swal.fire("Error", error.message, "error");
+      Swal.fire({
+        title: "Error",
+        text: error.message,
+        icon: "error",
+        iconColor: "#DC2626",
+        position: "center",
+        confirmButtonText: "Okay",
+        confirmButtonColor: "#1D3658",
+        customClass: {
+          popup: "rounded-3xl shadow-2xl",
+          title: "text-2xl font-bold text-gray-900",
+          htmlContainer: "text-gray-600",
+          confirmButton:
+            "px-6 py-3 rounded-xl font-bold shadow-lg transition-all hover:scale-105",
+        },
+      });
     },
   });
 

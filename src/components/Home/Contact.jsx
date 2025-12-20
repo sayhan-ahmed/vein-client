@@ -28,14 +28,16 @@ const Contact = () => {
       title: "Message Sent Successfully!",
       html: `<p style="color: #666;">Thank you <strong>${formData.name}</strong> for reaching out. We'll get back to you soon at <strong>${formData.email}</strong></p>`,
       icon: "success",
-      iconColor: "#E53935",
+      iconColor: "#10B981",
+      position: "center",
       confirmButtonText: "Great!",
-      confirmButtonColor: "#E53935",
-      background: "#fff",
+      confirmButtonColor: "#1D3658",
       customClass: {
-        popup: "rounded-2xl",
-        title: "text-2xl font-bold",
-        confirmButton: "px-6 py-3 rounded-lg font-semibold",
+        popup: "rounded-3xl shadow-2xl",
+        title: "text-2xl font-bold text-gray-900",
+        htmlContainer: "text-gray-600",
+        confirmButton:
+          "px-6 py-3 rounded-xl font-bold shadow-lg transition-all hover:scale-105",
       },
     });
 
@@ -72,7 +74,9 @@ const Contact = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Left Side: Contact Form */}
           <div className="bg-white rounded-2xl p-8 shadow-lg">
-            <h2 className="text-2xl font-bold text-[#16273E] mb-4 uppercase">Leave us a message</h2>
+            <h2 className="text-2xl font-bold text-[#16273E] mb-4 uppercase">
+              Leave us a message
+            </h2>
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Name and Phone */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
