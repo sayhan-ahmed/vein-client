@@ -7,10 +7,13 @@ import {
   MdVerifiedUser,
   MdSecurity,
   MdAccessTime,
+  MdDashboard,
 } from "react-icons/md";
 import Container from "../Shared/Container";
+import useAuth from "../../hooks/useAuth";
 
 const Banner = () => {
+  const { user } = useAuth();
   return (
     <div className="relative w-full min-h-[700px] bg-[#0f172a] overflow-hidden flex items-center font-sans">
       {/* --- Animated Aurora Background --- */}
@@ -52,13 +55,22 @@ const Banner = () => {
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-5 pt-2 justify-center lg:justify-start">
               <Link
-                to="/signup"
+                to={user ? "/dashboard" : "/signup"}
                 className="group relative px-8 py-4 bg-linear-to-r from-red-600 to-rose-600 rounded-full font-bold text-white shadow-lg shadow-red-500/25 hover:shadow-red-500/40 hover:-translate-y-1 transition-all duration-300 overflow-hidden"
               >
                 <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
                 <div className="relative flex items-center justify-center gap-3">
-                  <MdOutlineBloodtype className="text-2xl" />
-                  <span>Join as a Donor</span>
+                  {user ? (
+                    <>
+                      <MdDashboard className="text-2xl" />
+                      <span>Go to Dashboard</span>
+                    </>
+                  ) : (
+                    <>
+                      <MdOutlineBloodtype className="text-2xl" />
+                      <span>Join as a Donor</span>
+                    </>
+                  )}
                 </div>
               </Link>
 

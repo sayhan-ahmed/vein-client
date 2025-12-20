@@ -7,7 +7,11 @@ import upazilasData from "../../assets/data/upazilas.json";
 import { FaClock, FaLocationDot } from "react-icons/fa6";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { TbAlertCircle } from "react-icons/tb";
-import { FaLongArrowAltRight } from "react-icons/fa";
+import {
+  FaLongArrowAltRight,
+  FaChevronLeft,
+  FaChevronRight,
+} from "react-icons/fa";
 
 const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 
@@ -18,6 +22,8 @@ export default function AllDonationRequests() {
   const [filterBloodGroup, setFilterBloodGroup] = useState("");
   const [filterDistrict, setFilterDistrict] = useState("");
   const [filterUpazila, setFilterUpazila] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 9;
 
   const axiosPublic = useAxiosPublic();
 
@@ -60,6 +66,17 @@ export default function AllDonationRequests() {
       : true;
     return matchesBlood && matchesDistrict && matchesUpazila;
   });
+
+  // Pagination calculations
+  const totalPages = Math.ceil(filteredRequests.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentRequests = filteredRequests.slice(startIndex, endIndex);
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filterBloodGroup, filterDistrict, filterUpazila]);
 
   const handleFilterChange = (setter, value) => {
     setFilterLoading(true);
@@ -251,7 +268,7 @@ export default function AllDonationRequests() {
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-                {filteredRequests.map((request) => (
+                {currentRequests.map((request) => (
                   <div
                     key={request._id || request.id}
                     className="group bg-white rounded-4xl p-6 hover:-translate-y-1 transition-all duration-300 border border-slate-100 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:border-red-100 relative overflow-hidden flex flex-col"
@@ -335,6 +352,104 @@ export default function AllDonationRequests() {
                 ))}
               </div>
             )}
+
+            {/* Pagination */}
+            {!loading &&
+              !filterLoading &&
+              filteredRequests.length > 0 &&
+              totalPages > 1 && (
+                <div className="mt-12 flex flex-col sm:flex-row items-center justify-between gap-6 bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                  {/* Page Info */}
+                  <div className="text-sm text-slate-600 font-medium">
+                    Showing{" "}
+                    <span className="font-bold text-slate-900">
+                      {startIndex + 1}
+                    </span>{" "}
+                    to{" "}
+                    <span className="font-bold text-slate-900">
+                      {Math.min(endIndex, filteredRequests.length)}
+                    </span>{" "}
+                    of{" "}
+                    <span className="font-bold text-slate-900">
+                      {filteredRequests.length}
+                    </span>{" "}
+                    requests
+                  </div>
+
+                  {/* Page Numbers */}
+                  <div className="flex items-center gap-2">
+                    {/* Previous Button */}
+                    <button
+                      onClick={() =>
+                        setCurrentPage((prev) => Math.max(prev - 1, 1))
+                      }
+                      disabled={currentPage === 1}
+                      className="p-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 hover:border-slate-300 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white transition-all"
+                      aria-label="Previous page"
+                    >
+                      <FaChevronLeft size={14} />
+                    </button>
+
+                    {/* Page Numbers */}
+                    <div className="flex items-center gap-1">
+                      {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                        (page) => {
+                          // Show first page, last page, current page, and pages around current
+                          const showPage =
+                            page === 1 ||
+                            page === totalPages ||
+                            (page >= currentPage - 1 &&
+                              page <= currentPage + 1);
+
+                          if (!showPage) {
+                            // Show ellipsis
+                            if (
+                              page === currentPage - 2 ||
+                              page === currentPage + 2
+                            ) {
+                              return (
+                                <span
+                                  key={page}
+                                  className="px-2 text-slate-400"
+                                >
+                                  ...
+                                </span>
+                              );
+                            }
+                            return null;
+                          }
+
+                          return (
+                            <button
+                              key={page}
+                              onClick={() => setCurrentPage(page)}
+                              className={`min-w-[40px] h-10 rounded-xl font-bold text-sm transition-all ${
+                                currentPage === page
+                                  ? "bg-linear-to-r from-red-600 to-rose-600 text-white shadow-lg shadow-red-500/30"
+                                  : "border border-slate-200 text-slate-600 hover:bg-slate-50 hover:border-slate-300"
+                              }`}
+                            >
+                              {page}
+                            </button>
+                          );
+                        }
+                      )}
+                    </div>
+
+                    {/* Next Button */}
+                    <button
+                      onClick={() =>
+                        setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                      }
+                      disabled={currentPage === totalPages}
+                      className="p-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 hover:border-slate-300 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white transition-all"
+                      aria-label="Next page"
+                    >
+                      <FaChevronRight size={14} />
+                    </button>
+                  </div>
+                </div>
+              )}
           </div>
         </div>
       </div>
