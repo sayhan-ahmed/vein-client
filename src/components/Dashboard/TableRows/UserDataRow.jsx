@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import { Menu, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import {
@@ -7,6 +8,7 @@ import {
   FaUserCheck,
   FaUserShield,
   FaUserGraduate,
+  FaEye,
 } from "react-icons/fa";
 
 const UserDataRow = ({ user, handleUpdate }) => {
@@ -68,14 +70,20 @@ const UserDataRow = ({ user, handleUpdate }) => {
       {/* Desktop View */}
       <tr className="hidden md:table-row hover:bg-slate-50/50 transition-colors duration-200">
         <td className="px-8 py-5">
-          <div className="flex items-center gap-4">
-            <div className="relative group shrink-0">
-              <div className="w-11 h-11 rounded-full overflow-hidden ring-2 ring-white shadow-sm group-hover:shadow-md transition-all duration-300 bg-slate-100 flex items-center justify-center">
+          <div className="flex items-center gap-4 group/item">
+            <Link
+              to={`/dashboard/profile/${email}`}
+              className="relative shrink-0 block"
+            >
+              <div className="w-11 h-11 rounded-full overflow-hidden ring-2 ring-white shadow-sm group-hover/item:shadow-md transition-all duration-300 bg-slate-100 flex items-center justify-center relative">
                 <img
                   src={image || "https://i.ibb.co/5GzXkwq/user.png"}
                   alt={name}
                   className="w-full h-full object-cover"
                 />
+                <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover/item:opacity-100 transition-opacity duration-300">
+                  <FaEye className="text-white text-xs" />
+                </div>
               </div>
               {status === "active" && (
                 <div
@@ -83,11 +91,14 @@ const UserDataRow = ({ user, handleUpdate }) => {
                   title="Active User"
                 ></div>
               )}
-            </div>
+            </Link>
             <div className="flex flex-col min-w-0">
-              <span className="text-sm font-black text-slate-800 tracking-tight leading-none mb-1">
+              <Link
+                to={`/dashboard/profile/${email}`}
+                className="text-sm font-black text-slate-800 tracking-tight leading-none mb-1 hover:text-red-600 group-hover/item:text-red-600 transition-colors block"
+              >
                 {name}
-              </span>
+              </Link>
               <span className="text-xs font-bold text-slate-400 lowercase">
                 {email}
               </span>
@@ -223,19 +234,27 @@ const UserDataRow = ({ user, handleUpdate }) => {
       <tr className="md:hidden">
         <td colSpan="5" className="px-4 py-4">
           <div className="bg-white rounded-3xl border border-slate-100 shadow-sm p-5 space-y-4">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between group/card">
               <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-2xl overflow-hidden ring-4 ring-slate-50 shadow-sm">
+                <Link
+                  to={`/dashboard/profile/${email}`}
+                  className="w-14 h-14 rounded-2xl overflow-hidden ring-4 ring-slate-50 shadow-sm block shrink-0 relative"
+                >
                   <img
                     src={image || "https://i.ibb.co/5GzXkwq/user.png"}
                     alt={name}
                     className="w-full h-full object-cover"
                   />
-                </div>
+                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover/card:opacity-100 transition-opacity duration-300">
+                    <FaEye className="text-white text-lg" />
+                  </div>
+                </Link>
                 <div className="min-w-0">
-                  <h4 className="font-black text-slate-800 truncate leading-tight tracking-tight">
-                    {name}
-                  </h4>
+                  <Link to={`/dashboard/profile/${email}`}>
+                    <h4 className="font-black text-slate-800 truncate leading-tight tracking-tight hover:text-red-600 group-hover/card:text-red-600 transition-colors">
+                      {name}
+                    </h4>
+                  </Link>
                   <p className="text-[11px] text-slate-400 font-bold lowercase truncate">
                     {email}
                   </p>
