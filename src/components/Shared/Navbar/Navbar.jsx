@@ -91,7 +91,7 @@ const Navbar = () => {
           onClick={() => setIsNavOpen(false)}
         >
           <LiaDonateSolid className="text-base lg:text-lg" />
-          <span>Funding</span>
+          <span>Contribute</span>
         </NavLink>
       )}
 

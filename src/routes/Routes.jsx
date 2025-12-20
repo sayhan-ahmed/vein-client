@@ -15,6 +15,7 @@ import MyDonationRequests from "../pages/Dashboard/Donor/MyDonationRequests";
 import AdminAllDonationRequests from "../pages/Dashboard/Admin/AllDonationRequests";
 import AllDonationRequests from "../pages/AllDonationRequests/AllDonationRequests";
 import SearchPage from "../pages/Search/SearchPage";
+import DonateMoney from "../pages/DonateMoney/DonateMoney";
 
 // 1. GUARDS
 import PrivateRoute from "./PrivateRoute";
@@ -47,6 +48,10 @@ export const router = createBrowserRouter([
       {
         path: "/search",
         element: <SearchPage />,
+      },
+      {
+        path: "/funding",
+        element: <DonateMoney />,
       },
     ],
   },
