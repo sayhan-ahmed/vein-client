@@ -49,7 +49,9 @@ const AdminHome = () => {
     return <AdminHomeSkeleton />;
 
   // Calculate Stats
-  const donorCount = users.filter((u) => u.role === "donor").length;
+  const donorCount = users.filter(
+    (u) => u.role === "donor" && u.status === "active"
+  ).length;
   const adminCount = users.filter((u) => u.role === "admin").length;
   const volunteerCount = users.filter((u) => u.role === "volunteer").length;
   const totalRequests = requests.length;
