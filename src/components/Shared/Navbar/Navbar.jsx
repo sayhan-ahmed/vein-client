@@ -11,6 +11,7 @@ import { useState, useEffect, useRef } from "react";
 import { Link, NavLink } from "react-router";
 import useAuth from "../../../hooks/useAuth";
 import avatarImg from "../../../assets/images/placeholder.jpg";
+import Swal from "sweetalert2";
 
 const Navbar = () => {
   const { user, logOut, loading } = useAuth();
@@ -20,6 +21,35 @@ const Navbar = () => {
 
   const navRef = useRef(null);
   const userMenuRef = useRef(null);
+
+  // Handle Logout with Confirmation
+  const handleLogout = () => {
+    Swal.fire({
+      title: "Sign Out?",
+      text: "Are you sure you want to sign out?",
+      icon: "question",
+      iconColor: "#E7000B",
+      showCancelButton: true,
+      confirmButtonText: "Yes, sign out",
+      cancelButtonText: "Cancel",
+      confirmButtonColor: "#E7000B",
+      cancelButtonColor: "#6B7280",
+      customClass: {
+        popup: "rounded-3xl shadow-2xl",
+        title: "text-2xl font-bold text-gray-900",
+        htmlContainer: "text-gray-600",
+        confirmButton:
+          "px-6 py-3 rounded-xl font-bold shadow-lg transition-all hover:scale-105",
+        cancelButton:
+          "px-6 py-3 rounded-xl font-bold shadow-lg transition-all hover:scale-105",
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        logOut();
+        setIsUserMenuOpen(false);
+      }
+    });
+  };
 
   // Handle Scroll Effect
   useEffect(() => {
@@ -174,7 +204,26 @@ const Navbar = () => {
               {/* Bell Icon */}
               <div className="flex items-center text-xl text-gray-600">
                 {user && (
-                  <FaRegBell className="cursor-pointer hover:text-red-700 hover:scale-110 transition" />
+                  <FaRegBell
+                    onClick={() => {
+                      Swal.fire({
+                        title: "Notifications",
+                        text: "You have no new notifications at this time.",
+                        icon: "info",
+                        iconColor: "#3B82F6",
+                        confirmButtonText: "OK",
+                        confirmButtonColor: "#E7000B",
+                        customClass: {
+                          popup: "rounded-3xl shadow-2xl",
+                          title: "text-2xl font-bold text-gray-900",
+                          htmlContainer: "text-gray-600",
+                          confirmButton:
+                            "px-6 py-3 rounded-xl font-bold shadow-lg transition-all hover:scale-105",
+                        },
+                      });
+                    }}
+                    className="cursor-pointer hover:text-red-700 hover:scale-110 transition"
+                  />
                 )}
               </div>
 
@@ -221,10 +270,7 @@ const Navbar = () => {
                             Dashboard
                           </Link>
                           <button
-                            onClick={() => {
-                              logOut();
-                              setIsUserMenuOpen(false);
-                            }}
+                            onClick={handleLogout}
                             className="w-full text-left px-3 py-2 hover:bg-red-50 text-gray-700 hover:text-red-600 rounded-lg transition font-medium flex items-center gap-3"
                           >
                             <LuLogOut className="text-lg" />

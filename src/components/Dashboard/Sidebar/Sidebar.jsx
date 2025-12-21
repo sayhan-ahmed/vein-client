@@ -2,6 +2,7 @@ import { useLocation, Link } from "react-router";
 import { useEffect, useState } from "react";
 import useAuth from "../../../hooks/useAuth";
 import useRole from "../../../hooks/useRole";
+import Swal from "sweetalert2";
 
 // Icons
 import { FaUserGear } from "react-icons/fa6";
@@ -20,6 +21,34 @@ const Sidebar = () => {
   const [isActive, setActive] = useState(true);
   const [role] = useRole();
   const location = useLocation();
+
+  // Handle Logout with Confirmation
+  const handleLogout = () => {
+    Swal.fire({
+      title: "Sign Out?",
+      text: "Are you sure you want to sign out?",
+      icon: "question",
+      iconColor: "#E7000B",
+      showCancelButton: true,
+      confirmButtonText: "Yes, sign out",
+      cancelButtonText: "Cancel",
+      confirmButtonColor: "#E7000B",
+      cancelButtonColor: "#6B7280",
+      customClass: {
+        popup: "rounded-3xl shadow-2xl",
+        title: "text-2xl font-bold text-gray-900",
+        htmlContainer: "text-gray-600",
+        confirmButton:
+          "px-6 py-3 rounded-xl font-bold shadow-lg transition-all hover:scale-105",
+        cancelButton:
+          "px-6 py-3 rounded-xl font-bold shadow-lg transition-all hover:scale-105",
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        logOut();
+      }
+    });
+  };
 
   // Auto-close sidebar on mobile when route changes
   useEffect(() => {
@@ -120,7 +149,7 @@ const Sidebar = () => {
               />
               <div className="h-px bg-white/10 my-1 mx-3"></div>
               <button
-                onClick={logOut}
+                onClick={handleLogout}
                 className="flex items-center px-4 py-3 mx-3 my-1 text-gray-400 hover:text-white hover:bg-red-600/10 rounded-xl transition-all duration-300 group"
               >
                 <VscSignOut

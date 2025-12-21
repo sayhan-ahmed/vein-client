@@ -8,6 +8,7 @@ import AdminHomeSkeleton from "./components/AdminHomeSkeleton";
 import AdminStats from "./components/AdminStats";
 import AdminAnalytics from "./components/AdminAnalytics";
 import AdminRecentActivity from "./components/AdminRecentActivity";
+import Swal from "sweetalert2";
 
 const AdminHome = () => {
   const { user } = useAuth();
@@ -64,6 +65,7 @@ const AdminHome = () => {
 
   const stats = {
     donorCount,
+    pendingRequests,
     totalRequests,
     funding: adminStats.funding || 0,
   };
@@ -116,7 +118,26 @@ const AdminHome = () => {
               </span>
             </div>
 
-            <button className="relative w-11 h-11 rounded-full bg-white border border-gray-100 flex items-center justify-center text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all shadow-sm group">
+            <button
+              onClick={() => {
+                Swal.fire({
+                  title: "Notifications",
+                  text: "You have no new notifications at this time.",
+                  icon: "info",
+                  iconColor: "#3B82F6",
+                  confirmButtonText: "OK",
+                  confirmButtonColor: "#E7000B",
+                  customClass: {
+                    popup: "rounded-3xl shadow-2xl",
+                    title: "text-2xl font-bold text-gray-900",
+                    htmlContainer: "text-gray-600",
+                    confirmButton:
+                      "px-6 py-3 rounded-xl font-bold shadow-lg transition-all hover:scale-105",
+                  },
+                });
+              }}
+              className="relative w-11 h-11 rounded-full bg-white border border-gray-100 flex items-center justify-center text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all shadow-sm group"
+            >
               <FaBell className="group-hover:animate-swing" />
               <span className="absolute top-2.5 right-3 w-2 h-2 bg-red-500 rounded-full ring-2 ring-white"></span>
             </button>

@@ -1,4 +1,4 @@
-import { StrictMode } from "react";
+import { StrictMode, Suspense } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import { router } from "./routes/Routes.jsx";
@@ -6,6 +6,7 @@ import { RouterProvider } from "react-router";
 import AuthProvider from "./providers/AuthProvider.jsx";
 import { Toaster } from "react-hot-toast";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import Loader from "./components/Shared/Loader.jsx";
 
 const queryClient = new QueryClient();
 
@@ -13,7 +14,15 @@ createRoot(document.getElementById("root")).render(
   <StrictMode>
     <AuthProvider>
       <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
+        <Suspense
+          fallback={
+            <div className="flex justify-center items-center min-h-screen bg-white">
+              <Loader />
+            </div>
+          }
+        >
+          <RouterProvider router={router} />
+        </Suspense>
       </QueryClientProvider>
       <Toaster
         position="top-center"

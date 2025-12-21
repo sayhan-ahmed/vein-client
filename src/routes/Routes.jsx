@@ -1,27 +1,43 @@
 import { createBrowserRouter } from "react-router";
-import Home from "../pages/Home/Home";
-import ErrorPage from "../pages/ErrorPage";
-import Login from "../pages/Login/Login";
-import SignUp from "../pages/SignUp/SignUp";
-import DonationRequestDetails from "../pages/DonationRequestDetails/DonationRequestDetails";
-import DashboardLayout from "../layouts/DashboardLayout";
-import CreateDonationRequest from "../pages/Dashboard/Donor/CreateDonationRequest";
-import UpdateDonationRequest from "../pages/Dashboard/Donor/UpdateDonationRequest";
-import ManageUsers from "../pages/Dashboard/Admin/ManageUsers";
-import Profile from "../pages/Dashboard/Common/Profile";
-import DashboardHome from "../pages/Dashboard/Common/DashboardHome";
-import MainLayout from "../layouts/MainLayout";
-import MyDonationRequests from "../pages/Dashboard/Donor/MyDonationRequests";
-import AdminAllDonationRequests from "../pages/Dashboard/Admin/AllDonationRequests";
-import AllDonationRequests from "../pages/AllDonationRequests/AllDonationRequests";
-import SearchPage from "../pages/Search/SearchPage";
-import DonateMoney from "../pages/DonateMoney/DonateMoney";
-import AllFundings from "../pages/Dashboard/Admin/AllFundings";
+import { lazy } from "react";
+
+// Lazy load all page components
+const Home = lazy(() => import("../pages/Home/Home"));
+const ErrorPage = lazy(() => import("../pages/ErrorPage"));
+const Login = lazy(() => import("../pages/Login/Login"));
+const SignUp = lazy(() => import("../pages/SignUp/SignUp"));
+const DonationRequestDetails = lazy(() =>
+  import("../pages/DonationRequestDetails/DonationRequestDetails")
+);
+const DashboardLayout = lazy(() => import("../layouts/DashboardLayout"));
+const CreateDonationRequest = lazy(() =>
+  import("../pages/Dashboard/Donor/CreateDonationRequest")
+);
+const UpdateDonationRequest = lazy(() =>
+  import("../pages/Dashboard/Donor/UpdateDonationRequest")
+);
+const ManageUsers = lazy(() => import("../pages/Dashboard/Admin/ManageUsers"));
+const Profile = lazy(() => import("../pages/Dashboard/Common/Profile"));
+const DashboardHome = lazy(() =>
+  import("../pages/Dashboard/Common/DashboardHome")
+);
+const MainLayout = lazy(() => import("../layouts/MainLayout"));
+const MyDonationRequests = lazy(() =>
+  import("../pages/Dashboard/Donor/MyDonationRequests")
+);
+const AdminAllDonationRequests = lazy(() =>
+  import("../pages/Dashboard/Admin/AllDonationRequests")
+);
+const AllDonationRequests = lazy(() =>
+  import("../pages/AllDonationRequests/AllDonationRequests")
+);
+const SearchPage = lazy(() => import("../pages/Search/SearchPage"));
+const DonateMoney = lazy(() => import("../pages/DonateMoney/DonateMoney"));
+const AllFundings = lazy(() => import("../pages/Dashboard/Admin/AllFundings"));
 
 // 1. GUARDS
 import PrivateRoute from "./PrivateRoute";
 import AdminRoute from "./AdminRoute";
-import VolunteerRoute from "./VolunteerRoute";
 import AdminVolunteerRoute from "./AdminVolunteerRoute";
 
 export const router = createBrowserRouter([

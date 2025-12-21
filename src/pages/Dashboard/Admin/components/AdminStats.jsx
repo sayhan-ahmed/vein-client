@@ -4,6 +4,7 @@ import {
   FaCoins,
   FaArrowUp,
   FaArrowRight,
+  FaClipboardList,
 } from "react-icons/fa";
 import { Link } from "react-router";
 
@@ -39,8 +40,8 @@ const AdminStats = ({ stats }) => {
     },
     {
       id: 3,
-      title: "Donation Requests",
-      count: stats.totalRequests,
+      title: "Pending Requests",
+      count: stats.pendingRequests,
       icon: <FaHandHoldingHeart />,
       accentColor: "text-red-600",
       bgColor: "bg-red-50",
@@ -51,10 +52,24 @@ const AdminStats = ({ stats }) => {
       hoverButtonBg: "hover:bg-red-600/10",
       link: "/donation-requests",
     },
+    {
+      id: 4,
+      title: "Total Requests",
+      count: stats.totalRequests,
+      icon: <FaClipboardList />,
+      accentColor: "text-purple-600",
+      bgColor: "bg-purple-50",
+      borderColor: "border-purple-100",
+      hoverText:
+        "group-hover:text-purple-600 group-hover:translate-x-1 transition-transform duration-500",
+      hoverShadow: "group-hover:shadow-purple-100/50",
+      hoverButtonBg: "hover:bg-purple-600/10",
+      link: "/dashboard/all-blood-donation-request",
+    },
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       {statItems.map((stat) => (
         <div
           key={stat.id}

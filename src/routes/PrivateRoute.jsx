@@ -1,7 +1,6 @@
 import useAuth from "../hooks/useAuth";
 import { Navigate, useLocation } from "react-router";
 import useRole from "../hooks/useRole";
-import Loader from "../components/Shared/Loader";
 
 const PrivateRoute = ({ children }) => {
   const { user, loading: isAuthLoading } = useAuth();
@@ -11,11 +10,7 @@ const PrivateRoute = ({ children }) => {
   const isDashboardPath = location.pathname.startsWith("/dashboard");
 
   if (isAuthLoading || (isDashboardPath && isRoleLoading)) {
-    return (
-      <div className="flex justify-center items-center min-h-screen bg-white">
-        <Loader />
-      </div>
-    );
+    return null;
   }
 
   if (user) return children;
