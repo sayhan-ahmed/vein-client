@@ -36,6 +36,7 @@
 17. activity trends chart margin
 18. all users avatar size responsiveness on all devices
 19. ecosystem pie chart's legend padding
+20. redirect to user profile from search page by clicking view profile button
 
 # TODO:
 
@@ -62,4 +63,5 @@
 4. @tanstack/react-query
 5. prop-types
 6. recharts
+7. stripe
 

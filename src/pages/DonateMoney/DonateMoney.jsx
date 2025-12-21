@@ -12,18 +12,55 @@ import { MdAttachMoney, MdVerified, MdTrendingUp } from "react-icons/md";
 import { BiDonateHeart } from "react-icons/bi";
 import { HiSparkles } from "react-icons/hi";
 import useAuth from "../../hooks/useAuth";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import { useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 import donate1 from "../../assets/images/donate1.jpeg";
 import donate2 from "../../assets/images/donate2.jpg";
 import donate3 from "../../assets/images/donate3.jpg";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
+import CheckoutForm from "./components/CheckoutForm";
+
+// Add stripe publishable key
+const stripeKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
+if (!stripeKey) {
+  console.error(
+    "VITE_STRIPE_PUBLISHABLE_KEY is missing in your .env.local file!"
+  );
+}
+const stripePromise = stripeKey
+  ? loadStripe(stripeKey)
+  : Promise.reject("Missing Stripe Key");
 
 const DonateMoney = () => {
   const { user } = useAuth();
+  const axiosSecure = useAxiosSecure();
   const [selectedAmount, setSelectedAmount] = useState(null);
   const [customAmount, setCustomAmount] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [isMonthly, setIsMonthly] = useState(false);
   const [showDonationForm, setShowDonationForm] = useState(false);
+  const [showPayment, setShowPayment] = useState(false);
+
+  const { data: funding = [], refetch } = useQuery({
+    queryKey: ["funding-public"],
+    queryFn: async () => {
+      const { data } = await axiosSecure.get("/funding");
+      return data;
+    },
+  });
+
+  const totalRaised = funding.reduce(
+    (acc, curr) => acc + (curr.amount || 0),
+    0
+  );
+  const targetAmount = 5000;
+  const progressPercentage = Math.min(
+    Math.round((totalRaised / targetAmount) * 100),
+    100
+  );
+  const isGoalReached = totalRaised >= targetAmount;
 
   const predefinedAmounts = [
     { value: 10, label: "Starter", impact: "Helps 1 connection" },
@@ -32,19 +69,6 @@ const DonateMoney = () => {
     { value: 100, label: "Champion", impact: "Helps 15 connections" },
     { value: 250, label: "Hero", impact: "Helps 40 connections" },
     { value: 500, label: "Guardian", impact: "Helps 100+ connections" },
-  ];
-
-  const donations = [
-    { name: "John Anderson", amount: "$500", date: "Dec 20, 2025" },
-    { name: "Sarah Mitchell", amount: "$250", date: "Dec 19, 2025" },
-    { name: "Michael Chen", amount: "$100", date: "Dec 19, 2025" },
-    { name: "Emily Rodriguez", amount: "$50", date: "Dec 18, 2025" },
-    { name: "David Thompson", amount: "$200", date: "Dec 18, 2025" },
-    { name: "Lisa Williams", amount: "$150", date: "Dec 17, 2025" },
-    { name: "James Brown", amount: "$300", date: "Dec 17, 2025" },
-    { name: "Maria Garcia", amount: "$75", date: "Dec 16, 2025" },
-    { name: "Robert Taylor", amount: "$125", date: "Dec 16, 2025" },
-    { name: "Jennifer Lee", amount: "$400", date: "Dec 15, 2025" },
   ];
 
   const handleAmountSelect = (amount) => {
@@ -88,33 +112,34 @@ const DonateMoney = () => {
       return;
     }
 
-    setIsProcessing(true);
+    setShowPayment(true);
+  };
 
-    setTimeout(() => {
-      setIsProcessing(false);
-      Swal.fire({
-        title: "Thank You!",
-        html: `<p style="color: #666;">Your generous ${
-          isMonthly ? "monthly " : ""
-        }donation of <strong>$${amount}</strong> will help save lives. Thank you for your support!</p>`,
-        icon: "success",
-        iconColor: "#10B981",
-        position: "center",
-        confirmButtonText: "Great!",
-        confirmButtonColor: "#1D3658",
-        customClass: {
-          popup: "rounded-3xl shadow-2xl",
-          title: "text-2xl font-bold text-gray-900",
-          htmlContainer: "text-gray-600",
-          confirmButton:
-            "px-6 py-3 rounded-xl font-bold shadow-lg transition-all hover:scale-105",
-        },
-      });
+  const handlePaymentSuccess = (transactionId) => {
+    Swal.fire({
+      title: "Thank You!",
+      html: `<p style="color: #666;">Your generous ${
+        isMonthly ? "monthly " : ""
+      }donation has been processed. <br/> Transaction ID: <span style="color: #ef4444; font-weight: bold;">${transactionId}</span></p>`,
+      icon: "success",
+      iconColor: "#10B981",
+      position: "center",
+      confirmButtonText: "Great!",
+      confirmButtonColor: "#1D3658",
+      customClass: {
+        popup: "rounded-3xl shadow-2xl",
+        title: "text-2xl font-bold text-gray-900",
+        htmlContainer: "text-gray-600",
+        confirmButton:
+          "px-6 py-3 rounded-xl font-bold shadow-lg transition-all hover:scale-105",
+      },
+    });
 
-      setSelectedAmount(null);
-      setCustomAmount("");
-      setShowDonationForm(false);
-    }, 1500);
+    setSelectedAmount(null);
+    setCustomAmount("");
+    setShowDonationForm(false);
+    setShowPayment(false);
+    refetch();
   };
 
   const colors = [
@@ -224,8 +249,8 @@ const DonateMoney = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             {/* Left Column: Funding History */}
             <div className="lg:col-span-2">
-              <div className="flex items-center justify-between mb-8 px-2">
-                <h2 className="text-3xl font-bold text-slate-800 tracking-tight">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8 px-2">
+                <h2 className="text-2xl sm:text-3xl font-bold text-slate-800 tracking-tight">
                   Recent Contributions
                 </h2>
                 <div className="flex items-center gap-2 text-[11px] font-semibold text-slate-500 bg-white px-4 py-2 rounded-full border border-slate-100 shadow-sm">
@@ -234,8 +259,8 @@ const DonateMoney = () => {
                 </div>
               </div>
 
-              {/* Table Header */}
-              <div className="bg-white/40 backdrop-blur-sm rounded-2xl border border-slate-200/50 p-1.5 flex items-center mb-6 shadow-sm">
+              {/* Table Header - Hidden on mobile */}
+              <div className="hidden md:block bg-white/40 backdrop-blur-sm rounded-2xl border border-slate-200/50 p-1.5 mb-6 shadow-sm">
                 <div className="grid grid-cols-12 w-full items-center">
                   <div className="col-span-6 px-4">
                     <div className="bg-[#0F172A] text-white rounded-xl px-4 py-2 inline-flex items-center gap-2 shadow-lg shadow-blue-900/10">
@@ -260,45 +285,108 @@ const DonateMoney = () => {
 
               {/* Donor Rows */}
               <div className="space-y-4">
-                {donations.map((donation, index) => {
+                {funding.slice(0, 10).map((donation, index) => {
                   const avatarColor = colors[index % colors.length];
 
                   return (
                     <div
                       key={index}
-                      className="grid grid-cols-12 gap-4 px-6 py-4.5 bg-white rounded-2xl border border-slate-100 shadow-sm hover:border-red-100 hover:shadow-xl hover:shadow-red-900/5 transition-all duration-500 group relative overflow-hidden"
+                      className="md:grid md:grid-cols-12 md:gap-4 px-4 sm:px-6 py-4 bg-white rounded-2xl border border-slate-100 shadow-sm hover:border-red-100 hover:shadow-xl hover:shadow-red-900/5 transition-all duration-500 group relative overflow-hidden"
                     >
                       <div className="absolute left-0 top-0 w-1 h-full bg-red-600 scale-y-0 group-hover:scale-y-100 transition-transform duration-500 origin-top"></div>
-                      <div className="col-span-6 flex items-center gap-4">
-                        <div className="relative">
-                          <div
-                            className={`w-12 h-12 ${avatarColor} rounded-full flex items-center justify-center text-white font-bold text-xs shadow-inner transition-transform group-hover:scale-110 duration-500`}
-                          >
-                            {donation.name
-                              .split(" ")
-                              .map((n) => n[0])
-                              .join("")}
+
+                      {/* Mobile Layout */}
+                      <div className="md:hidden space-y-3">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <div className="relative">
+                              <div
+                                className={`w-12 h-12 ${avatarColor} rounded-full flex items-center justify-center text-white font-bold text-xs shadow-inner transition-transform group-hover:scale-110 duration-500 overflow-hidden`}
+                              >
+                                {donation.image ? (
+                                  <img
+                                    src={donation.image}
+                                    alt={donation.name}
+                                    className="w-full h-full object-cover"
+                                  />
+                                ) : (
+                                  donation.name
+                                    .split(" ")
+                                    .map((n) => n[0])
+                                    .join("")
+                                )}
+                              </div>
+                              <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-0.5 shadow-sm">
+                                <MdVerified className="text-blue-500 text-sm" />
+                              </div>
+                            </div>
+                            <div className="flex flex-col">
+                              <span className="font-bold text-slate-800 text-sm tracking-tight group-hover:text-red-600 transition-colors">
+                                {donation.name}
+                              </span>
+                              <span className="text-[10px] text-slate-400 font-medium">
+                                Verified Donor
+                              </span>
+                            </div>
                           </div>
-                          <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-0.5 shadow-sm">
-                            <MdVerified className="text-blue-500 text-sm" />
-                          </div>
+                          <span className="text-xl font-bold text-[#0F172A] tracking-tight">
+                            ${donation.amount}
+                          </span>
                         </div>
-                        <div className="flex flex-col">
-                          <span className="font-bold text-slate-800 text-sm tracking-tight group-hover:text-red-600 transition-colors">
-                            {donation.name}
-                          </span>
-                          <span className="text-[10px] text-slate-400 font-medium">
-                            Verified Donor
-                          </span>
+                        <div className="text-slate-400 text-[11px] font-bold tracking-tight pl-15">
+                          {new Date(donation.date).toLocaleDateString("en-US", {
+                            month: "short",
+                            day: "numeric",
+                            year: "numeric",
+                          })}
                         </div>
                       </div>
-                      <div className="col-span-3 flex items-center">
-                        <span className="text-xl font-bold text-[#0F172A] tracking-tight">
-                          {donation.amount}
-                        </span>
-                      </div>
-                      <div className="col-span-3 flex items-center justify-end pr-2 text-slate-400 text-[11px] font-bold tracking-tight">
-                        {donation.date}
+
+                      {/* Desktop Layout */}
+                      <div className="hidden md:contents">
+                        <div className="col-span-6 flex items-center gap-4">
+                          <div className="relative">
+                            <div
+                              className={`w-12 h-12 ${avatarColor} rounded-full flex items-center justify-center text-white font-bold text-xs shadow-inner transition-transform group-hover:scale-110 duration-500 overflow-hidden`}
+                            >
+                              {donation.image ? (
+                                <img
+                                  src={donation.image}
+                                  alt={donation.name}
+                                  className="w-full h-full object-cover"
+                                />
+                              ) : (
+                                donation.name
+                                  .split(" ")
+                                  .map((n) => n[0])
+                                  .join("")
+                              )}
+                            </div>
+                            <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-0.5 shadow-sm">
+                              <MdVerified className="text-blue-500 text-sm" />
+                            </div>
+                          </div>
+                          <div className="flex flex-col">
+                            <span className="font-bold text-slate-800 text-sm tracking-tight group-hover:text-red-600 transition-colors">
+                              {donation.name}
+                            </span>
+                            <span className="text-[10px] text-slate-400 font-medium">
+                              Verified Donor
+                            </span>
+                          </div>
+                        </div>
+                        <div className="col-span-3 flex items-center">
+                          <span className="text-xl font-bold text-[#0F172A] tracking-tight">
+                            ${donation.amount}
+                          </span>
+                        </div>
+                        <div className="col-span-3 flex items-center justify-end pr-2 text-slate-400 text-[11px] font-bold tracking-tight">
+                          {new Date(donation.date).toLocaleDateString("en-US", {
+                            month: "short",
+                            day: "numeric",
+                            year: "numeric",
+                          })}
+                        </div>
                       </div>
                     </div>
                   );
@@ -335,10 +423,10 @@ const DonateMoney = () => {
                       </div>
                       <div className="flex items-baseline justify-center lg:justify-start gap-2">
                         <span className="text-4xl font-bold text-white">
-                          $2,150
+                          ${totalRaised.toLocaleString()}
                         </span>
                         <span className="text-red-500 font-bold text-sm">
-                          / $5,000
+                          / ${targetAmount.toLocaleString()}
                         </span>
                       </div>
                     </div>
@@ -347,15 +435,34 @@ const DonateMoney = () => {
                   {/* Visual Progress Bar */}
                   <div className="space-y-4">
                     <div className="flex justify-between items-end">
-                      <span className="text-[11px] font-bold uppercase tracking-widest text-slate-400">
-                        Campaign Progress
-                      </span>
-                      <span className="text-sm font-bold text-red-500">
-                        43%
+                      <div className="flex items-center gap-2">
+                        <span className="text-[11px] font-bold uppercase tracking-widest text-slate-400">
+                          Campaign Progress
+                        </span>
+                        {isGoalReached && (
+                          <span className="flex items-center gap-1.5 px-2 py-0.5 bg-emerald-500/20 border border-emerald-500/30 rounded-full text-[9px] font-black uppercase tracking-tighter text-emerald-400 animate-in zoom-in duration-500">
+                            <FaCheckCircle className="text-[10px]" />
+                            Campaign Successful
+                          </span>
+                        )}
+                      </div>
+                      <span
+                        className={`text-sm font-bold ${
+                          isGoalReached ? "text-emerald-400" : "text-red-500"
+                        }`}
+                      >
+                        {progressPercentage}%
                       </span>
                     </div>
                     <div className="h-3 bg-white/5 rounded-full overflow-hidden p-0.5 border border-white/10">
-                      <div className="h-full bg-linear-to-r from-red-600 to-red-400 rounded-full w-[43%] relative">
+                      <div
+                        className={`h-full ${
+                          isGoalReached
+                            ? "bg-linear-to-r from-emerald-600 to-amber-500 shadow-[0_0_20px_rgba(16,185,129,0.3)]"
+                            : "bg-linear-to-r from-red-600 to-red-400"
+                        } rounded-full relative transition-all duration-1000`}
+                        style={{ width: `${progressPercentage}%` }}
+                      >
                         <div className="absolute top-0 right-0 w-4 h-full bg-white/30 blur-sm"></div>
                       </div>
                     </div>
@@ -370,7 +477,7 @@ const DonateMoney = () => {
                       }}
                       className="w-full sm:w-auto bg-red-600 hover:bg-red-700 text-white px-10 py-4 rounded-xl font-bold text-xs uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-red-900/20"
                     >
-                      Maximize Impact
+                      {isGoalReached ? "Maintain Momentum" : "Maximize Impact"}
                     </button>
                     <p className="text-[11px] text-slate-400 font-medium italic">
                       Tax-deductible contributions supporting 2,800+ lives.
@@ -488,95 +595,106 @@ const DonateMoney = () => {
                         <BiDonateHeart className="text-xl" />
                       </div>
                       <h2 className="text-lg font-bold text-slate-800">
-                        Donation
+                        {showPayment ? "Secure Payment" : "Donation"}
                       </h2>
                     </div>
                     <button
-                      onClick={() => setShowDonationForm(false)}
+                      onClick={() => {
+                        setShowDonationForm(false);
+                        setShowPayment(false);
+                      }}
                       className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-200 text-slate-400 transition-colors outline-none focus:outline-none focus:ring-0 focus-visible:outline-none"
                     >
                       ×
                     </button>
                   </div>
 
-                  <form onSubmit={handleDonate} className="p-6">
-                    <div className="mb-6 bg-slate-100 rounded-xl p-1 flex">
-                      <button
-                        type="button"
-                        onClick={() => setIsMonthly(false)}
-                        className={`flex-1 py-2.5 rounded-lg font-bold text-xs transition-all outline-none focus:outline-none focus:ring-0 focus-visible:outline-none ${
-                          !isMonthly
-                            ? "bg-white text-slate-900 shadow-sm"
-                            : "text-slate-500"
-                        }`}
-                      >
-                        One-Time
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setIsMonthly(true)}
-                        className={`flex-1 py-2.5 rounded-lg font-bold text-xs transition-all outline-none focus:outline-none focus:ring-0 focus-visible:outline-none ${
-                          isMonthly
-                            ? "bg-white text-slate-900 shadow-sm"
-                            : "text-slate-500"
-                        }`}
-                      >
-                        Monthly
-                      </button>
-                    </div>
-
-                    <div className="mb-6">
-                      <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">
-                        Choose Amount
-                      </label>
-                      <div className="grid grid-cols-3 gap-2">
-                        {predefinedAmounts.map((item) => (
-                          <button
-                            key={item.value}
-                            type="button"
-                            onClick={() => handleAmountSelect(item.value)}
-                            className={`py-3 rounded-xl border font-bold text-sm transition-all outline-none focus:outline-none focus:ring-0 active:outline-none focus-visible:outline-none ${
-                              selectedAmount === item.value
-                                ? "border-red-600 bg-red-50 text-red-600"
-                                : "border-slate-100 bg-white text-slate-600 hover:border-slate-200"
-                            }`}
-                          >
-                            ${item.value}
-                          </button>
-                        ))}
+                  {!showPayment ? (
+                    <form onSubmit={handleDonate} className="p-6">
+                      <div className="mb-6 bg-slate-100 rounded-xl p-1 flex">
+                        <button
+                          type="button"
+                          onClick={() => setIsMonthly(false)}
+                          className={`flex-1 py-2.5 rounded-lg font-bold text-xs transition-all outline-none focus:outline-none focus:ring-0 focus-visible:outline-none ${
+                            !isMonthly
+                              ? "bg-white text-slate-900 shadow-sm"
+                              : "text-slate-500"
+                          }`}
+                        >
+                          One-Time
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setIsMonthly(true)}
+                          className={`flex-1 py-2.5 rounded-lg font-bold text-xs transition-all outline-none focus:outline-none focus:ring-0 focus-visible:outline-none ${
+                            isMonthly
+                              ? "bg-white text-slate-900 shadow-sm"
+                              : "text-slate-500"
+                          }`}
+                        >
+                          Monthly
+                        </button>
                       </div>
-                    </div>
 
-                    <div className="mb-8">
-                      <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">
-                        Custom Amount
-                      </label>
-                      <div className="relative">
-                        <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
-                          <MdAttachMoney className="text-xl" />
+                      <div className="mb-6">
+                        <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">
+                          Choose Amount
+                        </label>
+                        <div className="grid grid-cols-3 gap-2">
+                          {predefinedAmounts.map((item) => (
+                            <button
+                              key={item.value}
+                              type="button"
+                              onClick={() => handleAmountSelect(item.value)}
+                              className={`py-3 rounded-xl border font-bold text-sm transition-all outline-none focus:outline-none focus:ring-0 active:outline-none focus-visible:outline-none ${
+                                selectedAmount === item.value
+                                  ? "border-red-600 bg-red-50 text-red-600"
+                                  : "border-slate-100 bg-white text-slate-600 hover:border-slate-200"
+                              }`}
+                            >
+                              ${item.value}
+                            </button>
+                          ))}
                         </div>
-                        <input
-                          type="text"
-                          value={customAmount}
-                          onChange={handleCustomAmountChange}
-                          placeholder="0.00"
-                          className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-100 rounded-xl text-sm font-bold placeholder:text-slate-300 focus:outline-none focus:border-red-600 focus:bg-white focus:ring-0 transition-all shadow-inner outline-none active:outline-none focus-visible:outline-none"
-                        />
                       </div>
-                    </div>
 
-                    <button
-                      type="submit"
-                      disabled={
-                        isProcessing || (!selectedAmount && !customAmount)
-                      }
-                      className="w-full py-4 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700 disabled:opacity-50 transition-all shadow-lg hover:shadow-red-600/10 active:scale-95 text-xs uppercase tracking-widest outline-none focus:outline-none focus:ring-0 active:outline-none focus-visible:outline-none"
-                    >
-                      {isProcessing
-                        ? "Processing..."
-                        : `Donate $${getFinalAmount() || "0"}`}
-                    </button>
-                  </form>
+                      <div className="mb-8">
+                        <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">
+                          Custom Amount
+                        </label>
+                        <div className="relative">
+                          <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+                            <MdAttachMoney className="text-xl" />
+                          </div>
+                          <input
+                            type="text"
+                            value={customAmount}
+                            onChange={handleCustomAmountChange}
+                            placeholder="0.00"
+                            className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-100 rounded-xl text-sm font-bold placeholder:text-slate-300 focus:outline-none focus:border-red-600 focus:bg-white focus:ring-0 transition-all shadow-inner outline-none active:outline-none focus-visible:outline-none"
+                          />
+                        </div>
+                      </div>
+
+                      <button
+                        type="submit"
+                        disabled={!selectedAmount && !customAmount}
+                        className="w-full py-4 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700 disabled:opacity-50 transition-all shadow-lg hover:shadow-red-600/10 active:scale-95 text-xs uppercase tracking-widest outline-none focus:outline-none focus:ring-0 active:outline-none focus-visible:outline-none"
+                      >
+                        Proceed to Pay ${getFinalAmount() || "0"}
+                      </button>
+                    </form>
+                  ) : (
+                    <div className="p-6">
+                      <Elements stripe={stripePromise}>
+                        <CheckoutForm
+                          price={getFinalAmount()}
+                          onCancel={() => setShowPayment(false)}
+                          onSuccess={handlePaymentSuccess}
+                        />
+                      </Elements>
+                    </div>
+                  )}
                 </div>
               )}
             </div>

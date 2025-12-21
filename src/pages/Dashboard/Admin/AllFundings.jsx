@@ -100,8 +100,16 @@ const AllFundings = () => {
                 >
                   <td className="px-8 py-5">
                     <div className="flex items-center gap-4">
-                      <div className="w-11 h-11 rounded-full bg-linear-to-br from-gray-100 to-gray-200 flex items-center justify-center text-gray-600 font-bold text-xs border-2 border-white shadow-sm transition-transform group-hover:scale-110">
-                        {funding.name.charAt(0)}
+                      <div className="w-11 h-11 rounded-full bg-linear-to-br from-gray-100 to-gray-200 flex items-center justify-center text-gray-600 font-bold text-xs border-2 border-white shadow-sm transition-transform group-hover:scale-110 overflow-hidden">
+                        {funding.image ? (
+                          <img
+                            src={funding.image}
+                            alt={funding.name}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          funding.name.charAt(0)
+                        )}
                       </div>
                       <div className="flex flex-col">
                         <span className="text-sm font-bold text-gray-900 flex items-center gap-1.5">
