@@ -31,7 +31,20 @@ const AdminHome = () => {
     },
   });
 
-  if (isRoleLoading || isUsersLoading || isRequestsLoading)
+  const { data: adminStats = {}, isLoading: isAdminStatsLoading } = useQuery({
+    queryKey: ["admin-stats"],
+    queryFn: async () => {
+      const { data } = await axiosSecure.get("/admin-stats");
+      return data;
+    },
+  });
+
+  if (
+    isRoleLoading ||
+    isUsersLoading ||
+    isRequestsLoading ||
+    isAdminStatsLoading
+  )
     return <AdminHomeSkeleton />;
 
   // Calculate Stats
@@ -52,7 +65,7 @@ const AdminHome = () => {
   const stats = {
     donorCount,
     totalRequests,
-    funding: 0, // Currently no payment
+    funding: adminStats.funding || 0,
   };
 
   // Chart Data

@@ -10,7 +10,7 @@ const AdminMenu = () => {
         label="All Requests"
         address="all-blood-donation-request"
       />
-      <MenuItem icon={FaCoins} label="All Fundings" address="all-fundings" />
+      <MenuItem icon={FaCoins} label="All Funding" address="all-funding" />
     </>
   );
 };

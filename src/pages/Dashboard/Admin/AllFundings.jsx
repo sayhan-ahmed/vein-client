@@ -12,54 +12,22 @@ import { MdVerified } from "react-icons/md";
 const AllFundings = () => {
   const axiosSecure = useAxiosSecure();
 
-  const { data: fundings = [], isPending } = useQuery({
-    queryKey: ["all-fundings"],
+  const { data: funding = [], isPending } = useQuery({
+    queryKey: ["all-funding"],
     queryFn: async () => {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      // For now, mock data
-      return [
-        {
-          id: 1,
-          name: "John Anderson",
-          amount: 500,
-          date: "2025-12-20",
-          email: "john@example.com",
-        },
-        {
-          id: 2,
-          name: "Sarah Mitchell",
-          amount: 250,
-          date: "2025-12-19",
-          email: "sarah@example.com",
-        },
-        {
-          id: 3,
-          name: "Michael Chen",
-          amount: 100,
-          date: "2025-12-19",
-          email: "michael@example.com",
-        },
-        {
-          id: 4,
-          name: "Emily Rodriguez",
-          amount: 50,
-          date: "2025-12-18",
-          email: "emily@example.com",
-        },
-        {
-          id: 5,
-          name: "David Thompson",
-          amount: 200,
-          date: "2025-12-18",
-          email: "david@example.com",
-        },
-      ];
+      const { data } = await axiosSecure.get("/funding");
+      return data;
     },
   });
 
   if (isPending) {
     return <AllFundingsSkeleton />;
   }
+
+  const totalRaised = funding.reduce(
+    (acc, curr) => acc + (curr.amount || 0),
+    0
+  );
 
   return (
     <div className="p-6 md:p-8 space-y-8 animate-in fade-in duration-700">
@@ -70,7 +38,7 @@ const AllFundings = () => {
             <div className="p-2 bg-amber-50 rounded-xl">
               <FaCoins className="text-amber-500" />
             </div>
-            All Fundings
+            All Funding
           </h1>
           <p className="text-sm font-medium text-gray-500 mt-1">
             Monitoring total platform contributions and donor impact.
@@ -82,7 +50,12 @@ const AllFundings = () => {
             <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
               Total Raised
             </p>
-            <p className="text-xl font-black text-gray-900">$2,150.00</p>
+            <p className="text-xl font-black text-gray-900">
+              $
+              {totalRaised.toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+              })}
+            </p>
           </div>
           <div className="w-px h-8 bg-gray-100 mx-2"></div>
           <div className="p-2 bg-green-50 rounded-lg">
@@ -120,7 +93,7 @@ const AllFundings = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50">
-              {fundings.map((funding) => (
+              {funding.map((funding) => (
                 <tr
                   key={funding.id}
                   className="group hover:bg-gray-50/80 transition-all duration-300"
@@ -172,7 +145,7 @@ const AllFundings = () => {
         </div>
 
         {/* Empty State if no data */}
-        {fundings.length === 0 && (
+        {funding.length === 0 && (
           <div className="py-20 text-center">
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-50 mb-4">
               <FaCoins className="text-gray-200 text-2xl" />

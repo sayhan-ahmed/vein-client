@@ -99,7 +99,7 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "all-fundings",
+        path: "all-funding",
         element: (
           <AdminVolunteerRoute>
             <AllFundings />

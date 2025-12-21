@@ -35,7 +35,7 @@ const AdminStats = ({ stats }) => {
         "group-hover:text-amber-600 group-hover:translate-x-1 transition-transform duration-500",
       hoverShadow: "group-hover:shadow-amber-100/50",
       hoverButtonBg: "hover:bg-amber-500/10",
-      link: "/funding",
+      link: "/dashboard/all-funding",
     },
     {
       id: 3,
