@@ -1,4 +1,4 @@
-import { FaUserCog, FaInbox } from "react-icons/fa";
+import { FaUserCog, FaInbox, FaCoins } from "react-icons/fa";
 import MenuItem from "./MenuItem";
 
 const AdminMenu = () => {
@@ -10,6 +10,7 @@ const AdminMenu = () => {
         label="All Requests"
         address="all-blood-donation-request"
       />
+      <MenuItem icon={FaCoins} label="All Fundings" address="all-fundings" />
     </>
   );
 };
