@@ -1,9 +1,11 @@
 import { Outlet } from "react-router";
 import Sidebar from "../components/Dashboard/Sidebar/Sidebar";
+import ScrollToTop from "../components/Shared/ScrollToTop";
 
 const DashboardLayout = () => {
   return (
     <div className="relative min-h-screen md:flex bg-white">
+      <ScrollToTop />
       {/* Left Side: Sidebar Component */}
       <Sidebar />
       {/* Right Side: Dashboard Dynamic Content */}
