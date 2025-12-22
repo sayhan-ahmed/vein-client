@@ -7,6 +7,8 @@ import {
   signOut,
   updateProfile,
   sendPasswordResetEmail,
+  setPersistence,
+  browserLocalPersistence,
 } from "firebase/auth";
 import { app } from "../firebase/firebase.config";
 import { AuthContext } from "./AuthContext";
@@ -24,9 +26,16 @@ const AuthProvider = ({ children }) => {
     return createUserWithEmailAndPassword(auth, email, password);
   };
 
-  const signIn = (email, password) => {
+  const signIn = async (email, password) => {
     setLoading(true);
-    return signInWithEmailAndPassword(auth, email, password);
+    try {
+      // Set persistence to LOCAL for mobile compatibility
+      await setPersistence(auth, browserLocalPersistence);
+      return await signInWithEmailAndPassword(auth, email, password);
+    } catch (error) {
+      setLoading(false);
+      throw error;
+    }
   };
 
   const logOut = async () => {
@@ -47,6 +56,11 @@ const AuthProvider = ({ children }) => {
 
   // onAuthStateChange
   useEffect(() => {
+    // Set persistence on app load for mobile compatibility
+    setPersistence(auth, browserLocalPersistence).catch((error) => {
+      console.error("Persistence Error:", error);
+    });
+
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
         // User is Logged In
