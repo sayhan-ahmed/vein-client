@@ -39,7 +39,11 @@ const DonationRequests = () => {
   }, [axiosPublic]);
 
   if (loading) {
-    return <Loader />;
+    return (
+      <div className="flex items-center justify-center min-h-[400px] py-24">
+        <Loader />
+      </div>
+    );
   }
 
   // Removed early return to always show component

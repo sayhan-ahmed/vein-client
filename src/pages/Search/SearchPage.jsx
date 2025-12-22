@@ -237,17 +237,17 @@ const SearchPage = () => {
                               key={donor._id || donor.id}
                               className="group hover:bg-red-50/30 transition-colors duration-300"
                             >
-                              <td className="py-4 px-6">
+                              <td className="py-4 px-6 min-w-[200px]">
                                 <div className="flex items-center gap-4">
-                                  <div className="w-12 h-12 rounded-2xl overflow-hidden shadow-sm border border-slate-100 group-hover:shadow-md transition-all">
+                                  <div className="w-12 h-12 rounded-2xl overflow-hidden shadow-sm border border-slate-100 group-hover:shadow-md transition-all shrink-0">
                                     <img
                                       src={donor.image}
                                       alt={donor.name}
                                       className="w-full h-full object-cover"
                                     />
                                   </div>
-                                  <div>
-                                    <h3 className="font-bold text-slate-800 text-base group-hover:text-red-700 transition-colors">
+                                  <div className="min-w-0">
+                                    <h3 className="font-bold text-slate-800 text-base group-hover:text-red-700 transition-colors truncate">
                                       {donor.name}
                                     </h3>
                                     <p className="text-sm text-slate-500 capitalize">
