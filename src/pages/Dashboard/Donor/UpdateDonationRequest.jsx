@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { useNavigate, useParams } from "react-router";
+import useRole from "../../../hooks/useRole";
 import AddDonationRequestForm from "../../../components/Form/AddDonationRequestForm";
 import Swal from "sweetalert2";
 import { useQuery } from "@tanstack/react-query";
@@ -13,6 +14,7 @@ const UpdateDonationRequest = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
   const navigate = useNavigate();
+  const [role] = useRole();
 
   // Fetch Request Data
   const {
@@ -65,7 +67,12 @@ const UpdateDonationRequest = () => {
           },
         });
         refetch();
-        navigate("/dashboard/my-donation-requests");
+        // Role-based redirect
+        if (role === "admin" || role === "volunteer") {
+          navigate("/dashboard/all-blood-donation-request");
+        } else {
+          navigate("/dashboard/my-donation-requests");
+        }
       } else {
         Swal.fire({
           title: "No Changes",
