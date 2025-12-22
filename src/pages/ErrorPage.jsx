@@ -1,63 +1,54 @@
-import Button from '../components/Shared/Button/Button'
-import { useNavigate } from 'react-router'
+import { Link, useNavigate } from "react-router";
+import { FaHome, FaArrowLeft } from "react-icons/fa";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 const ErrorPage = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   return (
-    <section className='bg-white '>
-      <div className='container flex items-center min-h-screen px-6 py-12 mx-auto'>
-        <div className='flex flex-col items-center max-w-sm mx-auto text-center'>
-          <p className='p-3 text-sm font-medium text-lime-500 rounded-full bg-blue-50 '>
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              fill='none'
-              viewBox='0 0 24 24'
-              strokeWidth='2'
-              stroke='currentColor'
-              className='w-6 h-6'
-            >
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                d='M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z'
-              />
-            </svg>
-          </p>
-          <h1 className='mt-3 text-2xl font-semibold text-gray-800  md:text-3xl'>
-            Something Went Wrong!
+    <div className="min-h-screen bg-white flex items-center justify-center">
+      <div className="max-w-5xl w-full text-center">
+        {/* Lottie Animation */}
+        <div className="w-full mx-auto">
+          <DotLottieReact
+            src="https://lottie.host/6f9479b9-f060-4b2f-a8fe-4685efd27c07/cuItw3GcY1.lottie"
+            loop
+            autoplay
+          />
+        </div>
+
+        {/* Content */}
+        <div className="-mt-5 sm:-mt-12 md:-mt-18 lg:-mt-24">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#1D3658] mb-4 ">
+            Page <span className="text-red-600">Not Found</span>
           </h1>
-          <p className='mt-4 text-gray-500 '>Here are some helpful links:</p>
 
-          <div className='flex items-center w-full mt-6 gap-x-3 shrink-0 sm:w-auto'>
-            <button
-              onClick={() => navigate(-1)}
-              className='flex items-center justify-center w-1/2 px-5 py-1 text-sm text-gray-700 transition-colors duration-200 bg-white border rounded-lg gap-x-2 sm:w-auto   hover:bg-gray-100 '
-            >
-              <svg
-                xmlns='http://www.w3.org/2000/svg'
-                fill='none'
-                viewBox='0 0 24 24'
-                strokeWidth='1.5'
-                stroke='currentColor'
-                className='w-5 h-5 rtl:rotate-180 text-lime-500'
-              >
-                <path
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                  d='M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18'
-                />
-              </svg>
+          <p className="text-base md:text-lg text-slate-600 mb-10 max-w-xl mx-auto">
+            The page you're looking for doesn't exist or has been moved.
+          </p>
+        </div>
 
-              <span>Go back</span>
-            </button>
+        {/* Buttons */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <button
+            onClick={() => navigate(-1)}
+            className="inline-flex items-center gap-2 px-8 py-4 bg-white border-2 border-[#1D3658] text-[#1D3658] rounded-xl font-semibold hover:border-red-600 hover:shadow-lg transition-all"
+          >
+            <FaArrowLeft />
+            Go Back
+          </button>
 
-            <Button label={'Take Me Home'} onClick={() => navigate('/')} />
-          </div>
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-red-600 border-2 border-red-600 text-white rounded-xl font-semibold hover:bg-red-700 hover:border-red-700 shadow-lg hover:shadow-xl transition-all"
+          >
+            <FaHome />
+            Back to Home
+          </Link>
         </div>
       </div>
-    </section>
-  )
-}
+    </div>
+  );
+};
 
-export default ErrorPage
+export default ErrorPage;
