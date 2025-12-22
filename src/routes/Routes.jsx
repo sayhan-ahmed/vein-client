@@ -34,6 +34,10 @@ const AllDonationRequests = lazy(() =>
 const SearchPage = lazy(() => import("../pages/Search/SearchPage"));
 const DonateMoney = lazy(() => import("../pages/DonateMoney/DonateMoney"));
 const AllFundings = lazy(() => import("../pages/Dashboard/Admin/AllFundings"));
+const About = lazy(() => import("../pages/About/About"));
+const Contact = lazy(() => import("../pages/Contact/Contact"));
+const Terms = lazy(() => import("../pages/Terms/Terms"));
+const Privacy = lazy(() => import("../pages/Privacy/Privacy"));
 
 // 1. GUARDS
 import PrivateRoute from "./PrivateRoute";
@@ -69,6 +73,22 @@ export const router = createBrowserRouter([
       {
         path: "/funding",
         element: <DonateMoney />,
+      },
+      {
+        path: "/about",
+        element: <About />,
+      },
+      {
+        path: "/contact",
+        element: <Contact />,
+      },
+      {
+        path: "/terms",
+        element: <Terms />,
+      },
+      {
+        path: "/privacy",
+        element: <Privacy />,
       },
     ],
   },
