@@ -7,6 +7,9 @@ import useRole from "../../../hooks/useRole";
 import AdminHomeSkeleton from "./components/AdminHomeSkeleton";
 import AdminStats from "./components/AdminStats";
 import AdminAnalytics from "./components/AdminAnalytics";
+import DonationRequestTrendsChart from "./components/DonationRequestTrendsChart";
+import RecentUserRegistrations from "./components/RecentUserRegistrations";
+import BloodGroupDemand from "./components/BloodGroupDemand";
 import AdminRecentActivity from "./components/AdminRecentActivity";
 import Swal from "sweetalert2";
 
@@ -165,6 +168,11 @@ const AdminHome = () => {
             requestData={requestData}
             totalUsers={users.length}
           />
+          <DonationRequestTrendsChart requests={requests} />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <RecentUserRegistrations users={users} />
+            <BloodGroupDemand requests={requests} />
+          </div>
           <AdminRecentActivity requests={requests} />
         </div>
       </div>
