@@ -35,55 +35,60 @@ const AdminRecentActivity = ({ requests }) => {
         </div>
 
         <div className="space-y-3 flex-1 overflow-y-auto pr-1 custom-scrollbar">
-          {requests.slice(0, 5).map((request, idx) => (
-            <div
-              key={idx}
-              className="flex items-center gap-4 p-3 rounded-2xl bg-gray-50/70 border border-gray-100 hover:bg-white hover:shadow-lg hover:shadow-red-50/50 hover:-translate-y-0.5 transition-all duration-300 group cursor-default"
-            >
-              {/* Blood Group */}
+          {requests
+            .sort((a, b) => new Date(b.donationDate) - new Date(a.donationDate))
+            .slice(0, 5)
+            .map((request, idx) => (
               <div
-                className={`w-10 h-10 rounded-xl flex items-center justify-center text-sm shadow-sm transition-transform duration-500 group-hover:rotate-12 ${
-                  request.donationStatus === "pending"
-                    ? "bg-amber-100 text-amber-600"
-                    : request.donationStatus === "done"
-                    ? "bg-emerald-100 text-emerald-600"
-                    : "bg-gray-100 text-gray-500"
-                }`}
+                key={idx}
+                className="flex items-center gap-4 p-3 rounded-2xl bg-gray-50/70 border border-gray-100 hover:bg-white hover:shadow-lg hover:shadow-red-50/50 hover:-translate-y-0.5 transition-all duration-300 group cursor-default"
               >
-                <span className="font-black text-xs">{request.bloodGroup}</span>
-              </div>
+                {/* Blood Group */}
+                <div
+                  className={`w-10 h-10 rounded-xl flex items-center justify-center text-sm shadow-sm transition-transform duration-500 group-hover:rotate-12 ${
+                    request.donationStatus === "pending"
+                      ? "bg-amber-100 text-amber-600"
+                      : request.donationStatus === "done"
+                      ? "bg-emerald-100 text-emerald-600"
+                      : "bg-gray-100 text-gray-500"
+                  }`}
+                >
+                  <span className="font-black text-xs">
+                    {request.bloodGroup}
+                  </span>
+                </div>
 
-              {/* Info */}
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center justify-between mb-0.5">
-                  <h4 className="font-bold text-gray-900 text-sm truncate pr-2">
-                    {request.recipientName}
-                  </h4>
-                  <span className="text-[10px] font-medium text-gray-400">
-                    {request.donationDate || "Just now"}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <p className="text-xs text-gray-500 font-semibold truncate w-2/3">
-                    {request.hospitalName}
-                  </p>
-                  <span
-                    className={`text-[9px] font-black uppercase tracking-wider ${
-                      request.donationStatus === "pending"
-                        ? "text-amber-500"
-                        : request.donationStatus === "done"
-                        ? "text-emerald-500"
-                        : "text-gray-400"
-                    }`}
-                  >
-                    {request.donationStatus === "done"
-                      ? "Completed"
-                      : request.donationStatus}
-                  </span>
+                {/* Info */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between mb-0.5">
+                    <h4 className="font-bold text-gray-900 text-sm truncate pr-2">
+                      {request.recipientName}
+                    </h4>
+                    <span className="text-[10px] font-medium text-gray-400">
+                      {request.donationDate || "Just now"}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs text-gray-500 font-semibold truncate w-2/3">
+                      {request.hospitalName}
+                    </p>
+                    <span
+                      className={`text-[9px] font-black uppercase tracking-wider ${
+                        request.donationStatus === "pending"
+                          ? "text-amber-500"
+                          : request.donationStatus === "done"
+                          ? "text-emerald-500"
+                          : "text-gray-400"
+                      }`}
+                    >
+                      {request.donationStatus === "done"
+                        ? "Completed"
+                        : request.donationStatus}
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
           {requests.length === 0 && (
             <div className="h-full flex flex-col items-center justify-center text-gray-300 gap-2 py-10">
               <FaClipboardList size={24} className="opacity-20" />

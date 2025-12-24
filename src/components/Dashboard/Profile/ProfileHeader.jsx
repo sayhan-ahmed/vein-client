@@ -1,5 +1,12 @@
-import { FaCamera, FaTint, FaUser, FaMapMarkerAlt } from "react-icons/fa";
+import {
+  FaCamera,
+  FaTint,
+  FaUser,
+  FaMapMarkerAlt,
+  FaHeart,
+} from "react-icons/fa";
 import { MdEdit, MdCancel } from "react-icons/md";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 const ProfileHeader = ({
   userData,
@@ -33,8 +40,100 @@ const ProfileHeader = ({
         </div>
       )}
 
-      <div className="absolute top-0 left-0 w-full h-32 bg-[#1D3557]/20 flex items-center justify-center"></div>
-      <div className="absolute top-0 right-0 w-64 h-64 bg-red-500/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+      {/* Enhanced Cover Photo Area - Lottie Heartbeat Animation */}
+      <div className="absolute top-0 left-0 w-full h-32 bg-linear-to-b from-gray-50 to-white overflow-hidden">
+        {/* Blood Drop Pattern Background - Asymmetric Scatter */}
+        <div className="absolute inset-0 opacity-6">
+          {/* Left side - 3 drops */}
+          <FaTint
+            className="absolute"
+            style={{
+              top: "70%",
+              left: "30%",
+              fontSize: "2.5rem",
+              color: "#ef4444",
+              transform: "rotate(-18deg)",
+            }}
+          />
+          <FaTint
+            className="absolute"
+            style={{
+              top: "10%",
+              left: "20%",
+              fontSize: "3rem",
+              color: "#dc2626",
+              transform: "rotate(25deg)",
+            }}
+          />
+          <FaTint
+            className="absolute"
+            style={{
+              top: "15%",
+              left: "1%",
+              fontSize: "2rem",
+              color: "#f87171",
+              transform: "rotate(-15deg)",
+            }}
+          />
+
+          {/* Right side - 4 drops */}
+          <FaTint
+            className="absolute"
+            style={{
+              top: "30%",
+              right: "30%",
+              fontSize: "3rem",
+              color: "#fca5a5",
+              transform: "rotate(-29deg)",
+            }}
+          />
+          <FaTint
+            className="absolute"
+            style={{
+              top: "70%",
+              right: "20%",
+              fontSize: "2rem",
+              color: "#ef4444",
+              transform: "rotate(29deg)",
+            }}
+          />
+          <FaTint
+            className="absolute"
+            style={{
+              top: "10%",
+              right: "5%",
+              fontSize: "5rem",
+              color: "#dc2626",
+              transform: "rotate(15deg)",
+            }}
+          />
+          <FaTint
+            className="absolute"
+            style={{
+              top: "82%",
+              right: "0%",
+              fontSize: "1.75rem",
+              color: "#f87171",
+              transform: "rotate(-30deg)",
+            }}
+          />
+        </div>
+
+        {/* Lottie Heartbeat Animation */}
+        <div className="absolute inset-0 flex items-center justify-center opacity-60">
+          <DotLottieReact
+            src="https://lottie.host/137fb528-dafe-4c6e-8841-bb0480bc3752/yIGulyJqXs.lottie"
+            loop
+            autoplay
+            className="w-full h-full object-cover"
+          />
+        </div>
+
+        {/* Pulsing Heart Icon */}
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-5">
+          <FaHeart className="text-8xl text-red-500 animate-pulse" />
+        </div>
+      </div>
 
       <div className="relative z-10 flex flex-col md:flex-row items-center md:items-end gap-8 mt-12 md:mt-14 lg:mt-5">
         <div className="relative group/avatar">
