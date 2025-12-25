@@ -25,7 +25,12 @@ const DonationRequests = () => {
         const res = await axiosPublic.get("/donation-requests");
         const pendingRequests = res.data
           .filter((req) => req.donationStatus === "pending")
-          .reverse() // Show newest first
+          .sort((a, b) => {
+            // Sort by createdAt in descending order (latest first)
+            const dateA = new Date(a.createdAt || a.date || 0);
+            const dateB = new Date(b.createdAt || b.date || 0);
+            return dateB - dateA;
+          })
           .slice(0, 6);
         setRequests(pendingRequests);
       } catch (error) {
