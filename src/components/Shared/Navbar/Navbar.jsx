@@ -8,19 +8,54 @@ import { FaRegBell } from "react-icons/fa";
 import { RxDashboard } from "react-icons/rx";
 import { LuLogOut } from "react-icons/lu";
 import { useState, useEffect, useRef } from "react";
-import { Link, NavLink } from "react-router";
+import { Link, NavLink, useNavigate } from "react-router";
 import useAuth from "../../../hooks/useAuth";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import { useQuery } from "@tanstack/react-query";
 import avatarImg from "../../../assets/images/placeholder.jpg";
 import Swal from "sweetalert2";
 
 const Navbar = () => {
   const { user, logOut, loading } = useAuth();
+  const axiosSecure = useAxiosSecure();
+  const navigate = useNavigate();
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   const navRef = useRef(null);
   const userMenuRef = useRef(null);
+  const notificationRef = useRef(null);
+
+  // Fetch Notifications
+  const { data: notifications = [], refetch: refetchNotifications } = useQuery({
+    queryKey: ["notifications", user?.email],
+    enabled: !!user?.email,
+    queryFn: async () => {
+      const { data } = await axiosSecure.get(
+        `/notifications?email=${user.email}`
+      );
+      return data;
+    },
+    // Refetch every minute to keep it fresh
+    refetchInterval: 60000,
+  });
+
+  const unreadCount = notifications.filter((n) => !n.isRead).length;
+
+  const handleMarkAsRead = async (id, link) => {
+    try {
+      await axiosSecure.patch(`/notifications/${id}`);
+      refetchNotifications();
+      if (link) {
+        navigate(link);
+        setIsNotificationOpen(false);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   // Handle Logout with Confirmation
   const handleLogout = () => {
@@ -70,6 +105,13 @@ const Navbar = () => {
       // Close User Menu if clicked outside
       if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
         setIsUserMenuOpen(false);
+      }
+      // Close Notification Dropdown if clicked outside
+      if (
+        notificationRef.current &&
+        !notificationRef.current.contains(event.target)
+      ) {
+        setIsNotificationOpen(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -201,29 +243,100 @@ const Navbar = () => {
                 {navLinks}
               </div>
 
-              {/* Bell Icon */}
-              <div className="flex items-center text-xl text-gray-600">
+              {/* Bell Icon & Notifications */}
+              <div
+                className="relative flex items-center text-xl text-gray-600"
+                ref={notificationRef}
+              >
                 {user && (
-                  <FaRegBell
-                    onClick={() => {
-                      Swal.fire({
-                        title: "Notifications",
-                        text: "You have no new notifications at this time.",
-                        icon: "info",
-                        iconColor: "#3B82F6",
-                        confirmButtonText: "OK",
-                        confirmButtonColor: "#E7000B",
-                        customClass: {
-                          popup: "rounded-3xl shadow-2xl",
-                          title: "text-2xl font-bold text-gray-900",
-                          htmlContainer: "text-gray-600",
-                          confirmButton:
-                            "px-6 py-3 rounded-xl font-bold shadow-lg transition-all hover:scale-105",
-                        },
-                      });
-                    }}
-                    className="cursor-pointer hover:text-red-700 hover:scale-110 transition"
-                  />
+                  <>
+                    <button
+                      onClick={() => setIsNotificationOpen(!isNotificationOpen)}
+                      className="relative cursor-pointer hover:text-red-700 hover:scale-110 transition outline-none"
+                    >
+                      <FaRegBell />
+                      {unreadCount > 0 && (
+                        <span className="absolute -top-1.5 -right-1.5 bg-red-600 text-white text-[9px] font-bold h-4 w-4 flex items-center justify-center rounded-full ring-2 ring-white">
+                          {unreadCount > 9 ? "9+" : unreadCount}
+                        </span>
+                      )}
+                    </button>
+
+                    {/* Notification Dropdown */}
+                    {isNotificationOpen && (
+                      <div className="absolute right-0 top-10 w-80 bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden z-50">
+                        <div className="p-3 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+                          <h3 className="font-bold text-gray-800 text-sm">
+                            Notifications
+                          </h3>
+                          {unreadCount > 0 && (
+                            <button
+                              onClick={() => {
+                                // Logic to mark all as read could go here
+                                // For now, simple interaction
+                              }}
+                              className="text-xs text-red-600 hover:text-red-700 font-medium"
+                            >
+                              Mark all read
+                            </button>
+                          )}
+                        </div>
+                        <div className="max-h-80 overflow-y-auto">
+                          {notifications.length > 0 ? (
+                            notifications.map((notification) => (
+                              <div
+                                key={notification._id}
+                                onClick={() =>
+                                  handleMarkAsRead(
+                                    notification._id,
+                                    notification.link
+                                  )
+                                }
+                                className={`p-3 border-b border-gray-50 cursor-pointer transition hover:bg-gray-50 flex gap-3 ${
+                                  !notification.isRead ? "bg-red-50/30" : ""
+                                }`}
+                              >
+                                <div
+                                  className={`mt-1 h-2 w-2 rounded-full shrink-0 ${
+                                    !notification.isRead
+                                      ? "bg-red-500"
+                                      : "bg-transparent"
+                                  }`}
+                                ></div>
+                                <div className="flex-1">
+                                  <p
+                                    className={`text-sm ${
+                                      !notification.isRead
+                                        ? "font-bold text-gray-800"
+                                        : "text-gray-600"
+                                    }`}
+                                  >
+                                    {notification.message}
+                                  </p>
+                                  <span className="text-[10px] text-gray-400 mt-1 block">
+                                    {new Date(
+                                      notification.createdAt
+                                    ).toLocaleTimeString([], {
+                                      hour: "2-digit",
+                                      minute: "2-digit",
+                                    })}
+                                    {" - "}
+                                    {new Date(
+                                      notification.createdAt
+                                    ).toLocaleDateString()}
+                                  </span>
+                                </div>
+                              </div>
+                            ))
+                          ) : (
+                            <div className="p-6 text-center text-gray-400 text-sm">
+                              No notifications yet
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                  </>
                 )}
               </div>
 

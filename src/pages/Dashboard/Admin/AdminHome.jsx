@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { Link } from "react-router";
+import { useNavigate, Link } from "react-router";
+import { useState, useEffect, useRef } from "react";
 import { FaSearch, FaBell, FaCalendarAlt } from "react-icons/fa";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
@@ -16,7 +17,52 @@ import Swal from "sweetalert2";
 const AdminHome = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
+  const navigate = useNavigate();
   const [role, isRoleLoading] = useRole();
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+  const notificationRef = useRef(null);
+
+  // Close Notification Dropdown if clicked outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        notificationRef.current &&
+        !notificationRef.current.contains(event.target)
+      ) {
+        setIsNotificationOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // Fetch Notifications
+  const { data: notifications = [], refetch: refetchNotifications } = useQuery({
+    queryKey: ["notifications", user?.email],
+    enabled: !!user?.email,
+    queryFn: async () => {
+      const { data } = await axiosSecure.get(
+        `/notifications?email=${user.email}`
+      );
+      return data;
+    },
+    refetchInterval: 60000,
+  });
+
+  const unreadCount = notifications.filter((n) => !n.isRead).length;
+
+  const handleMarkAsRead = async (id, link) => {
+    try {
+      await axiosSecure.patch(`/notifications/${id}`);
+      refetchNotifications();
+      if (link) {
+        navigate(link);
+        setIsNotificationOpen(false);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   // Fetch Stats Data
   const { data: users = [], isLoading: isUsersLoading } = useQuery({
@@ -123,29 +169,81 @@ const AdminHome = () => {
               </span>
             </div>
 
-            <button
-              onClick={() => {
-                Swal.fire({
-                  title: "Notifications",
-                  text: "You have no new notifications at this time.",
-                  icon: "info",
-                  iconColor: "#3B82F6",
-                  confirmButtonText: "OK",
-                  confirmButtonColor: "#E7000B",
-                  customClass: {
-                    popup: "rounded-3xl shadow-2xl",
-                    title: "text-2xl font-bold text-gray-900",
-                    htmlContainer: "text-gray-600",
-                    confirmButton:
-                      "px-6 py-3 rounded-xl font-bold shadow-lg transition-all hover:scale-105",
-                  },
-                });
-              }}
-              className="relative w-11 h-11 rounded-full bg-white border border-gray-100 flex items-center justify-center text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all shadow-sm group"
-            >
-              <FaBell className="group-hover:animate-swing" />
-              <span className="absolute top-2.5 right-3 w-2 h-2 bg-red-500 rounded-full ring-2 ring-white"></span>
-            </button>
+            <div className="relative" ref={notificationRef}>
+              <button
+                onClick={() => setIsNotificationOpen(!isNotificationOpen)}
+                className="relative w-11 h-11 rounded-full bg-white border border-gray-100 flex items-center justify-center text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all shadow-sm group"
+              >
+                <FaBell className="group-hover:animate-swing" />
+                {unreadCount > 0 && (
+                  <span className="absolute top-2.5 right-3 w-2 h-2 bg-red-500 rounded-full ring-2 ring-white"></span>
+                )}
+              </button>
+
+              {/* Notification Dropdown */}
+              {isNotificationOpen && (
+                <div className="absolute right-0 top-12 w-80 bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden z-50">
+                  <div className="p-3 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+                    <h3 className="font-bold text-gray-800 text-sm">
+                      Notifications
+                    </h3>
+                  </div>
+                  <div className="max-h-80 overflow-y-auto">
+                    {notifications.length > 0 ? (
+                      notifications.map((notification) => (
+                        <div
+                          key={notification._id}
+                          onClick={() =>
+                            handleMarkAsRead(
+                              notification._id,
+                              notification.link
+                            )
+                          }
+                          className={`p-3 border-b border-gray-50 cursor-pointer transition hover:bg-gray-50 flex gap-3 ${
+                            !notification.isRead ? "bg-red-50/30" : ""
+                          }`}
+                        >
+                          <div
+                            className={`mt-1 h-2 w-2 rounded-full shrink-0 ${
+                              !notification.isRead
+                                ? "bg-red-500"
+                                : "bg-transparent"
+                            }`}
+                          ></div>
+                          <div className="flex-1">
+                            <p
+                              className={`text-sm ${
+                                !notification.isRead
+                                  ? "font-bold text-gray-800"
+                                  : "text-gray-600"
+                              }`}
+                            >
+                              {notification.message}
+                            </p>
+                            <span className="text-[10px] text-gray-400 mt-1 block">
+                              {new Date(
+                                notification.createdAt
+                              ).toLocaleTimeString([], {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })}
+                              {" - "}
+                              {new Date(
+                                notification.createdAt
+                              ).toLocaleDateString()}
+                            </span>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="p-6 text-center text-gray-400 text-sm">
+                        No notifications yet
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
 
             <Link
               to="/dashboard/profile"
