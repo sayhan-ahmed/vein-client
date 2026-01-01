@@ -75,7 +75,7 @@ const Login = () => {
       };
       await axiosPublic.post("/users", userInfo);
       navigate(from, { replace: true });
-      toast.success("Google Login Successful");
+      toast.success("Google Login Successful. Please Update Your Profile");
     } catch (err) {
       console.error(err);
       toast.error(err?.message || "Google Login Failed");

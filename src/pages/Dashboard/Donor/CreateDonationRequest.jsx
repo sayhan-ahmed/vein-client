@@ -23,8 +23,9 @@ const CreateDonationRequest = () => {
     },
   });
 
+  const [submitting, setSubmitting] = useState(false);
   const isBlocked = dbUser?.status === "blocked";
-  const loading = authLoading || userLoading;
+  const isLoading = authLoading || userLoading || submitting;
 
   const onSubmit = async (data) => {
     if (isBlocked) {
@@ -47,6 +48,7 @@ const CreateDonationRequest = () => {
       return;
     }
 
+    setSubmitting(true);
     const requestData = {
       requesterName: user?.displayName,
       requesterEmail: user?.email,
@@ -111,10 +113,12 @@ const CreateDonationRequest = () => {
             "px-6 py-3 rounded-xl font-bold shadow-lg transition-all hover:scale-105",
         },
       });
+    } finally {
+      setSubmitting(false);
     }
   };
 
-  if (loading) return <DonationRequestSkeleton />;
+  if (authLoading || userLoading) return <DonationRequestSkeleton />; // Use original loading check for skeleton
 
   return (
     <div className="min-h-screen bg-[#F8F9FD] relative py-12 px-4 sm:px-6 lg:px-8 font-sans overflow-hidden selection:bg-red-500/30">
@@ -138,7 +142,6 @@ const CreateDonationRequest = () => {
             network instantly.
           </p>
         </div>
-
         {/* Card */}
         <div className="bg-white/60 backdrop-blur-2xl backdrop-saturate-150 rounded-[2.5rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.08)] border border-white/60 relative overflow-hidden ring-1 ring-black/5">
           {/* Decorative Top Highlight */}
@@ -148,7 +151,7 @@ const CreateDonationRequest = () => {
             <AddDonationRequestForm
               onSubmit={onSubmit}
               user={user}
-              loading={loading}
+              loading={isLoading}
               isBlocked={isBlocked}
             />
           </div>

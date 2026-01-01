@@ -10,6 +10,7 @@ import {
   FaCalendarAlt,
   FaClock,
 } from "react-icons/fa";
+import { ImSpinner9 } from "react-icons/im";
 import districtsData from "../../assets/data/districts.json";
 import upazilasData from "../../assets/data/upazilas.json";
 
@@ -84,7 +85,10 @@ const AddDonationRequestForm = ({
         </p>
         <p className="text-gray-500 text-xs mt-5">
           Please contact the{" "}
-          <a href="mailto:admin@vein.com" className="font-semibold hover:text-red-600 hover:underline transition-colors">
+          <a
+            href="mailto:admin@vein.com"
+            className="font-semibold hover:text-red-600 hover:underline transition-colors"
+          >
             admin
           </a>{" "}
           for more information.
@@ -462,7 +466,10 @@ const AddDonationRequestForm = ({
         >
           <span className="absolute inset-0 flex items-center justify-center text-white text-lg font-bold bg-red-600 group-hover:bg-red-700 transition-colors duration-300">
             {loading ? (
-              <span>{initialData ? "Updating..." : "Processing..."}</span>
+              <span className="flex items-center gap-2">
+                <ImSpinner9 className="animate-spin text-xl" />
+                <span>{initialData ? "Updating..." : "Processing..."}</span>
+              </span>
             ) : (
               <>
                 <span>{initialData ? "Update Request" : "Submit Request"}</span>

@@ -13,6 +13,7 @@ const ProfileUpdateForm = ({
   districts,
   upazilas,
   selectedDistrict,
+  handleImageChange,
 }) => {
   return (
     <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 relative h-fit">
@@ -100,7 +101,16 @@ const ProfileUpdateForm = ({
             <input
               type="file"
               accept="image/*"
-              {...register("image")}
+              {...(() => {
+                const { onChange, ...rest } = register("image");
+                return {
+                  ...rest,
+                  onChange: (e) => {
+                    onChange(e);
+                    if (handleImageChange) handleImageChange(e);
+                  },
+                };
+              })()}
               className="w-full px-4 py-2 rounded-xl bg-gray-50 border border-dashed border-gray-300 text-xs text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:text-[10px] file:font-bold file:bg-red-50 file:text-red-600 hover:file:bg-red-100 cursor-pointer"
             />
           </div>

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { useNavigate, useParams } from "react-router";
@@ -15,6 +15,7 @@ const UpdateDonationRequest = () => {
   const axiosSecure = useAxiosSecure();
   const navigate = useNavigate();
   const [role] = useRole();
+  const [submitting, setSubmitting] = useState(false);
 
   // Fetch Request Data
   const {
@@ -30,6 +31,7 @@ const UpdateDonationRequest = () => {
   });
 
   const onSubmit = async (data) => {
+    setSubmitting(true);
     const updateData = {
       recipientName: data.recipientName,
       recipientDistrict: data.recipientDistrict,
@@ -112,6 +114,8 @@ const UpdateDonationRequest = () => {
             "px-6 py-3 rounded-xl font-bold shadow-lg transition-all hover:scale-105",
         },
       });
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -149,7 +153,7 @@ const UpdateDonationRequest = () => {
             <AddDonationRequestForm
               onSubmit={onSubmit}
               user={user}
-              loading={false}
+              loading={submitting}
               isBlocked={false}
               initialData={requestData}
             />

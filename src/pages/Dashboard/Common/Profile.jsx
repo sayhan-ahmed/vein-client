@@ -260,9 +260,21 @@ const Profile = () => {
         upazila: getUpazilaIdByName(userData.upazila),
         image: null,
       });
+      setImagePreview(null);
     }
     setIsEditing(!isEditing);
   };
+
+  const handleImageChange = async (e) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setValue("image", [file]);
+      setImagePreview(URL.createObjectURL(file));
+      toast.success("Image uploaded! Click Save to apply.");
+    }
+  };
+
+  // ...
 
   if (isDataLoading || isStatsLoading) return <ProfileSkeleton />;
 
@@ -275,14 +287,7 @@ const Profile = () => {
           isEditing={isEditing}
           handleEditToggle={handleEditToggle}
           isOwnProfile={isOwnProfile}
-          handleImageChange={async (e) => {
-            if (e.target.files && e.target.files[0]) {
-              const file = e.target.files[0];
-              setValue("image", [file]);
-              setImagePreview(URL.createObjectURL(file));
-              toast.success("Image uploaded! Click Save to apply.");
-            }
-          }}
+          handleImageChange={handleImageChange}
           loading={loading}
           uploading={uploading}
           imagePreview={imagePreview}
@@ -302,6 +307,7 @@ const Profile = () => {
               districts={districts}
               upazilas={upazilas}
               selectedDistrict={selectedDistrict}
+              handleImageChange={handleImageChange}
             />
             {/* Impact Insights */}
             <ImpactInsights myDonations={myDonations} />
