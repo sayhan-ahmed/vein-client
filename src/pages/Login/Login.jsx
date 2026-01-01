@@ -3,21 +3,23 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import useAuth from "../../hooks/useAuth";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
 import { TbDropletFilled } from "react-icons/tb";
 import { MdBloodtype } from "react-icons/md";
 import {
-  FaXTwitter,
-  FaFacebookF,
   FaHandHoldingHeart,
   FaLocationDot,
   FaEye,
   FaEyeSlash,
+  FaUserShield,
 } from "react-icons/fa6";
 import { ImSpinner9 } from "react-icons/im";
 import { FcGoogle } from "react-icons/fc";
 
 const Login = () => {
-  const { signIn, resetPassword, loading, setLoading, user } = useAuth();
+  const { signIn, googleSignIn, resetPassword, loading, setLoading, user } =
+    useAuth();
+  const axiosPublic = useAxiosPublic();
   const navigate = useNavigate();
   const location = useLocation();
   const [isReset, setIsReset] = useState(false);
@@ -61,6 +63,26 @@ const Login = () => {
     }
   };
 
+  const handleGoogleSignIn = async () => {
+    try {
+      const result = await googleSignIn();
+      const userInfo = {
+        name: result.user?.displayName,
+        email: result.user?.email,
+        image: result.user?.photoURL,
+        role: "donor",
+        status: "active",
+      };
+      await axiosPublic.post("/users", userInfo);
+      navigate(from, { replace: true });
+      toast.success("Google Login Successful");
+    } catch (err) {
+      console.error(err);
+      toast.error(err?.message || "Google Login Failed");
+      setLoading(false); // Ensure loading is reset on error
+    }
+  };
+
   const onReset = async (data) => {
     const { email } = data;
     if (!email) return toast.error("Please enter your email");
@@ -77,6 +99,25 @@ const Login = () => {
       }
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDemoLogin = async (role) => {
+    let email, password;
+    if (role === "volunteer") {
+      email = "volunteer@vein.com";
+      password = "volunteer911";
+    } else if (role === "admin") {
+      email = "admin@vein.com";
+      password = "admin911";
+    }
+
+    try {
+      await signIn(email, password);
+      navigate(from, { replace: true });
+      toast.success(`Logged in as ${role}`);
+    } catch (err) {
+      toast.error("Invalid Credentials");
     }
   };
 
@@ -458,7 +499,47 @@ const Login = () => {
                 </form>
               )}
 
-              <div className="mt-8">
+              {/* Quick Login Section */}
+              <div className="mb-6">
+                <div className="relative mb-3">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-slate-100"></div>
+                  </div>
+                  <div className="relative flex justify-center text-[10px] uppercase font-bold text-slate-400 tracking-widest">
+                    <span className="bg-white px-3">Quick Login</span>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => handleDemoLogin("volunteer")}
+                    className="flex items-center justify-center gap-3 py-2 px-4 rounded-lg border border-emerald-100 bg-white shadow-sm hover:shadow-md hover:border-emerald-200 hover:bg-emerald-50 transition-all group"
+                  >
+                    <div className="w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center group-hover:scale-110 transition-transform shadow-emerald-200 shadow">
+                      <FaHandHoldingHeart className="text-xs" />
+                    </div>
+                    <span className="text-[10px] font-bold text-slate-600 uppercase tracking-wide group-hover:text-emerald-600">
+                      Volunteer
+                    </span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => handleDemoLogin("admin")}
+                    className="flex items-center justify-center gap-3 py-2 px-4 rounded-lg border border-slate-200 bg-white shadow-sm hover:shadow-md hover:border-slate-300 hover:bg-slate-50 transition-all group"
+                  >
+                    <div className="w-6 h-6 rounded-full bg-slate-800 text-white flex items-center justify-center group-hover:scale-110 transition-transform shadow-slate-300 shadow">
+                      <FaUserShield className="text-xs" />
+                    </div>
+                    <span className="text-[10px] font-bold text-slate-600 uppercase tracking-wide group-hover:text-slate-800">
+                      Admin
+                    </span>
+                  </button>
+                </div>
+              </div>
+
+              <div>
                 <div className="relative mb-6">
                   <div className="absolute inset-0 flex items-center">
                     <div className="w-full border-t border-slate-100"></div>
@@ -468,14 +549,12 @@ const Login = () => {
                   </div>
                 </div>
                 <div className="flex gap-3">
-                  <button className="flex-1 py-2.5 border border-slate-200 rounded-lg hover:bg-slate-50 flex items-center justify-center text-slate-600 transition-colors group">
+                  <button
+                    onClick={handleGoogleSignIn}
+                    className="flex-1 py-2.5 border border-slate-200 rounded-lg hover:bg-slate-50 flex items-center justify-center text-slate-600 transition-colors group"
+                  >
                     <FcGoogle className="group-hover:scale-110 transition-transform" />
-                  </button>
-                  <button className="flex-1 py-2.5 border border-slate-200 rounded-lg hover:bg-slate-50 flex items-center justify-center text-slate-600 transition-colors group">
-                    <FaXTwitter className="text-[#1a1e21] group-hover:scale-110 transition-transform" />
-                  </button>
-                  <button className="flex-1 py-2.5 border border-slate-200 rounded-lg hover:bg-slate-50 flex items-center justify-center text-slate-600 transition-colors group">
-                    <FaFacebookF className="text-[#0B66FF] group-hover:scale-110 transition-transform" />
+                    <span className="ml-2 font-bold text-sm">Google</span>
                   </button>
                 </div>
               </div>

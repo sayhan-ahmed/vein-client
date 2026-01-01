@@ -9,6 +9,8 @@ import {
   sendPasswordResetEmail,
   setPersistence,
   browserLocalPersistence,
+  GoogleAuthProvider,
+  signInWithPopup,
 } from "firebase/auth";
 import { app } from "../firebase/firebase.config";
 import { AuthContext } from "./AuthContext";
@@ -21,9 +23,16 @@ const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const axiosPublic = useAxiosPublic();
 
+  const googleProvider = new GoogleAuthProvider();
+
   const createUser = (email, password) => {
     setLoading(true);
     return createUserWithEmailAndPassword(auth, email, password);
+  };
+
+  const googleSignIn = () => {
+    setLoading(true);
+    return signInWithPopup(auth, googleProvider);
   };
 
   const signIn = async (email, password) => {
@@ -101,6 +110,7 @@ const AuthProvider = ({ children }) => {
     logOut,
     updateUserProfile,
     resetPassword,
+    googleSignIn,
   };
 
   return (

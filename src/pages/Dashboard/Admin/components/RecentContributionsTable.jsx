@@ -190,7 +190,7 @@ const RecentContributionsTable = ({
                     onClick={() => onPageChange(page)}
                     className={`w-8 h-8 rounded-lg text-sm font-semibold transition-colors ${
                       currentPage === page
-                        ? "bg-blue-600 text-white"
+                        ? "bg-[#1D3657] text-white"
                         : "text-gray-700 hover:bg-gray-100"
                     }`}
                   >

@@ -23,7 +23,8 @@ import districtsJson from "../../assets/data/districts.json";
 import upazilasJson from "../../assets/data/upazilas.json";
 
 const SignUp = () => {
-  const { createUser, updateUserProfile, loading, setLoading } = useAuth();
+  const { createUser, updateUserProfile, googleSignIn, loading, setLoading } =
+    useAuth();
   const axiosPublic = useAxiosPublic();
   const navigate = useNavigate();
   const location = useLocation();
@@ -142,6 +143,25 @@ const SignUp = () => {
       toast.error(err?.message || "Registration failed");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      const result = await googleSignIn();
+      const userInfo = {
+        name: result.user?.displayName,
+        email: result.user?.email,
+        image: result.user?.photoURL,
+        role: "donor",
+        status: "active",
+      };
+      await axiosPublic.post("/users", userInfo);
+      toast.success("Google Sign Up Successful");
+      navigate(from, { replace: true });
+    } catch (err) {
+      console.error(err);
+      toast.error(err?.message || "Google Sign Up Failed");
     }
   };
 
@@ -629,14 +649,12 @@ const SignUp = () => {
                   </div>
                 </div>
                 <div className="flex gap-3">
-                  <button className="flex-1 py-2.5 border border-slate-200 rounded-lg hover:bg-slate-50 flex items-center justify-center text-slate-600 transition-colors group">
+                  <button
+                    onClick={handleGoogleSignIn}
+                    className="flex-1 py-2.5 border border-slate-200 rounded-lg hover:bg-slate-50 flex items-center justify-center text-slate-600 transition-colors group"
+                  >
                     <FcGoogle className="group-hover:scale-110 transition-transform" />
-                  </button>
-                  <button className="flex-1 py-2.5 border border-slate-200 rounded-lg hover:bg-slate-50 flex items-center justify-center text-slate-600 transition-colors group">
-                    <FaXTwitter className="text-[#1a1e21] group-hover:scale-110 transition-transform" />
-                  </button>
-                  <button className="flex-1 py-2.5 border border-slate-200 rounded-lg hover:bg-slate-50 flex items-center justify-center text-slate-600 transition-colors group">
-                    <FaFacebookF className="text-[#0B66FF] group-hover:scale-110 transition-transform" />
+                    <span className="ml-2 font-bold text-sm">Google</span>
                   </button>
                 </div>
               </div>
