@@ -5,7 +5,7 @@ import {
   FaMapMarkerAlt,
   FaHeart,
 } from "react-icons/fa";
-import { MdEdit, MdCancel } from "react-icons/md";
+import { MdEdit, MdCancel, MdSave } from "react-icons/md";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 const ProfileHeader = ({
@@ -14,11 +14,26 @@ const ProfileHeader = ({
   isEditing,
   handleEditToggle,
   isOwnProfile,
+  handleImageChange,
+  loading,
+  uploading,
+  imagePreview,
 }) => {
   return (
     <div className="bg-white rounded-3xl p-8 shadow-xl shadow-slate-200/50 border border-white/50 relative overflow-hidden group">
       {isOwnProfile && (
-        <div className="absolute top-0 right-0 p-4 sm:p-6 z-20">
+        <div className="absolute top-0 right-0 p-4 sm:p-6 z-20 flex gap-2">
+          {isEditing && (
+            <button
+              type="submit"
+              form="profile-update-form"
+              disabled={loading || uploading}
+              className="flex items-center gap-2 px-5 py-2.5 rounded-full font-bold text-sm transition-all shadow-lg active:scale-95 bg-[#1D3557] text-white hover:bg-[#2a4d7d] hover:shadow-blue-900/20 disabled:opacity-70 disabled:cursor-not-allowed"
+            >
+              <MdSave size={16} /> Save
+            </button>
+          )}
+
           <button
             onClick={handleEditToggle}
             className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-bold text-sm transition-all shadow-lg active:scale-95 ${
@@ -139,14 +154,26 @@ const ProfileHeader = ({
         <div className="relative group/avatar">
           <div className="w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-white shadow-2xl overflow-hidden bg-gray-100 relative">
             <img
-              src={userData?.image || user?.photoURL}
+              src={imagePreview || userData?.image || user?.photoURL}
               alt="Profile"
               className="w-full h-full object-cover"
             />
             {isEditing && (
-              <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover/avatar:opacity-100 transition-opacity backdrop-blur-[2px] cursor-pointer">
-                <FaCamera className="text-white text-3xl drop-shadow-md" />
-              </div>
+              <>
+                <input
+                  type="file"
+                  id="profile-image-upload"
+                  className="hidden"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                />
+                <label
+                  htmlFor="profile-image-upload"
+                  className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover/avatar:opacity-100 transition-opacity backdrop-blur-[2px] cursor-pointer"
+                >
+                  <FaCamera className="text-white text-3xl drop-shadow-md" />
+                </label>
+              </>
             )}
           </div>
           <div

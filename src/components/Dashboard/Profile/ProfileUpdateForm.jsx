@@ -20,7 +20,11 @@ const ProfileUpdateForm = ({
         <FaUserEdit className="text-red-500" /> Personal Details
       </h2>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+      <form
+        id="profile-update-form"
+        onSubmit={handleSubmit(onSubmit)}
+        className="space-y-5"
+      >
         <div className="space-y-1.5">
           <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">
             Full Name
@@ -81,7 +85,7 @@ const ProfileUpdateForm = ({
               ))}
             </select>
             <FaTint
-              className={`absolute left-3.5 top-1/2 -translate-y-1/2 text-xs transition-colors ${
+              className={`absolute left-3.5 top-1/2 -translate-y-1/2 text-xs transition-colors pointer-events-none ${
                 isEditing ? "text-red-500" : "text-gray-300"
               }`}
             />
@@ -125,7 +129,7 @@ const ProfileUpdateForm = ({
                 ))}
               </select>
               <FaMapMarkerAlt
-                className={`absolute left-3 top-1/2 -translate-y-1/2 text-xs transition-colors ${
+                className={`absolute left-3 top-1/2 -translate-y-1/2 text-xs transition-colors pointer-events-none ${
                   isEditing ? "text-blue-500" : "text-gray-300"
                 }`}
               />
@@ -154,7 +158,7 @@ const ProfileUpdateForm = ({
                 ))}
               </select>
               <FaMapMarkerAlt
-                className={`absolute left-3 top-1/2 -translate-y-1/2 text-xs transition-colors ${
+                className={`absolute left-3 top-1/2 -translate-y-1/2 text-xs transition-colors pointer-events-none ${
                   isEditing ? "text-green-500" : "text-gray-300"
                 }`}
               />

@@ -36,6 +36,7 @@ const Profile = () => {
   // Location Data States
   const [districts, setDistricts] = useState([]);
   const [upazilas, setUpazilas] = useState([]);
+  const [imagePreview, setImagePreview] = useState(null);
 
   // Hook Form
   const {
@@ -159,7 +160,7 @@ const Profile = () => {
 
   // Initialize Data when loaded
   useEffect(() => {
-    if (userData) {
+    if (userData && !isEditing) {
       reset({
         name: userData.name,
         email: userData.email,
@@ -169,7 +170,7 @@ const Profile = () => {
         image: null,
       });
     }
-  }, [userData, reset, districts, upazilas]);
+  }, [userData, reset, districts, isEditing]);
 
   // Load Districts
   useEffect(() => {
@@ -274,6 +275,17 @@ const Profile = () => {
           isEditing={isEditing}
           handleEditToggle={handleEditToggle}
           isOwnProfile={isOwnProfile}
+          handleImageChange={async (e) => {
+            if (e.target.files && e.target.files[0]) {
+              const file = e.target.files[0];
+              setValue("image", [file]);
+              setImagePreview(URL.createObjectURL(file));
+              toast.success("Image uploaded! Click Save to apply.");
+            }
+          }}
+          loading={loading}
+          uploading={uploading}
+          imagePreview={imagePreview}
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">

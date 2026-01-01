@@ -57,6 +57,17 @@ const Navbar = () => {
     }
   };
 
+  const handleMarkAllRead = async () => {
+    try {
+      await axiosSecure.patch(
+        `/notifications/mark-all-read/user?email=${user?.email}`
+      );
+      refetchNotifications();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   // Handle Logout with Confirmation
   const handleLogout = () => {
     Swal.fire({
@@ -271,10 +282,7 @@ const Navbar = () => {
                           </h3>
                           {unreadCount > 0 && (
                             <button
-                              onClick={() => {
-                                // Logic to mark all as read could go here
-                                // For now, simple interaction
-                              }}
+                              onClick={handleMarkAllRead}
                               className="text-xs text-red-600 hover:text-red-700 font-medium"
                             >
                               Mark all read
