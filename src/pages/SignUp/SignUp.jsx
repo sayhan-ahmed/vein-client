@@ -157,7 +157,7 @@ const SignUp = () => {
         status: "active",
       };
       await axiosPublic.post("/users", userInfo);
-      toast.success("Google Sign Up Successful");
+      toast.success("Google Sign Up Successful. Please Update Your Profile");
       navigate(from, { replace: true });
     } catch (err) {
       console.error(err);
