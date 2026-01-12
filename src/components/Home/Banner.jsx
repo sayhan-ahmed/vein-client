@@ -130,7 +130,7 @@ const Banner = () => {
                 ) : (
                   <MdOutlineBloodtype className="text-2xl" />
                 )}
-                <span>{user ? "Dashboard" : "Init Network"}</span>
+                <span>{user ? "Dashboard" : "Join as a Donor"}</span>
                 <MdArrowForward className="group-hover:translate-x-2 transition-transform" />
               </Link>
 

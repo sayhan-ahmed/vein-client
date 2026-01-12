@@ -154,9 +154,18 @@ const ProfileHeader = ({
         <div className="relative group/avatar">
           <div className="w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-white shadow-2xl overflow-hidden bg-gray-100 relative">
             <img
-              src={imagePreview || userData?.image || user?.photoURL}
+              src={
+                imagePreview ||
+                userData?.image ||
+                user?.photoURL ||
+                "https://freesvg.org/img/1389952697.png"
+              }
               alt="Profile"
               className="w-full h-full object-cover"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = "https://freesvg.org/img/1389952697.png";
+              }}
             />
             {isEditing && (
               <>
@@ -194,8 +203,10 @@ const ProfileHeader = ({
               <FaTint className="text-xs" /> {userData?.bloodGroup || "N/A"}
             </span>
             <span className="flex items-center gap-1.5 px-3 py-1 bg-slate-100 text-slate-600 rounded-full">
-              <FaMapMarkerAlt className="text-xs" /> {userData?.upazila},{" "}
-              {userData?.district}
+              <FaMapMarkerAlt className="text-xs" />{" "}
+              {userData?.upazila && userData?.district
+                ? `${userData.upazila}, ${userData.district}`
+                : userData?.district || userData?.upazila || "Location N/A"}
             </span>
           </div>
         </div>

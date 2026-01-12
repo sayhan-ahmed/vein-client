@@ -241,9 +241,20 @@ const SearchPage = () => {
                                 <div className="flex items-center gap-4">
                                   <div className="w-12 h-12 rounded-2xl overflow-hidden shadow-sm border border-slate-100 group-hover:shadow-md transition-all shrink-0">
                                     <img
-                                      src={donor.image}
+                                      src={
+                                        donor.image &&
+                                        donor.image !== "null" &&
+                                        donor.image !== "undefined"
+                                          ? donor.image
+                                          : "https://freesvg.org/img/1389952697.png"
+                                      }
                                       alt={donor.name}
                                       className="w-full h-full object-cover"
+                                      onError={(e) => {
+                                        e.target.onerror = null; // Prevent infinite loop
+                                        e.target.src =
+                                          "https://freesvg.org/img/1389952697.png";
+                                      }}
                                     />
                                   </div>
                                   <div className="min-w-0">
@@ -258,19 +269,23 @@ const SearchPage = () => {
                               </td>
                               <td className="py-4 px-6">
                                 <span
-                                  className={`inline-flex items-center justify-center px-4 py-1 rounded-4xl text-xs font-black shadow-sm ${
-                                    donor.bloodGroup.includes("+")
+                                  className={`inline-flex items-center justify-center w-16 py-1.5 rounded-4xl text-sm font-black shadow-sm ${
+                                    !donor.bloodGroup
+                                      ? "bg-slate-100 text-slate-500 border border-slate-200"
+                                      : donor.bloodGroup.includes("+")
                                       ? "bg-red-100 text-red-600 border border-red-200"
                                       : "bg-indigo-100 text-indigo-600 border border-indigo-200"
                                   }`}
                                 >
-                                  {donor.bloodGroup}
+                                  {donor.bloodGroup || "N/A"}
                                 </span>
                               </td>
                               <td className="py-4 px-6">
                                 <div className="flex flex-col">
                                   <span className="text-sm font-semibold text-slate-700">
-                                    {donor.district}
+                                    {donor.district ||
+                                      (!donor.upazila &&
+                                        "No info Found")}
                                   </span>
                                   <span className="text-xs text-slate-400 font-medium">
                                     {donor.upazila}

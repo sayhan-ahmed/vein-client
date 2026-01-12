@@ -362,8 +362,17 @@ const Navbar = () => {
                       <img
                         className="w-10 h-10 md:w-12 md:h-12 rounded-full ring-2 ring-red-200 hover:ring-red-300 p-0.5 object-cover transition"
                         referrerPolicy="no-referrer"
-                        src={user.photoURL ? user.photoURL : avatarImg}
+                        src={
+                          user.photoURL
+                            ? user.photoURL
+                            : "https://freesvg.org/img/1389952697.png"
+                        }
                         alt="profile"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src =
+                            "https://freesvg.org/img/1389952697.png";
+                        }}
                       />
                     </div>
 
