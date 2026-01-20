@@ -11,7 +11,16 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
+import { useState, useEffect } from "react";
+
 const RecentUserRegistrations = ({ users }) => {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsMounted(true), 100);
+    return () => clearTimeout(timer);
+  }, []);
+
   // Calculate user registrations over last 7 days
   const registrationData = useMemo(() => {
     if (!users.length) return [];
@@ -39,8 +48,8 @@ const RecentUserRegistrations = ({ users }) => {
           new Date(
             userDate.getFullYear(),
             userDate.getMonth(),
-            userDate.getDate()
-          ).getTime()
+            userDate.getDate(),
+          ).getTime(),
       );
       if (dayData) {
         dayData.total++;
@@ -107,51 +116,57 @@ const RecentUserRegistrations = ({ users }) => {
               New Users
             </span>
           </div>
-          <span className="text-green-600 font-black text-sm">{totalNewUsers}</span>
+          <span className="text-green-600 font-black text-sm">
+            {totalNewUsers}
+          </span>
         </div>
       </div>
 
       {/* Chart */}
       <div className="h-[240px] w-full relative z-10">
         {registrationData.length > 0 ? (
-          <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={registrationData}>
-              <defs>
-                <linearGradient id="colorTotal" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#10b981" stopOpacity={0.3} />
-                  <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
-                </linearGradient>
-              </defs>
-              <CartesianGrid
-                strokeDasharray="3 3"
-                vertical={false}
-                stroke="#f3f4f6"
-              />
-              <XAxis
-                dataKey="date"
-                axisLine={false}
-                tickLine={false}
-                tick={{ fill: "#9ca3af", fontSize: 10, fontWeight: 700 }}
-                dy={10}
-              />
-              <YAxis
-                axisLine={false}
-                tickLine={false}
-                tick={{ fill: "#9ca3af", fontSize: 10, fontWeight: 600 }}
-                allowDecimals={false}
-              />
-              <Tooltip content={<CustomTooltip />} />
-              <Area
-                type="monotone"
-                dataKey="total"
-                stroke="#10b981"
-                strokeWidth={3}
-                fillOpacity={1}
-                fill="url(#colorTotal)"
-                animationDuration={1500}
-              />
-            </AreaChart>
-          </ResponsiveContainer>
+          <>
+            {isMounted && (
+              <ResponsiveContainer width="100%" height={240}>
+                <AreaChart data={registrationData}>
+                  <defs>
+                    <linearGradient id="colorTotal" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#10b981" stopOpacity={0.3} />
+                      <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    vertical={false}
+                    stroke="#f3f4f6"
+                  />
+                  <XAxis
+                    dataKey="date"
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fill: "#9ca3af", fontSize: 10, fontWeight: 700 }}
+                    dy={10}
+                  />
+                  <YAxis
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fill: "#9ca3af", fontSize: 10, fontWeight: 600 }}
+                    allowDecimals={false}
+                  />
+                  <Tooltip content={<CustomTooltip />} />
+                  <Area
+                    type="monotone"
+                    dataKey="total"
+                    stroke="#10b981"
+                    strokeWidth={3}
+                    fillOpacity={1}
+                    fill="url(#colorTotal)"
+                    animationDuration={1500}
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            )}
+          </>
         ) : (
           <div className="h-full flex items-center justify-center text-gray-400 text-sm">
             No registration data available

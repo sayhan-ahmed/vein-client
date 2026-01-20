@@ -12,7 +12,16 @@ import {
   Cell,
 } from "recharts";
 
+import { useState, useEffect } from "react";
+
 const BloodGroupDemand = ({ requests }) => {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsMounted(true), 100);
+    return () => clearTimeout(timer);
+  }, []);
+
   const getBarColor = (group) => {
     const colors = {
       "O+": "#ef4444",
@@ -96,41 +105,43 @@ const BloodGroupDemand = ({ requests }) => {
       {/* Bar Chart */}
       {demandData.length > 0 ? (
         <div className="h-[240px] w-full relative z-10">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={demandData} barSize={35}>
-              <CartesianGrid
-                strokeDasharray="3 3"
-                vertical={false}
-                stroke="#f3f4f6"
-              />
-              <XAxis
-                dataKey="group"
-                axisLine={false}
-                tickLine={false}
-                tick={{ fill: "#9ca3af", fontSize: 11, fontWeight: 700 }}
-                dy={10}
-              />
-              <YAxis
-                axisLine={false}
-                tickLine={false}
-                tick={{ fill: "#9ca3af", fontSize: 10, fontWeight: 600 }}
-                allowDecimals={false}
-              />
-              <Tooltip
-                cursor={{ fill: "#f9fafb" }}
-                content={<CustomTooltip />}
-              />
-              <Bar
-                dataKey="count"
-                radius={[8, 8, 0, 0]}
-                animationDuration={1500}
-              >
-                {demandData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.fill} />
-                ))}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
+          {isMounted && (
+            <ResponsiveContainer width="100%" height={240}>
+              <BarChart data={demandData} barSize={35}>
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  vertical={false}
+                  stroke="#f3f4f6"
+                />
+                <XAxis
+                  dataKey="group"
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fill: "#9ca3af", fontSize: 11, fontWeight: 700 }}
+                  dy={10}
+                />
+                <YAxis
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fill: "#9ca3af", fontSize: 10, fontWeight: 600 }}
+                  allowDecimals={false}
+                />
+                <Tooltip
+                  cursor={{ fill: "#f9fafb" }}
+                  content={<CustomTooltip />}
+                />
+                <Bar
+                  dataKey="count"
+                  radius={[8, 8, 0, 0]}
+                  animationDuration={1500}
+                >
+                  {demandData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.fill} />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          )}
         </div>
       ) : (
         <div className="h-[240px] flex items-center justify-center text-gray-400 text-sm relative z-10">

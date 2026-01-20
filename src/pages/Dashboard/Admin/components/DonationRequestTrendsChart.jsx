@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import PropTypes from "prop-types";
 import {
   AreaChart,
@@ -12,6 +12,13 @@ import {
 import { FaChartLine } from "react-icons/fa";
 
 const DonationRequestTrendsChart = ({ requests }) => {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsMounted(true), 100);
+    return () => clearTimeout(timer);
+  }, []);
+
   const [period, setPeriod] = useState("daily");
 
   // Calculate trend data based on selected period
@@ -43,8 +50,8 @@ const DonationRequestTrendsChart = ({ requests }) => {
             new Date(
               reqDate.getFullYear(),
               reqDate.getMonth(),
-              reqDate.getDate()
-            ).getTime()
+              reqDate.getDate(),
+            ).getTime(),
         );
         if (dayData) dayData.count++;
       });
@@ -61,7 +68,7 @@ const DonationRequestTrendsChart = ({ requests }) => {
           weekStart: new Date(
             weekStart.getFullYear(),
             weekStart.getMonth(),
-            weekStart.getDate()
+            weekStart.getDate(),
           ),
         };
       });
@@ -94,7 +101,7 @@ const DonationRequestTrendsChart = ({ requests }) => {
         const reqDate = new Date(req.createdAt || req.date);
         const monthData = monthlyData.find(
           (m) =>
-            m.month === reqDate.getMonth() && m.year === reqDate.getFullYear()
+            m.month === reqDate.getMonth() && m.year === reqDate.getFullYear(),
         );
         if (monthData) monthData.count++;
       });
@@ -154,47 +161,51 @@ const DonationRequestTrendsChart = ({ requests }) => {
       {/* Chart */}
       <div className="h-[250px] w-full relative z-10">
         {trendData.length > 0 ? (
-          <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={trendData}>
-              <defs>
-                <linearGradient id="colorCount" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3} />
-                  <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
-                </linearGradient>
-              </defs>
-              <CartesianGrid
-                strokeDasharray="3 3"
-                vertical={false}
-                stroke="#f3f4f6"
-              />
-              <XAxis
-                dataKey="label"
-                axisLine={false}
-                tickLine={false}
-                tick={{ fill: "#9ca3af", fontSize: 10, fontWeight: 700 }}
-                dy={10}
-              />
-              <YAxis
-                axisLine={false}
-                tickLine={false}
-                tick={{ fill: "#9ca3af", fontSize: 10, fontWeight: 600 }}
-                allowDecimals={false}
-              />
-              <Tooltip
-                cursor={{ fill: "#f9fafb" }}
-                content={<CustomTooltip />}
-              />
-              <Area
-                type="monotone"
-                dataKey="count"
-                stroke="#3b82f6"
-                strokeWidth={3}
-                fillOpacity={1}
-                fill="url(#colorCount)"
-                animationDuration={1500}
-              />
-            </AreaChart>
-          </ResponsiveContainer>
+          <>
+            {isMounted && (
+              <ResponsiveContainer width="100%" height={250}>
+                <AreaChart data={trendData}>
+                  <defs>
+                    <linearGradient id="colorCount" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3} />
+                      <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    vertical={false}
+                    stroke="#f3f4f6"
+                  />
+                  <XAxis
+                    dataKey="label"
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fill: "#9ca3af", fontSize: 10, fontWeight: 700 }}
+                    dy={10}
+                  />
+                  <YAxis
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fill: "#9ca3af", fontSize: 10, fontWeight: 600 }}
+                    allowDecimals={false}
+                  />
+                  <Tooltip
+                    cursor={{ fill: "#f9fafb" }}
+                    content={<CustomTooltip />}
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="count"
+                    stroke="#3b82f6"
+                    strokeWidth={3}
+                    fillOpacity={1}
+                    fill="url(#colorCount)"
+                    animationDuration={1500}
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            )}
+          </>
         ) : (
           <div className="h-full flex items-center justify-center text-gray-400 text-sm">
             No request data available

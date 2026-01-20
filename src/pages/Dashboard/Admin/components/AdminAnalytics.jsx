@@ -13,7 +13,17 @@ import {
 } from "recharts";
 import { FaChartBar, FaChartPie } from "react-icons/fa";
 
+import { useState, useEffect } from "react";
+
 const AdminAnalytics = ({ roleData, requestData, totalUsers }) => {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    // Delay rendering slightly to allow layout and animations to settle
+    const timer = setTimeout(() => setIsMounted(true), 100);
+    return () => clearTimeout(timer);
+  }, []);
+
   // Custom Tooltip Component
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
@@ -67,46 +77,48 @@ const AdminAnalytics = ({ roleData, requestData, totalUsers }) => {
         </div>
 
         <div className="h-[250px] w-full relative z-10">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={requestData} barSize={50}>
-              <CartesianGrid
-                strokeDasharray="3 3"
-                vertical={false}
-                stroke="#f3f4f6"
-              />
-              <XAxis
-                dataKey="name"
-                axisLine={false}
-                tickLine={false}
-                tick={{ fill: "#9ca3af", fontSize: 10, fontWeight: 700 }}
-                dy={10}
-              />
-              <YAxis
-                axisLine={false}
-                tickLine={false}
-                tick={{ fill: "#9ca3af", fontSize: 10, fontWeight: 600 }}
-                allowDecimals={false}
-              />
-              <Tooltip
-                cursor={{ fill: "#f9fafb" }}
-                content={<CustomTooltip />}
-              />
+          {isMounted && (
+            <ResponsiveContainer width="100%" height={250}>
+              <BarChart data={requestData} barSize={50}>
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  vertical={false}
+                  stroke="#f3f4f6"
+                />
+                <XAxis
+                  dataKey="name"
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fill: "#9ca3af", fontSize: 10, fontWeight: 700 }}
+                  dy={10}
+                />
+                <YAxis
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fill: "#9ca3af", fontSize: 10, fontWeight: 600 }}
+                  allowDecimals={false}
+                />
+                <Tooltip
+                  cursor={{ fill: "#f9fafb" }}
+                  content={<CustomTooltip />}
+                />
 
-              <Bar
-                dataKey="value"
-                radius={[8, 8, 8, 8]}
-                animationDuration={1500}
-              >
-                {requestData.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={entry.fill}
-                    strokeWidth={0}
-                  />
-                ))}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
+                <Bar
+                  dataKey="value"
+                  radius={[8, 8, 8, 8]}
+                  animationDuration={1500}
+                >
+                  {requestData.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={entry.fill}
+                      strokeWidth={0}
+                    />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          )}
         </div>
 
         {/* Decorative Background Icon */}
@@ -126,43 +138,45 @@ const AdminAnalytics = ({ roleData, requestData, totalUsers }) => {
           </p>
         </div>
 
-        <div className="flex-1 min-h-[220px] relative flex items-center justify-center z-10">
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie
-                data={roleData}
-                innerRadius={65}
-                outerRadius={90}
-                paddingAngle={4}
-                dataKey="value"
-                cornerRadius={8}
-                startAngle={90}
-                endAngle={-270}
-              >
-                {roleData.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={entry.color}
-                    stroke="none"
-                  />
-                ))}
-              </Pie>
-              <Tooltip content={<CustomTooltip />} />
-              <Legend
-                verticalAlign="bottom"
-                height={36}
-                iconType="circle"
-                iconSize={8}
-                wrapperStyle={{
-                  paddingTop: "20px",
-                  fontSize: "10px",
-                  fontWeight: "bold",
-                  color: "#6b7280",
-                  textTransform: "uppercase",
-                }}
-              />
-            </PieChart>
-          </ResponsiveContainer>
+        <div className="flex-1 min-h-[220px] w-full relative flex items-center justify-center z-10">
+          {isMounted && (
+            <ResponsiveContainer width="100%" height={220}>
+              <PieChart>
+                <Pie
+                  data={roleData}
+                  innerRadius={65}
+                  outerRadius={90}
+                  paddingAngle={4}
+                  dataKey="value"
+                  cornerRadius={8}
+                  startAngle={90}
+                  endAngle={-270}
+                >
+                  {roleData.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={entry.color}
+                      stroke="none"
+                    />
+                  ))}
+                </Pie>
+                <Tooltip content={<CustomTooltip />} />
+                <Legend
+                  verticalAlign="bottom"
+                  height={36}
+                  iconType="circle"
+                  iconSize={8}
+                  wrapperStyle={{
+                    paddingTop: "20px",
+                    fontSize: "10px",
+                    fontWeight: "bold",
+                    color: "#6b7280",
+                    textTransform: "uppercase",
+                  }}
+                />
+              </PieChart>
+            </ResponsiveContainer>
+          )}
 
           {/* Center Content */}
           <div className="absolute inset-0 flex items-center justify-center flex-col pointer-events-none pb-8">
