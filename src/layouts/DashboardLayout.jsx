@@ -9,7 +9,7 @@ const DashboardLayout = () => {
       {/* Left Side: Sidebar Component */}
       <Sidebar />
       {/* Right Side: Dashboard Dynamic Content */}
-      <div className="flex-1 md:ml-64">
+      <div className="flex-1 md:ml-64 min-w-0">
         <div className="p-2 sm:p-5 bg-red-50/50 min-h-screen">
           <Outlet />
         </div>

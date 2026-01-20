@@ -139,7 +139,10 @@ const UserDataRow = ({ user, handleUpdate }) => {
               leaveFrom="transform opacity-100 scale-100"
               leaveTo="transform opacity-0 scale-95"
             >
-              <MenuItems className="absolute right-0 mt-2 w-52 origin-top-right divide-y divide-slate-50 rounded-2xl bg-white shadow-[0_20px_40px_-10px_rgba(0,0,0,0.12)] ring-1 ring-black/5 focus:outline-none z-50 overflow-hidden">
+              <MenuItems
+                anchor="bottom end"
+                className="w-52 divide-y divide-slate-50 rounded-2xl bg-white shadow-[0_20px_40px_-10px_rgba(0,0,0,0.12)] ring-1 ring-black/5 focus:outline-none z-50 overflow-hidden"
+              >
                 <div className="px-1.5 py-1.5">
                   <MenuItem>
                     {({ active }) => (
@@ -151,7 +154,7 @@ const UserDataRow = ({ user, handleUpdate }) => {
                               status:
                                 status === "active" ? "blocked" : "active",
                             },
-                            status === "active" ? "blocked" : "active"
+                            status === "active" ? "blocked" : "active",
                           )
                         }
                         className={`${
@@ -294,7 +297,7 @@ const UserDataRow = ({ user, handleUpdate }) => {
                   handleUpdate(
                     _id,
                     { status: status === "active" ? "blocked" : "active" },
-                    status === "active" ? "blocked" : "active"
+                    status === "active" ? "blocked" : "active",
                   )
                 }
                 className={`flex-1 py-3 rounded-2xl text-[10px] font-black uppercase tracking-tight sm:tracking-widest shadow-sm active:scale-95 transition-all ${
@@ -320,7 +323,10 @@ const UserDataRow = ({ user, handleUpdate }) => {
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                   >
-                    <MenuItems className="absolute right-0 bottom-full mb-2 w-52 origin-bottom-right divide-y divide-slate-50 rounded-2xl bg-white shadow-2xl ring-1 ring-black/5 focus:outline-none z-50 overflow-hidden">
+                    <MenuItems
+                      anchor="top end"
+                      className="w-52 divide-y divide-slate-50 rounded-2xl bg-white shadow-2xl ring-1 ring-black/5 focus:outline-none z-50 overflow-hidden"
+                    >
                       <div className="px-1.5 py-1.5">
                         <MenuItem disabled={role === "volunteer"}>
                           {({ active }) => (

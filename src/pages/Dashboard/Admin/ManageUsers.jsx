@@ -39,7 +39,7 @@ const ManageUsers = () => {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentData = filteredUsers.slice(
     startIndex,
-    startIndex + itemsPerPage
+    startIndex + itemsPerPage,
   );
 
   const handlePageChange = (page) => {
@@ -52,7 +52,7 @@ const ManageUsers = () => {
     mutationFn: async ({ id, updateData }) => {
       const { data } = await axiosSecure.patch(
         `/users/update/${id}`,
-        updateData
+        updateData,
       );
       return data;
     },
@@ -186,7 +186,7 @@ const ManageUsers = () => {
           {/* Table Container */}
           <div className="px-0 sm:px-6 pb-8">
             <div className="rounded-none sm:rounded-3xl md:rounded-4xl border-y sm:border border-gray-100 overflow-hidden bg-white/50 sm:bg-white">
-              <div className="overflow-x-auto no-scrollbar">
+              <div className="overflow-x-auto">
                 <table className="w-full border-collapse">
                   <thead className="hidden md:table-header-group">
                     <tr className="hidden md:table-row bg-slate-50/80 border-b border-gray-100 text-left text-[11px] font-black text-slate-500 uppercase tracking-widest">

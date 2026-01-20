@@ -25,7 +25,7 @@ const MyDonationRequests = () => {
     queryKey: ["my-donation-requests", user?.email],
     queryFn: async () => {
       const { data } = await axiosSecure.get(
-        `/donation-requests/my?email=${user?.email}`
+        `/donation-requests/my?email=${user?.email}`,
       );
       // Priority: pending > inprogress > done > canceled
       const statusPriority = {
@@ -36,7 +36,7 @@ const MyDonationRequests = () => {
       };
       return data.sort(
         (a, b) =>
-          statusPriority[a.donationStatus] - statusPriority[b.donationStatus]
+          statusPriority[a.donationStatus] - statusPriority[b.donationStatus],
       );
     },
   });
@@ -120,7 +120,7 @@ const MyDonationRequests = () => {
 
       const { data } = await axiosSecure.patch(
         `/donation-requests/${id}`,
-        updateData
+        updateData,
       );
       if (data.modifiedCount > 0) {
         Swal.fire({
@@ -173,7 +173,7 @@ const MyDonationRequests = () => {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentData = filteredRequests.slice(
     startIndex,
-    startIndex + itemsPerPage
+    startIndex + itemsPerPage,
   );
 
   const handlePageChange = (page) => {
@@ -246,7 +246,7 @@ const MyDonationRequests = () => {
           {/* Table Container */}
           <div className="px-0 sm:px-6 pb-8">
             <div className="rounded-none sm:rounded-2xl border-y sm:border border-gray-100 overflow-hidden bg-white/50 sm:bg-white">
-              <div className="overflow-x-auto no-scrollbar">
+              <div className="overflow-x-auto">
                 <table className="w-full border-collapse">
                   <thead className="hidden md:table-header-group">
                     <tr className="hidden md:table-row bg-gray-50/50 border-b border-gray-100 text-left text-[11px] font-extrabold text-gray-500 uppercase tracking-widest">
