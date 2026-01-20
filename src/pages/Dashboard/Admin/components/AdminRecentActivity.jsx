@@ -49,8 +49,8 @@ const AdminRecentActivity = ({ requests }) => {
                     request.donationStatus === "pending"
                       ? "bg-amber-100 text-amber-600"
                       : request.donationStatus === "done"
-                      ? "bg-emerald-100 text-emerald-600"
-                      : "bg-gray-100 text-gray-500"
+                        ? "bg-emerald-100 text-emerald-600"
+                        : "bg-gray-100 text-gray-500"
                   }`}
                 >
                   <span className="font-black text-xs">
@@ -77,8 +77,8 @@ const AdminRecentActivity = ({ requests }) => {
                         request.donationStatus === "pending"
                           ? "text-amber-500"
                           : request.donationStatus === "done"
-                          ? "text-emerald-500"
-                          : "text-gray-400"
+                            ? "text-emerald-500"
+                            : "text-gray-400"
                       }`}
                     >
                       {request.donationStatus === "done"

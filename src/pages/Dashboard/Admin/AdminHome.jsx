@@ -42,7 +42,7 @@ const AdminHome = () => {
     enabled: !!user?.email,
     queryFn: async () => {
       const { data } = await axiosSecure.get(
-        `/notifications?email=${user.email}`
+        `/notifications?email=${user.email}`,
       );
       return data;
     },
@@ -99,19 +99,19 @@ const AdminHome = () => {
 
   // Calculate Stats
   const donorCount = users.filter(
-    (u) => u.role === "donor" && u.status === "active"
+    (u) => u.role === "donor" && u.status === "active",
   ).length;
   const adminCount = users.filter((u) => u.role === "admin").length;
   const volunteerCount = users.filter((u) => u.role === "volunteer").length;
   const totalRequests = requests.length;
   const pendingRequests = requests.filter(
-    (r) => r.donationStatus === "pending"
+    (r) => r.donationStatus === "pending",
   ).length;
   const doneRequests = requests.filter(
-    (r) => r.donationStatus === "done"
+    (r) => r.donationStatus === "done",
   ).length;
   const canceledRequests = requests.filter(
-    (r) => r.donationStatus === "canceled"
+    (r) => r.donationStatus === "canceled",
   ).length;
 
   const stats = {
@@ -196,7 +196,7 @@ const AdminHome = () => {
                           onClick={() =>
                             handleMarkAsRead(
                               notification._id,
-                              notification.link
+                              notification.link,
                             )
                           }
                           className={`p-3 border-b border-gray-50 cursor-pointer transition hover:bg-gray-50 flex gap-3 ${
@@ -222,14 +222,14 @@ const AdminHome = () => {
                             </p>
                             <span className="text-[10px] text-gray-400 mt-1 block">
                               {new Date(
-                                notification.createdAt
+                                notification.createdAt,
                               ).toLocaleTimeString([], {
                                 hour: "2-digit",
                                 minute: "2-digit",
                               })}
                               {" - "}
                               {new Date(
-                                notification.createdAt
+                                notification.createdAt,
                               ).toLocaleDateString()}
                             </span>
                           </div>

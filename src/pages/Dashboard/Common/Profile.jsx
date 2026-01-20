@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useParams } from "react-router";
+import { useParams, Link } from "react-router";
+import { FaPlus, FaList } from "react-icons/fa";
 import useAuth from "../../../hooks/useAuth";
+import useRole from "../../../hooks/useRole";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 import { imageUpload } from "../../../utils/imageUpload";
@@ -23,6 +25,7 @@ import upazilasJson from "../../../assets/data/upazilas.json";
 
 const Profile = () => {
   const { user, updateUserProfile } = useAuth();
+  const [role] = useRole();
   const { email } = useParams();
   const axiosSecure = useAxiosSecure();
   const [isEditing, setIsEditing] = useState(false);
@@ -76,11 +79,11 @@ const Profile = () => {
 
   // Calculate Real Stats
   const myDonations = allRequests.filter(
-    (req) => req.donorEmail === targetEmail && req.donationStatus === "done"
+    (req) => req.donorEmail === targetEmail && req.donationStatus === "done",
   );
 
   const myRequests = allRequests.filter(
-    (req) => req.requesterEmail === targetEmail
+    (req) => req.requesterEmail === targetEmail,
   );
 
   const totalDonations = myDonations.length;
@@ -117,7 +120,7 @@ const Profile = () => {
 
     myDonations.forEach((donation) => {
       const date = new Date(
-        donation.donationDate + " " + donation.donationTime
+        donation.donationDate + " " + donation.donationTime,
       );
       const finalDate = isNaN(date.getTime())
         ? new Date(donation.donationDate)
@@ -176,7 +179,7 @@ const Profile = () => {
   useEffect(() => {
     if (districtsJson[2] && districtsJson[2].data) {
       setDistricts(
-        districtsJson[2].data.sort((a, b) => a.name.localeCompare(b.name))
+        districtsJson[2].data.sort((a, b) => a.name.localeCompare(b.name)),
       );
     }
   }, []);
@@ -185,7 +188,7 @@ const Profile = () => {
   useEffect(() => {
     if (selectedDistrict && upazilasJson[2] && upazilasJson[2].data) {
       const filtered = upazilasJson[2].data.filter(
-        (up) => up.district_id === selectedDistrict
+        (up) => up.district_id === selectedDistrict,
       );
       setUpazilas(filtered.sort((a, b) => a.name.localeCompare(b.name)));
     } else {
@@ -324,6 +327,28 @@ const Profile = () => {
             <ActivityChart activityData={activityData} />
 
             <RecentActivity myDonations={myDonations} />
+
+            {/* Quick Actions Below Card - Only for Admin/Volunteer */}
+            {(role === "admin" || role === "volunteer") && (
+              <div className="flex flex-col sm:flex-row gap-4 mt-4 animate-fade-in-up">
+                <Link
+                  to="/dashboard/create-donation-request"
+                  className="group relative flex items-center justify-center gap-3 py-4 px-8 overflow-hidden rounded-2xl bg-red-600 text-white text-xs font-black uppercase tracking-widest transition-all shadow-[0_10px_20px_-5px_rgba(231,0,11,0.3)] hover:shadow-[0_20px_40px_-10px_rgba(231,0,11,0.4)] hover:-translate-y-1 active:scale-95 flex-1"
+                >
+                  <div className="absolute inset-0 bg-white/10 group-hover:translate-x-full transition-transform duration-500"></div>
+                  <FaPlus className="text-sm group-hover:rotate-90 transition-transform duration-300" />
+                  <span>Add New Request</span>
+                </Link>
+                <Link
+                  to="/dashboard/my-donation-requests"
+                  className="group relative flex items-center justify-center gap-3 py-4 px-8 overflow-hidden rounded-2xl bg-[#1D3658] text-white text-xs font-black uppercase tracking-widest transition-all shadow-[0_10px_20px_-5px_rgba(29,53,87,0.3)] hover:shadow-[0_20px_40px_-10px_rgba(29,53,87,0.4)] hover:-translate-y-1 active:scale-95 flex-1"
+                >
+                  <div className="absolute inset-0 bg-white/10 group-hover:translate-x-full transition-transform duration-500"></div>
+                  <FaList className="text-sm group-hover:scale-110 transition-transform duration-300" />
+                  <span>My Requests</span>
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </div>
