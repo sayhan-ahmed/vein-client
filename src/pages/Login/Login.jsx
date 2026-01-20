@@ -41,7 +41,6 @@ const Login = () => {
 
     try {
       await signIn(email, password);
-      navigate(from, { replace: true });
       toast.success("Login Successful");
     } catch (err) {
       // Handle identifying specific errors
@@ -74,7 +73,6 @@ const Login = () => {
         status: "active",
       };
       await axiosPublic.post("/users", userInfo);
-      navigate(from, { replace: true });
       toast.success("Google Login Successful. Please Update Your Profile");
     } catch (err) {
       console.error(err);
@@ -114,7 +112,6 @@ const Login = () => {
 
     try {
       await signIn(email, password);
-      navigate(from, { replace: true });
       toast.success(`Logged in as ${role}`);
     } catch (err) {
       toast.error("Invalid Credentials");

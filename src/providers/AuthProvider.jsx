@@ -72,27 +72,25 @@ const AuthProvider = ({ children }) => {
 
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
-        // User is Logged In
-        setUser(currentUser);
-
-        // 1. Get Token from Backend
+        // 1. Get Token from Backend FIRST
         const userInfo = { email: currentUser.email };
         try {
           await axiosPublic.post("/jwt", userInfo);
+          // 2. ONLY set user AFTER token is successfully set in cookies
+          setUser(currentUser);
         } catch (err) {
           console.error("Token Error:", err);
+          setUser(null);
         }
       } else {
         // User is Logged Out
         setUser(null);
 
-        // 2. Clear Token from Backend
+        // Clear Token from Backend
         try {
           await axiosPublic.post("/logout");
         } catch (err) {
           console.error("Logout Error:", err);
-        } finally {
-          // setLoading(false) will be handled after the if/else
         }
       }
       setLoading(false);
