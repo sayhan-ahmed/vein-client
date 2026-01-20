@@ -511,12 +511,12 @@ const Login = () => {
                   <button
                     type="button"
                     onClick={() => handleDemoLogin("volunteer")}
-                    className="flex items-center justify-center gap-3 py-2 px-4 rounded-lg border border-emerald-100 bg-white shadow-sm hover:shadow-md hover:border-emerald-200 hover:bg-emerald-50 transition-all group"
+                    className="flex items-center justify-center gap-2 py-2 px-2 sm:px-4 rounded-lg border border-emerald-100 bg-white shadow-sm hover:shadow-md hover:border-emerald-200 hover:bg-emerald-50 transition-all group"
                   >
-                    <div className="w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center group-hover:scale-110 transition-transform shadow-emerald-200 shadow">
-                      <FaHandHoldingHeart className="text-xs" />
+                    <div className="w-6 h-6 sm:w-8 sm:h-8 shrink-0 rounded-full bg-emerald-500 text-white flex items-center justify-center group-hover:scale-110 transition-transform shadow-emerald-200 shadow">
+                      <FaHandHoldingHeart className="sm:text-base text-xs" />
                     </div>
-                    <span className="text-[10px] font-bold text-slate-600 uppercase tracking-wide group-hover:text-emerald-600">
+                    <span className="text-[10px] font-bold text-slate-600 uppercase tracking-tight sm:tracking-wide group-hover:text-emerald-600">
                       Volunteer
                     </span>
                   </button>
@@ -524,12 +524,12 @@ const Login = () => {
                   <button
                     type="button"
                     onClick={() => handleDemoLogin("admin")}
-                    className="flex items-center justify-center gap-3 py-2 px-4 rounded-lg border border-slate-200 bg-white shadow-sm hover:shadow-md hover:border-slate-300 hover:bg-slate-50 transition-all group"
+                    className="flex items-center justify-center gap-2 py-2 px-2 sm:px-4 rounded-lg border border-slate-200 bg-white shadow-sm hover:shadow-md hover:border-slate-300 hover:bg-slate-50 transition-all group"
                   >
-                    <div className="w-6 h-6 rounded-full bg-slate-800 text-white flex items-center justify-center group-hover:scale-110 transition-transform shadow-slate-300 shadow">
-                      <FaUserShield className="text-xs" />
+                    <div className="w-6 h-6 sm:w-8 sm:h-8 shrink-0 rounded-full bg-slate-800 text-white flex items-center justify-center group-hover:scale-110 transition-transform shadow-slate-300 shadow">
+                      <FaUserShield className="sm:text-base text-xs" />
                     </div>
-                    <span className="text-[10px] font-bold text-slate-600 uppercase tracking-wide group-hover:text-slate-800">
+                    <span className="text-[10px] font-bold text-slate-600 uppercase tracking-tight sm:tracking-wide group-hover:text-slate-800">
                       Admin
                     </span>
                   </button>
