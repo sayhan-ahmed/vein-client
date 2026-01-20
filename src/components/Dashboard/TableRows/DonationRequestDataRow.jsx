@@ -79,10 +79,12 @@ const DonationRequestDataRow = ({
               donationStatus === "inprogress"
                 ? "bg-blue-50 text-blue-700 border-blue-100"
                 : donationStatus === "done"
-                ? "bg-emerald-50 text-emerald-700 border-emerald-100"
-                : donationStatus === "canceled"
-                ? "bg-red-50 text-red-700 border-red-100"
-                : "bg-amber-50 text-amber-700 border-amber-100"
+                  ? "bg-emerald-50 text-emerald-700 border-emerald-100"
+                  : donationStatus === "canceled"
+                    ? "bg-red-50 text-red-700 border-red-100"
+                    : donationStatus === "expired"
+                      ? "bg-slate-100 text-slate-600 border-slate-200"
+                      : "bg-amber-50 text-amber-700 border-amber-100"
             }`}
           >
             <span
@@ -90,17 +92,21 @@ const DonationRequestDataRow = ({
                 donationStatus === "inprogress"
                   ? "bg-blue-500"
                   : donationStatus === "done"
-                  ? "bg-emerald-500"
-                  : donationStatus === "canceled"
-                  ? "bg-red-500"
-                  : "bg-amber-500"
+                    ? "bg-emerald-500"
+                    : donationStatus === "canceled"
+                      ? "bg-red-500"
+                      : donationStatus === "expired"
+                        ? "bg-slate-400"
+                        : "bg-amber-500"
               }`}
             ></span>
             {donationStatus === "inprogress"
               ? "In Progress"
               : donationStatus === "done"
-              ? "Completed"
-              : donationStatus}
+                ? "Completed"
+                : donationStatus === "expired"
+                  ? "Expired"
+                  : donationStatus}
           </span>
         </td>
         <td className="px-6 py-5 whitespace-nowrap text-sm text-gray-500">
@@ -199,15 +205,19 @@ const DonationRequestDataRow = ({
                   donationStatus === "inprogress"
                     ? "bg-blue-50 text-blue-700 border-blue-100"
                     : donationStatus === "done"
-                    ? "bg-emerald-50 text-emerald-700 border-emerald-100"
-                    : donationStatus === "canceled"
-                    ? "bg-red-50 text-red-700 border-red-100"
-                    : "bg-amber-50 text-amber-700 border-amber-100"
+                      ? "bg-emerald-50 text-emerald-700 border-emerald-100"
+                      : donationStatus === "canceled"
+                        ? "bg-red-50 text-red-700 border-red-100"
+                        : donationStatus === "expired"
+                          ? "bg-slate-100 text-slate-600 border-slate-200 shadow-none"
+                          : "bg-amber-50 text-amber-700 border-amber-100"
                 }`}
               >
                 {donationStatus === "inprogress"
                   ? "In Progress"
-                  : donationStatus}
+                  : donationStatus === "expired"
+                    ? "Expired"
+                    : donationStatus}
               </span>
             </div>
 

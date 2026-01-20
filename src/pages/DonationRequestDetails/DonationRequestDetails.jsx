@@ -247,8 +247,10 @@ const DonationRequestDetails = () => {
                         request.donationStatus === "inprogress"
                           ? "bg-yellow-100 text-yellow-800 border-yellow-200"
                           : request.donationStatus === "done"
-                          ? "bg-green-100 text-green-800 border-green-200"
-                          : "bg-red-100 text-red-600 border-red-200"
+                            ? "bg-green-100 text-green-800 border-green-200"
+                            : request.donationStatus === "expired"
+                              ? "bg-slate-100 text-slate-600 border-slate-200"
+                              : "bg-red-100 text-red-600 border-red-200"
                       }`}
                     >
                       <span
@@ -256,17 +258,21 @@ const DonationRequestDetails = () => {
                           request.donationStatus === "inprogress"
                             ? "bg-yellow-500"
                             : request.donationStatus === "done"
-                            ? "bg-green-500"
-                            : "bg-red-500"
+                              ? "bg-green-500"
+                              : request.donationStatus === "expired"
+                                ? "bg-slate-400"
+                                : "bg-red-500"
                         }`}
                       ></span>
                       {request.donationStatus === "inprogress"
                         ? "In Progress"
                         : request.donationStatus === "done"
-                        ? "Completed"
-                        : request.donationStatus === "canceled"
-                        ? "Canceled"
-                        : "Pending"}
+                          ? "Completed"
+                          : request.donationStatus === "canceled"
+                            ? "Canceled"
+                            : request.donationStatus === "expired"
+                              ? "Expired"
+                              : "Pending"}
                     </span>
                   </div>
 
@@ -416,15 +422,18 @@ const DonationRequestDetails = () => {
                     request.donationStatus === "inprogress"
                       ? "In Progress"
                       : request.donationStatus === "done"
-                      ? "Completed"
-                      : request.donationStatus === "canceled"
-                      ? "Canceled"
-                      : "Donate"
+                        ? "Completed"
+                        : request.donationStatus === "canceled"
+                          ? "Canceled"
+                          : request.donationStatus === "expired"
+                            ? "Expired"
+                            : "Donate"
                   }
                   disabled={
                     request.donationStatus === "inprogress" ||
                     request.donationStatus === "done" ||
-                    request.donationStatus === "canceled"
+                    request.donationStatus === "canceled" ||
+                    request.donationStatus === "expired"
                   }
                 />
 

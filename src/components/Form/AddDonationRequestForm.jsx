@@ -45,7 +45,7 @@ const AddDonationRequestForm = ({
   useEffect(() => {
     if (initialData?.recipientDistrict && districts.length > 0) {
       const dist = districts.find(
-        (d) => d.name === initialData.recipientDistrict
+        (d) => d.name === initialData.recipientDistrict,
       );
       if (dist) setSelectedDistrict(dist.id);
     }
@@ -56,7 +56,7 @@ const AddDonationRequestForm = ({
     if (selectedDistrict) {
       const allUpazilas = upazilasData[2]?.data || [];
       const filteredUpazilas = allUpazilas.filter(
-        (upazila) => upazila.district_id === selectedDistrict
+        (upazila) => upazila.district_id === selectedDistrict,
       );
       setUpazilas(filteredUpazilas);
     } else {
@@ -68,7 +68,7 @@ const AddDonationRequestForm = ({
     setSelectedDistrict(e.target.value);
     setValue(
       "recipientDistrict",
-      e.target.options[e.target.selectedIndex].text
+      e.target.options[e.target.selectedIndex].text,
     );
     setValue("recipientUpazila", "");
   };
@@ -204,7 +204,7 @@ const AddDonationRequestForm = ({
                       <option key={bg} value={bg}>
                         {bg}
                       </option>
-                    )
+                    ),
                   )}
                 </select>
                 <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-rose-500">
@@ -401,6 +401,7 @@ const AddDonationRequestForm = ({
               <input
                 type="date"
                 {...register("donationDate", { required: "Date is required" })}
+                min={new Date().toISOString().split("T")[0]}
                 className="w-full pl-10 pr-4 py-3.5 rounded-xl bg-white border border-slate-200 hover:border-emerald-300 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all font-semibold text-slate-800 outline-none shadow-sm"
               />
               <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-emerald-500">

@@ -33,6 +33,7 @@ const MyDonationRequests = () => {
         inprogress: 2,
         done: 3,
         canceled: 4,
+        expired: 5,
       };
       return data.sort(
         (a, b) =>
@@ -189,6 +190,7 @@ const MyDonationRequests = () => {
     { id: "inprogress", label: "Progress" },
     { id: "done", label: "Done" },
     { id: "canceled", label: "Cancel" },
+    { id: "expired", label: "Expired" },
   ];
 
   return (
