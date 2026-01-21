@@ -1,2 +1,23 @@
 @import "tailwindcss";
 @plugin "daisyui";
+
+@theme {
+  --animate-scan-line: scan-line 3s linear infinite;
+
+  @keyframes scan-line {
+    0% {
+      top: 0;
+      opacity: 0;
+    }
+    5% {
+      opacity: 1;
+    }
+    95% {
+      opacity: 1;
+    }
+    100% {
+      top: 100%;
+      opacity: 0;
+    }
+  }
+}

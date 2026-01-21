@@ -3,7 +3,7 @@
 import Banner from "../../components/Home/Banner";
 import Contact from "../../components/Home/Contact";
 import DonationRequests from "../../components/Home/DonationRequests";
-import Featured from "../../components/Home/Featured";
+import CompatibilityMatrix from "../../components/Home/CompatibilityMatrix";
 import WhyDonate from "../../components/Home/WhyDonate";
 import PulseOfLife from "../../components/Home/PulseOfLife";
 
@@ -11,8 +11,8 @@ const Home = () => {
   return (
     <div>
       <Banner />
-      <Featured />
       <PulseOfLife />
+      <CompatibilityMatrix />
       <WhyDonate />
       <DonationRequests />
       <Contact />
