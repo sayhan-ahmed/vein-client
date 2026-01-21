@@ -9,7 +9,20 @@ import {
 } from "react-icons/fa";
 import { MdBloodtype } from "react-icons/md";
 
+import { useQuery } from "@tanstack/react-query";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
+
 const About = () => {
+  const axiosPublic = useAxiosPublic();
+
+  const { data: stats = {} } = useQuery({
+    queryKey: ["public-life-stats"],
+    queryFn: async () => {
+      const { data } = await axiosPublic.get("/public-stats");
+      return data;
+    },
+  });
+
   return (
     <div className="min-h-screen bg-linear-to-br from-slate-50 to-red-50/30 py-20">
       <Container>
@@ -111,17 +124,24 @@ const About = () => {
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {[
-            { number: "10K+", label: "Active Donors" },
-            { number: "5K+", label: "Lives Saved" },
-            { number: "50+", label: "Districts Covered" },
-            { number: "24/7", label: "Support Available" },
+            { number: stats.totalDonors || 0, label: "Active Donors" },
+            { number: stats.totalDonations || 0, label: "Lives Saved" },
+            { number: stats.totalDistricts || 0, label: "Districts Covered" },
+            {
+              number: stats.fundingContributions || 0,
+              label: "Funding Contributions",
+            },
           ].map((stat, idx) => (
             <div
               key={idx}
               className="bg-white rounded-2xl p-6 text-center shadow-lg border border-slate-100"
             >
               <div className="text-4xl font-black text-red-600 mb-2">
-                {stat.number}
+                {typeof stat.number === "number" &&
+                stat.number < 10 &&
+                stat.number > 0
+                  ? `0${stat.number}`
+                  : stat.number}
               </div>
               <div className="text-slate-600 font-semibold">{stat.label}</div>
             </div>

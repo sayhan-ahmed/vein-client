@@ -5,12 +5,14 @@ import Contact from "../../components/Home/Contact";
 import DonationRequests from "../../components/Home/DonationRequests";
 import Featured from "../../components/Home/Featured";
 import WhyDonate from "../../components/Home/WhyDonate";
+import PulseOfLife from "../../components/Home/PulseOfLife";
 
 const Home = () => {
   return (
     <div>
       <Banner />
       <Featured />
+      <PulseOfLife />
       <WhyDonate />
       <DonationRequests />
       <Contact />
