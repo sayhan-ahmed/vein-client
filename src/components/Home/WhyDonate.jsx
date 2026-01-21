@@ -1,12 +1,23 @@
 // ================= [ HOME WHY DONATE ] ================= //
 // > Educational and motivational section on donation benefits.
-import React from "react";
+import { useQuery } from "@tanstack/react-query";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
 import { MdBloodtype } from "react-icons/md";
 import { FaHeart, FaUserCheck } from "react-icons/fa";
 import Container from "../Shared/Container";
 import why_donate from "../../assets/images/why-donate.jpg";
 
 const WhyDonate = () => {
+  const axiosPublic = useAxiosPublic();
+
+  const { data: stats = {} } = useQuery({
+    queryKey: ["public-life-stats"],
+    queryFn: async () => {
+      const { data } = await axiosPublic.get("/public-stats");
+      return data;
+    },
+  });
+
   const benefits = [
     {
       icon: MdBloodtype,
@@ -86,7 +97,10 @@ const WhyDonate = () => {
                 <div>
                   <p className="text-base text-gray-600">Join</p>
                   <p className="text-xl font-bold text-gray-900">
-                    11,000+ <span className="text-red-600">heroes</span>
+                    {stats.totalDonors
+                      ? `${stats.totalDonors.toLocaleString()}+`
+                      : "..."}{" "}
+                    <span className="text-red-600">heroes</span>
                   </p>
                   <p className="text-xs text-gray-500">
                     and be lifesavers for others

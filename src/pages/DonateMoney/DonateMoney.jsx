@@ -14,6 +14,7 @@ import { BiDonateHeart } from "react-icons/bi";
 import { HiSparkles } from "react-icons/hi";
 import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
 import { useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 import donate1 from "../../assets/images/donate1.jpeg";
@@ -37,7 +38,16 @@ const stripePromise = stripeKey
 const DonateMoney = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
+  const axiosPublic = useAxiosPublic();
   const [selectedAmount, setSelectedAmount] = useState(null);
+
+  const { data: stats = {} } = useQuery({
+    queryKey: ["public-life-stats"],
+    queryFn: async () => {
+      const { data } = await axiosPublic.get("/public-stats");
+      return data;
+    },
+  });
   const [customAmount, setCustomAmount] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [isMonthly, setIsMonthly] = useState(false);
@@ -188,8 +198,20 @@ const DonateMoney = () => {
                 <div className="grid grid-cols-3 gap-6 p-7 bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl relative overflow-hidden group">
                   <div className="absolute inset-0 bg-linear-to-r from-red-600/0 via-red-600/5 to-red-600/0 -translate-x-100% group-hover:translate-x-100% transition-transform duration-1000"></div>
                   {[
-                    { label: "Lives Touched", val: "2,840+", icon: FaUsers },
-                    { label: "Active Donors", val: "1,200+", icon: FaHeart },
+                    {
+                      label: "Lives Touched",
+                      val: stats.totalDonations
+                        ? `${stats.totalDonations.toLocaleString()}+`
+                        : "0+",
+                      icon: FaUsers,
+                    },
+                    {
+                      label: "Active Donors",
+                      val: stats.totalDonors
+                        ? `${stats.totalDonors.toLocaleString()}+`
+                        : "0+",
+                      icon: FaHeart,
+                    },
                     { label: "Systems Ready", val: "24/7", icon: FaClock },
                   ].map((stat, i) => (
                     <div
@@ -413,8 +435,11 @@ const DonateMoney = () => {
                         Impact Summary
                       </h3>
                       <p className="text-slate-400 text-sm max-w-sm">
-                        Joining forces with 1,234 heroes to provide critical
-                        infrastructure.
+                        Joining forces with{" "}
+                        {stats.totalDonors
+                          ? stats.totalDonors.toLocaleString()
+                          : "..."}{" "}
+                        heroes to provide critical infrastructure.
                       </p>
                     </div>
 
@@ -481,7 +506,11 @@ const DonateMoney = () => {
                       {isGoalReached ? "Maintain Momentum" : "Maximize Impact"}
                     </button>
                     <p className="text-[11px] text-slate-400 font-medium italic">
-                      Tax-deductible contributions supporting 2,800+ lives.
+                      Tax-deductible contributions supporting{" "}
+                      {stats.totalDonations
+                        ? `${stats.totalDonations.toLocaleString()}+`
+                        : "..."}{" "}
+                      lives.
                     </p>
                   </div>
                 </div>
