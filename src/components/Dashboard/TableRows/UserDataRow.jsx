@@ -11,7 +11,6 @@ import {
 import { Fragment } from "react";
 import {
   FaEllipsisV,
-  FaUserEdit,
   FaUserSlash,
   FaUserCheck,
   FaUserShield,

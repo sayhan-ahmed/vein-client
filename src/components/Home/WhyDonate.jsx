@@ -1,7 +1,7 @@
 // ================= [ HOME WHY DONATE ] ================= //
 // > Educational and motivational section on donation benefits.
 import React from "react";
-import { MdBloodtype, MdAccessTime } from "react-icons/md";
+import { MdBloodtype } from "react-icons/md";
 import { FaHeart, FaUserCheck } from "react-icons/fa";
 import Container from "../Shared/Container";
 import why_donate from "../../assets/images/why-donate.jpg";

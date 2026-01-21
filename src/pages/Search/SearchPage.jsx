@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import districtsData from "../../assets/data/districts.json";
 import upazilasData from "../../assets/data/upazilas.json";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 import Loader from "../../components/Shared/Loader";
 import { LuUserSearch } from "react-icons/lu";
-import { FaLocationDot } from "react-icons/fa6";
 
 const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 

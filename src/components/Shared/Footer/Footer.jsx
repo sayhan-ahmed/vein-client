@@ -4,7 +4,7 @@ import { Link } from "react-router";
 import Swal from "sweetalert2";
 
 // ================= [ FOOTER ICONS ] ================= //
-import { IoMail, IoWaterOutline } from "react-icons/io5";
+import { IoMail } from "react-icons/io5";
 import { FaFacebookF, FaInstagram, FaYoutube } from "react-icons/fa";
 import { FaLocationDot, FaPhone, FaXTwitter } from "react-icons/fa6";
 

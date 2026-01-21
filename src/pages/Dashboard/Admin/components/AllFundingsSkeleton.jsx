@@ -1,5 +1,3 @@
-import React from "react";
-
 const AllFundingsSkeleton = () => {
   return (
     <div className="p-6 md:p-8 space-y-8 animate-pulse">

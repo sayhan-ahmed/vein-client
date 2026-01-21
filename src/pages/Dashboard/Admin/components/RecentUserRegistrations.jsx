@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { FaUserPlus, FaUsers } from "react-icons/fa";
+import { FaUsers } from "react-icons/fa";
 import { useMemo } from "react";
 import {
   AreaChart,

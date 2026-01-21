@@ -4,7 +4,6 @@ import { Link, NavLink, useNavigate } from "react-router";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
-import avatarImg from "../../../assets/images/placeholder.jpg";
 import Swal from "sweetalert2";
 
 // ================= [ NAVBAR ICONS ] ================= //

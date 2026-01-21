@@ -2,7 +2,6 @@
 // > Fundraising interface for platform support.
 import { useState } from "react";
 import {
-  FaHandHoldingHeart,
   FaCheckCircle,
   FaHeart,
   FaShieldAlt,

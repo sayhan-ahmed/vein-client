@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate, Link } from "react-router";
 import { useState, useEffect, useRef } from "react";
-import { FaSearch, FaBell, FaCalendarAlt } from "react-icons/fa";
+import { FaBell, FaCalendarAlt } from "react-icons/fa";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useRole from "../../../hooks/useRole";
@@ -12,7 +12,6 @@ import DonationRequestTrendsChart from "./components/DonationRequestTrendsChart"
 import RecentUserRegistrations from "./components/RecentUserRegistrations";
 import BloodGroupDemand from "./components/BloodGroupDemand";
 import AdminRecentActivity from "./components/AdminRecentActivity";
-import Swal from "sweetalert2";
 
 // ================= [ ADMIN DASHBOARD ] ================= //
 const AdminHome = () => {

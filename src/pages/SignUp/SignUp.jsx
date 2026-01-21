@@ -10,8 +10,6 @@ import { imageUpload } from "../../utils/imageUpload";
 import { TbDropletFilled } from "react-icons/tb";
 import { MdBloodtype } from "react-icons/md";
 import {
-  FaXTwitter,
-  FaFacebookF,
   FaHandHoldingHeart,
   FaEye,
   FaEyeSlash,

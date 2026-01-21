@@ -2,7 +2,6 @@ import {
   FaUsers,
   FaHandHoldingHeart,
   FaCoins,
-  FaArrowUp,
   FaArrowRight,
   FaClipboardList,
 } from "react-icons/fa";
