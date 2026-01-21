@@ -1,3 +1,5 @@
+// ================= [ AUTH PROVIDER ] ================= //
+// > Firebase authentication lifecycle and context management.
 import { useEffect, useState } from "react";
 import {
   createUserWithEmailAndPassword,
@@ -38,7 +40,7 @@ const AuthProvider = ({ children }) => {
   const signIn = async (email, password) => {
     setLoading(true);
     try {
-      // Set persistence to LOCAL for mobile compatibility
+      // > Setup: Local persistence for mobile stability.
       await setPersistence(auth, browserLocalPersistence);
       return await signInWithEmailAndPassword(auth, email, password);
     } catch (error) {
@@ -72,7 +74,7 @@ const AuthProvider = ({ children }) => {
 
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
-        // 1. Get Token from Backend FIRST
+        // > Logic: Exchange Firebase token for JWT.
         const userInfo = { email: currentUser.email };
         try {
           await axiosPublic.post("/jwt", userInfo);
@@ -83,7 +85,7 @@ const AuthProvider = ({ children }) => {
           setUser(null);
         }
       } else {
-        // User is Logged Out
+        // > Event: User logout.
         setUser(null);
 
         // Clear Token from Backend

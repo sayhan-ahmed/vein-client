@@ -14,6 +14,7 @@ import { ImSpinner9 } from "react-icons/im";
 import districtsData from "../../assets/data/districts.json";
 import upazilasData from "../../assets/data/upazilas.json";
 
+// ================= [ DONATION REQUEST FORM ] ================= //
 const AddDonationRequestForm = ({
   onSubmit,
   user,
@@ -51,8 +52,8 @@ const AddDonationRequestForm = ({
     }
   }, [initialData, districts]);
 
+  // > [ Sync ]: Filters Upazilas based on selected District.
   useEffect(() => {
-    // Filter Upazilas based on selected district
     if (selectedDistrict) {
       const allUpazilas = upazilasData[2]?.data || [];
       const filteredUpazilas = allUpazilas.filter(

@@ -16,6 +16,7 @@ import AdminMenu from "./Menu/AdminMenu";
 import VolunteerMenu from "./Menu/VolunteerMenu";
 import DonorMenu from "./Menu/DonorMenu";
 
+// ================= [ SIDEBAR NAVIGATION ] ================= //
 const Sidebar = () => {
   const { logOut } = useAuth();
   const [isActive, setActive] = useState(true);
@@ -165,7 +166,7 @@ const Sidebar = () => {
             {/* User Info Micro-view */}
             <div className="flex justify-center py-2 opacity-60">
               <div className="text-[10px] text-gray-400 leading-tight">
-                &copy; 2025 Vein. All rights reserved.
+                &copy; 2026 Vein. All rights reserved.
               </div>
             </div>
           </div>

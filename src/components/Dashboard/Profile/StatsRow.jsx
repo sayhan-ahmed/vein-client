@@ -1,3 +1,5 @@
+// ================= [ STATS ROW ] ================= //
+// > High-level metrics display for the dashboard.
 import {
   FaHandHoldingHeart,
   FaClipboardList,

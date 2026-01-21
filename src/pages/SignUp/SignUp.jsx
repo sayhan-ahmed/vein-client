@@ -1,3 +1,5 @@
+// ================= [ SIGNUP PAGE ] ================= //
+// > User registration with profile setup and location data.
 import { Link, useLocation, useNavigate } from "react-router";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -54,7 +56,7 @@ const SignUp = () => {
   useEffect(() => {
     if (districtsJson[2] && districtsJson[2].data) {
       setDistricts(
-        districtsJson[2].data.sort((a, b) => a.name.localeCompare(b.name))
+        districtsJson[2].data.sort((a, b) => a.name.localeCompare(b.name)),
       );
     }
   }, []);
@@ -63,7 +65,7 @@ const SignUp = () => {
   useEffect(() => {
     if (selectedDistrict && upazilasJson[2] && upazilasJson[2].data) {
       const filtered = upazilasJson[2].data.filter(
-        (up) => up.district_id === selectedDistrict
+        (up) => up.district_id === selectedDistrict,
       );
       setUpazilas(filtered.sort((a, b) => a.name.localeCompare(b.name)));
     } else {
@@ -72,6 +74,7 @@ const SignUp = () => {
   }, [selectedDistrict]);
 
   // Form Submit Handler
+  // > Processes registration and initial profile creation.
   const onSubmit = async (data) => {
     const {
       name,

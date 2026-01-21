@@ -1,3 +1,5 @@
+// ================= [ PROFILE SKELETON ] ================= //
+// > Kinetic loading placeholder for profile views.
 const ProfileSkeleton = () => {
   return (
     <div className="font-sans text-gray-900 w-full p-2 sm:p-4 pb-20">

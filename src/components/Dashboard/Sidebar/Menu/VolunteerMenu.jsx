@@ -1,3 +1,5 @@
+// ================= [ VOLUNTEER MENU ] ================= //
+// > Sidebar navigation links for volunteer staff.
 import { FaInbox, FaCoins } from "react-icons/fa";
 import MenuItem from "./MenuItem";
 

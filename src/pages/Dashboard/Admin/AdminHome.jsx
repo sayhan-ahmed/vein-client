@@ -14,6 +14,7 @@ import BloodGroupDemand from "./components/BloodGroupDemand";
 import AdminRecentActivity from "./components/AdminRecentActivity";
 import Swal from "sweetalert2";
 
+// ================= [ ADMIN DASHBOARD ] ================= //
 const AdminHome = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
@@ -133,6 +134,8 @@ const AdminHome = () => {
     { name: "Completed", value: doneRequests, fill: "#10b981" },
     { name: "Canceled", value: canceledRequests, fill: "#6b7280" },
   ];
+
+  // ================= [ DASHBOARD INTERFACE RENDER ] ================= //
 
   return (
     <div className="min-h-screen font-sans text-gray-800 w-full pb-12">

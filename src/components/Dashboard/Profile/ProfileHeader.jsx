@@ -1,3 +1,5 @@
+// ================= [ PROFILE HEADER ] ================= //
+// > Visual header with identity and medical metadata.
 import {
   FaCamera,
   FaTint,

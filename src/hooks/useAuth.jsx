@@ -1,9 +1,11 @@
-import { useContext } from 'react'
-import { AuthContext } from '../providers/AuthContext'
+// ================= [ AUTH HOOK ] ================= //
+// > Access authentication context across components.
+import { useContext } from "react";
+import { AuthContext } from "../providers/AuthContext";
 
 const useAuth = () => {
-  const auth = useContext(AuthContext)
-  return auth
-}
+  const auth = useContext(AuthContext);
+  return auth;
+};
 
-export default useAuth
+export default useAuth;

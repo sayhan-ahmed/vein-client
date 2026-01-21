@@ -1,3 +1,5 @@
+// ================= [ PROFILE UPDATE FORM ] ================= //
+// > Interface for modifying user account metadata.
 import { FaUserEdit, FaEnvelope, FaTint, FaMapMarkerAlt } from "react-icons/fa";
 import { ImSpinner9 } from "react-icons/im";
 import { MdSave } from "react-icons/md";

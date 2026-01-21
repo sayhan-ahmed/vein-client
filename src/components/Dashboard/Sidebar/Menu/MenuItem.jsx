@@ -1,3 +1,5 @@
+// ================= [ MENU ITEM ] ================= //
+// > Reusable atomic navigation component for sidebar.
 import { NavLink } from "react-router";
 
 const MenuItem = ({ label, address, icon: Icon }) => {

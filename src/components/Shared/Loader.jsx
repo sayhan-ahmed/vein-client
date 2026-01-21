@@ -1,3 +1,5 @@
+// ================= [ LOADER COMPONENT ] ================= //
+// > Kinetic Lottie animation for loading states.
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import React from "react";
 const Loader = () => {

@@ -1,3 +1,5 @@
+// ================= [ TERMS & CONDITIONS ] ================= //
+// > User agreement and platform usage policies.
 import Container from "../../components/Shared/Container";
 
 const Terms = () => {

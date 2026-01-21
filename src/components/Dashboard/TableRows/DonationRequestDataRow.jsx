@@ -4,6 +4,8 @@ import { FaEdit, FaTrash, FaEye } from "react-icons/fa";
 import useRole from "../../../hooks/useRole";
 import useAuth from "../../../hooks/useAuth";
 
+// ================= [ DONATION REQUEST DATA ROW ] ================= //
+// > Dual-mode row supporting desktop table and mobile cards.
 const DonationRequestDataRow = ({
   request,
   handleDelete,
@@ -24,7 +26,7 @@ const DonationRequestDataRow = ({
     requesterEmail,
   } = request;
 
-  // Format time to AM/PM
+  // > Normalizes time strings to human-readable 12-hour format.
   const formatTime = (timeString) => {
     if (!timeString) return "";
     const [percent, time] = timeString.split(" ");
@@ -106,7 +108,8 @@ const DonationRequestDataRow = ({
                 ? "Completed"
                 : donationStatus === "expired"
                   ? "Expired"
-                  : donationStatus}
+                  : donationStatus.charAt(0).toUpperCase() +
+                    donationStatus.slice(1)}
           </span>
         </td>
         <td className="px-6 py-5 whitespace-nowrap text-sm text-gray-500">
@@ -215,9 +218,12 @@ const DonationRequestDataRow = ({
               >
                 {donationStatus === "inprogress"
                   ? "In Progress"
-                  : donationStatus === "expired"
-                    ? "Expired"
-                    : donationStatus}
+                  : donationStatus === "done"
+                    ? "Completed"
+                    : donationStatus === "expired"
+                      ? "Expired"
+                      : donationStatus.charAt(0).toUpperCase() +
+                        donationStatus.slice(1)}
               </span>
             </div>
 
@@ -316,6 +322,7 @@ const DonationRequestDataRow = ({
 DonationRequestDataRow.propTypes = {
   request: PropTypes.object,
   handleDelete: PropTypes.func,
+  handleStatusUpdate: PropTypes.func,
 };
 
 export default DonationRequestDataRow;

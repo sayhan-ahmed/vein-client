@@ -1,3 +1,5 @@
+// ================= [ LOGIN PAGE ] ================= //
+// > Authentication gateway with multi-role demo access.
 import { Link, Navigate, useLocation, useNavigate } from "react-router";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -36,6 +38,7 @@ const Login = () => {
 
   if (user) return <Navigate to={from} replace={true} />;
 
+  // > Handles standard email/password authentication.
   const onLogin = async (data) => {
     const { email, password } = data;
 
@@ -62,6 +65,7 @@ const Login = () => {
     }
   };
 
+  // > Handles OAuth authentication via Google.
   const handleGoogleSignIn = async () => {
     try {
       const result = await googleSignIn();

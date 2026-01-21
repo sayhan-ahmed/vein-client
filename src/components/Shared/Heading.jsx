@@ -1,3 +1,5 @@
+// ================= [ SECTION HEADING ] ================= //
+// > Standardized titles and subtitles for sections.
 const Heading = ({ title, subtitle, paragraph, center }) => {
   return (
     <div className={center ? "text-center" : "text-start"}>

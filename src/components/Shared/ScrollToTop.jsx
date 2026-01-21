@@ -1,3 +1,5 @@
+// ================= [ SCROLL RESET ] ================= //
+// > Resets window scroll position on route changes.
 import { useEffect } from "react";
 import { useLocation } from "react-router";
 

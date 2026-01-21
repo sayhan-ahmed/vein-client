@@ -1,3 +1,5 @@
+// ================= [ DONOR MENU ] ================= //
+// > Sidebar navigation links for donor accounts.
 import { FaUserEdit } from "react-icons/fa";
 import { VscGitPullRequestNewChanges } from "react-icons/vsc";
 import MenuItem from "./MenuItem";

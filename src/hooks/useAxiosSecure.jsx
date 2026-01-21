@@ -1,3 +1,5 @@
+// ================= [ SECURE AXIOS HOOK ] ================= //
+// > Secure Axios instance with auth interceptors.
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
 import axios from "axios";
@@ -13,19 +15,19 @@ const useAxiosSecure = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // 1. RESPONSE INTERCEPTOR (Listen for Errors)
+    // > Interceptor: Catch auth errors and force logout.
     const responseInterceptor = axiosInstance.interceptors.response.use(
       (res) => res,
       async (err) => {
         const status = err?.response?.status;
 
-        // 2. If 401 or 403, Log out the user
+        // > Logic: Log out on 401/403.
         if (status === 401 || status === 403) {
           await logOut();
           navigate("/login");
         }
         return Promise.reject(err);
-      }
+      },
     );
 
     // Cleanup to prevent multiple interceptors on re-renders

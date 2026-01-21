@@ -1,3 +1,5 @@
+// ================= [ ROUTING SYSTEM ] ================= //
+// > Centralized application routes and route guards.
 import { createBrowserRouter } from "react-router";
 import { lazy } from "react";
 
@@ -6,30 +8,30 @@ const Home = lazy(() => import("../pages/Home/Home"));
 const ErrorPage = lazy(() => import("../pages/ErrorPage"));
 const Login = lazy(() => import("../pages/Login/Login"));
 const SignUp = lazy(() => import("../pages/SignUp/SignUp"));
-const DonationRequestDetails = lazy(() =>
-  import("../pages/DonationRequestDetails/DonationRequestDetails")
+const DonationRequestDetails = lazy(
+  () => import("../pages/DonationRequestDetails/DonationRequestDetails"),
 );
 const DashboardLayout = lazy(() => import("../layouts/DashboardLayout"));
-const CreateDonationRequest = lazy(() =>
-  import("../pages/Dashboard/Donor/CreateDonationRequest")
+const CreateDonationRequest = lazy(
+  () => import("../pages/Dashboard/Donor/CreateDonationRequest"),
 );
-const UpdateDonationRequest = lazy(() =>
-  import("../pages/Dashboard/Donor/UpdateDonationRequest")
+const UpdateDonationRequest = lazy(
+  () => import("../pages/Dashboard/Donor/UpdateDonationRequest"),
 );
 const ManageUsers = lazy(() => import("../pages/Dashboard/Admin/ManageUsers"));
 const Profile = lazy(() => import("../pages/Dashboard/Common/Profile"));
-const DashboardHome = lazy(() =>
-  import("../pages/Dashboard/Common/DashboardHome")
+const DashboardHome = lazy(
+  () => import("../pages/Dashboard/Common/DashboardHome"),
 );
 const MainLayout = lazy(() => import("../layouts/MainLayout"));
-const MyDonationRequests = lazy(() =>
-  import("../pages/Dashboard/Donor/MyDonationRequests")
+const MyDonationRequests = lazy(
+  () => import("../pages/Dashboard/Donor/MyDonationRequests"),
 );
-const AdminAllDonationRequests = lazy(() =>
-  import("../pages/Dashboard/Admin/AllDonationRequests")
+const AdminAllDonationRequests = lazy(
+  () => import("../pages/Dashboard/Admin/AllDonationRequests"),
 );
-const AllDonationRequests = lazy(() =>
-  import("../pages/AllDonationRequests/AllDonationRequests")
+const AllDonationRequests = lazy(
+  () => import("../pages/AllDonationRequests/AllDonationRequests"),
 );
 const SearchPage = lazy(() => import("../pages/Search/SearchPage"));
 const DonateMoney = lazy(() => import("../pages/DonateMoney/DonateMoney"));

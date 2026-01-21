@@ -1,3 +1,5 @@
+// ================= [ DONATION MODAL ] ================= //
+// > Final confirmation interface for blood donation.
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 
 const DonationModal = ({
@@ -7,7 +9,6 @@ const DonationModal = ({
   userInfo,
   handleDonate,
 }) => {
-
   return (
     <Dialog
       open={isOpen}

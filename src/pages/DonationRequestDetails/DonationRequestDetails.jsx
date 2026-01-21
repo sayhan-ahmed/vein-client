@@ -18,6 +18,7 @@ import { FaArrowLeft } from "react-icons/fa6";
 
 import useAuth from "../../hooks/useAuth";
 
+// ================= [ REQUEST DETAILS VIEW ] ================= //
 const DonationRequestDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -194,7 +195,7 @@ const DonationRequestDetails = () => {
             Request Not Found
           </h2>
           <p className="text-slate-500 mt-2">
-            The donation request you serve looking for doesn't exist or has been
+            The donation request you are looking for doesn't exist or has been
             removed.
           </p>
         </div>

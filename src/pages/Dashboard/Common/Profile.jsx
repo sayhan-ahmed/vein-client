@@ -23,6 +23,8 @@ import ProfileSkeleton from "../../../components/Dashboard/Profile/ProfileSkelet
 import districtsJson from "../../../assets/data/districts.json";
 import upazilasJson from "../../../assets/data/upazilas.json";
 
+// ================= [ USER PROFILE COMMAND CENTER ] ================= //
+
 const Profile = () => {
   const { user, updateUserProfile } = useAuth();
   const [role] = useRole();
@@ -147,6 +149,7 @@ const Profile = () => {
     return last6Months;
   };
 
+  // > [ Activity ]: Aggregates counts for visualization.
   const activityData = processActivityData();
 
   // Helpers

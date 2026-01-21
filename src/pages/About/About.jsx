@@ -1,3 +1,5 @@
+// ================= [ ABOUT PAGE ] ================= //
+// > Platform information, mission, and impact statistics.
 import Container from "../../components/Shared/Container";
 import {
   FaHeartbeat,

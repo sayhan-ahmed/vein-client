@@ -1,3 +1,5 @@
+// ================= [ HOME FEATURED ] ================= //
+// > Interactive compatibility tool and educational resource.
 import React, { useState } from "react";
 import { MdBloodtype } from "react-icons/md";
 import { BiSolidDonateBlood } from "react-icons/bi";
@@ -175,8 +177,8 @@ const Featured = () => {
                 {selectedBloodType === "O-"
                   ? "You're a universal donor! Your blood can save anyone in an emergency."
                   : selectedBloodType === "AB+"
-                  ? "You're a universal recipient! You can receive blood from any type."
-                  : `As ${selectedBloodType}, you can help ${compatibility.canDonateTo.length} blood types.`}
+                    ? "You're a universal recipient! You can receive blood from any type."
+                    : `As ${selectedBloodType}, you can help ${compatibility.canDonateTo.length} blood types.`}
               </div>
             </div>
           </div>

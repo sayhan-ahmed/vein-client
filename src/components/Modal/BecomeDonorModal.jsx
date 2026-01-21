@@ -1,3 +1,5 @@
+// ================= [ BECOME DONOR MODAL ] ================= //
+// > Confirmation dialog for donor role escalation.
 import { Dialog, DialogTitle, DialogPanel } from "@headlessui/react";
 const BecomeDonorModal = ({ closeModal, isOpen }) => {
   return (

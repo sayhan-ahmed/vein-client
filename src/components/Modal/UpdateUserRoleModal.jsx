@@ -1,3 +1,5 @@
+// ================= [ UPDATE USER ROLE MODAL ] ================= //
+// > Admin dialog for manual role assignment.
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { useState } from "react";
 

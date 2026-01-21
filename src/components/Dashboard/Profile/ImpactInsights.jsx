@@ -1,3 +1,5 @@
+// ================= [ IMPACT INSIGHTS ] ================= //
+// > Metrics summary of donor impact and reach.
 import { FaTint, FaMapMarkerAlt } from "react-icons/fa";
 import { MdHistory } from "react-icons/md";
 
@@ -17,7 +19,7 @@ const ImpactInsights = ({ myDonations }) => {
           <h4 className="text-base font-black text-gray-800 mt-1">
             {myDonations.length > 0
               ? [...myDonations].sort(
-                  (a, b) => new Date(b.donationDate) - new Date(a.donationDate)
+                  (a, b) => new Date(b.donationDate) - new Date(a.donationDate),
                 )[0].donationDate
               : "No donations yet"}
           </h4>
@@ -53,8 +55,8 @@ const ImpactInsights = ({ myDonations }) => {
             {myDonations.length > 5
               ? "Elite Savior"
               : myDonations.length > 0
-              ? "Regular Hero"
-              : "Novice Donor"}
+                ? "Regular Hero"
+                : "Novice Donor"}
           </h4>
         </div>
         <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-purple-500 shadow-sm group-hover:scale-110 transition-transform">

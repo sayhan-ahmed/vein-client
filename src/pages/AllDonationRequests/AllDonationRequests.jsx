@@ -1,3 +1,5 @@
+// ================= [ ALL DONATION REQUESTS ] ================= //
+// > Public marketplace for active blood requests with filtering.
 import React, { useEffect, useState } from "react";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 import { Link } from "react-router";
@@ -27,7 +29,7 @@ export default function AllDonationRequests() {
 
   const axiosPublic = useAxiosPublic();
 
-  // Extract districts
+  // > Extraction and reactive filtering logic for geographic data.
   const districts = districtsData[2]?.data || [];
 
   // Filter upazilas based on selected district
@@ -40,9 +42,10 @@ export default function AllDonationRequests() {
   useEffect(() => {
     const fetchRequests = async () => {
       try {
+        // > Fetching the master list of all donation requests.
         const res = await axiosPublic.get("/donation-requests");
         const pendingRequests = res.data.filter(
-          (req) => req.donationStatus === "pending"
+          (req) => req.donationStatus === "pending",
         );
         setRequests(pendingRequests);
       } catch (error) {
@@ -153,7 +156,7 @@ export default function AllDonationRequests() {
                         onClick={() =>
                           handleFilterChange(
                             setFilterBloodGroup,
-                            filterBloodGroup === bg ? "" : bg
+                            filterBloodGroup === bg ? "" : bg,
                           )
                         }
                         className={`w-10 h-10 rounded-xl text-sm font-bold flex items-center justify-center transition-all duration-300 hover:scale-105 active:scale-95 ${
@@ -432,7 +435,7 @@ export default function AllDonationRequests() {
                               {page}
                             </button>
                           );
-                        }
+                        },
                       )}
                     </div>
 

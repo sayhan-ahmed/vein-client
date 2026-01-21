@@ -1,3 +1,5 @@
+// ================= [ PRIVACY POLICY ] ================= //
+// > Data handling, protection, and user privacy standards.
 import Container from "../../components/Shared/Container";
 
 const Privacy = () => {

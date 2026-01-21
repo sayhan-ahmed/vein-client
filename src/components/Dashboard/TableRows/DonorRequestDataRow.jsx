@@ -1,3 +1,5 @@
+// ================= [ DONOR REQUEST DATA ROW ] ================= //
+// > Interface for managing individual donor requests.
 import { useState } from "react";
 import DeleteModal from "../../Modal/DeleteModal";
 const DonorRequestDataRow = () => {

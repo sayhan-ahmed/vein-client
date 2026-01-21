@@ -1,3 +1,5 @@
+// ================= [ HOME WHY DONATE ] ================= //
+// > Educational and motivational section on donation benefits.
 import React from "react";
 import { MdBloodtype, MdAccessTime } from "react-icons/md";
 import { FaHeart, FaUserCheck } from "react-icons/fa";

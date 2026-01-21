@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import Container from "../Container";
-import { IoMail, IoWaterOutline } from "react-icons/io5";
-import { FaFacebookF, FaInstagram, FaYoutube } from "react-icons/fa";
 import { Link } from "react-router";
 import Swal from "sweetalert2";
+
+// ================= [ FOOTER ICONS ] ================= //
+import { IoMail, IoWaterOutline } from "react-icons/io5";
+import { FaFacebookF, FaInstagram, FaYoutube } from "react-icons/fa";
 import { FaLocationDot, FaPhone, FaXTwitter } from "react-icons/fa6";
 
 const Footer = () => {

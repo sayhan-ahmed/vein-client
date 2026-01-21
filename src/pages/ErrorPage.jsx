@@ -1,3 +1,5 @@
+// ================= [ ERROR PAGE ] ================= //
+// > Universal 404 and fallback error display.
 import { Link, useNavigate } from "react-router";
 import { FaHome, FaArrowLeft } from "react-icons/fa";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";

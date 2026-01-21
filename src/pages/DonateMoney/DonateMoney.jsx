@@ -1,3 +1,5 @@
+// ================= [ DONATE MONEY PAGE ] ================= //
+// > Fundraising interface for platform support.
 import { useState } from "react";
 import {
   FaHandHoldingHeart,
@@ -26,7 +28,7 @@ import CheckoutForm from "./components/CheckoutForm";
 const stripeKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
 if (!stripeKey) {
   console.error(
-    "VITE_STRIPE_PUBLISHABLE_KEY is missing in your .env.local file!"
+    "VITE_STRIPE_PUBLISHABLE_KEY is missing in your .env.local file!",
   );
 }
 const stripePromise = stripeKey
@@ -53,12 +55,12 @@ const DonateMoney = () => {
 
   const totalRaised = funding.reduce(
     (acc, curr) => acc + (curr.amount || 0),
-    0
+    0,
   );
   const targetAmount = 5000;
   const progressPercentage = Math.min(
     Math.round((totalRaised / targetAmount) * 100),
-    100
+    100,
   );
   const isGoalReached = totalRaised >= targetAmount;
 

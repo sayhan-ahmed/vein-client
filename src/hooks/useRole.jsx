@@ -1,3 +1,5 @@
+// ================= [ ROLE HOOK ] ================= //
+// > Fetch and track current user's role.
 import { useQuery } from "@tanstack/react-query";
 import useAuth from "./useAuth";
 import useAxiosSecure from "./useAxiosSecure";

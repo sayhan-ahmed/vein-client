@@ -1,3 +1,5 @@
+// ================= [ ACTIVITY CHART ] ================= //
+// > Visualizes user donation and request trends.
 import { useState, useEffect } from "react";
 import {
   BarChart,

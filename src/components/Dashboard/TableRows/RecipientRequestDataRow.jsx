@@ -1,3 +1,5 @@
+// ================= [ RECIPIENT REQUEST DATA ROW ] ================= //
+// > Row component for tracking recipient blood needs.
 import { useState } from "react";
 import DeleteModal from "../../Modal/DeleteModal";
 const RecipientRequestDataRow = () => {

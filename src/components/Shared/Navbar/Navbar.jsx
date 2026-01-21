@@ -1,4 +1,13 @@
 import Container from "../Container";
+import { useState, useEffect, useRef } from "react";
+import { Link, NavLink, useNavigate } from "react-router";
+import useAuth from "../../../hooks/useAuth";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import { useQuery } from "@tanstack/react-query";
+import avatarImg from "../../../assets/images/placeholder.jpg";
+import Swal from "sweetalert2";
+
+// ================= [ NAVBAR ICONS ] ================= //
 import { AiOutlineMenu } from "react-icons/ai";
 import { BiDonateHeart } from "react-icons/bi";
 import { LiaDonateSolid } from "react-icons/lia";
@@ -7,13 +16,6 @@ import { CiWarning } from "react-icons/ci";
 import { FaRegBell } from "react-icons/fa";
 import { RxDashboard } from "react-icons/rx";
 import { LuLogOut } from "react-icons/lu";
-import { useState, useEffect, useRef } from "react";
-import { Link, NavLink, useNavigate } from "react-router";
-import useAuth from "../../../hooks/useAuth";
-import useAxiosSecure from "../../../hooks/useAxiosSecure";
-import { useQuery } from "@tanstack/react-query";
-import avatarImg from "../../../assets/images/placeholder.jpg";
-import Swal from "sweetalert2";
 
 const Navbar = () => {
   const { user, logOut, loading } = useAuth();
@@ -34,7 +36,7 @@ const Navbar = () => {
     enabled: !!user?.email,
     queryFn: async () => {
       const { data } = await axiosSecure.get(
-        `/notifications?email=${user.email}`
+        `/notifications?email=${user.email}`,
       );
       return data;
     },
@@ -60,7 +62,7 @@ const Navbar = () => {
   const handleMarkAllRead = async () => {
     try {
       await axiosSecure.patch(
-        `/notifications/mark-all-read/user?email=${user?.email}`
+        `/notifications/mark-all-read/user?email=${user?.email}`,
       );
       refetchNotifications();
     } catch (err) {
@@ -297,7 +299,7 @@ const Navbar = () => {
                                 onClick={() =>
                                   handleMarkAsRead(
                                     notification._id,
-                                    notification.link
+                                    notification.link,
                                   )
                                 }
                                 className={`p-3 border-b border-gray-50 cursor-pointer transition hover:bg-gray-50 flex gap-3 ${
@@ -323,14 +325,14 @@ const Navbar = () => {
                                   </p>
                                   <span className="text-[10px] text-gray-400 mt-1 block">
                                     {new Date(
-                                      notification.createdAt
+                                      notification.createdAt,
                                     ).toLocaleTimeString([], {
                                       hour: "2-digit",
                                       minute: "2-digit",
                                     })}
                                     {" - "}
                                     {new Date(
-                                      notification.createdAt
+                                      notification.createdAt,
                                     ).toLocaleDateString()}
                                   </span>
                                 </div>

@@ -1,3 +1,5 @@
+// ================= [ HOME BANNER ] ================= //
+// > Interactive hero section with site introduction.
 import { Link } from "react-router";
 import {
   MdOutlineBloodtype,

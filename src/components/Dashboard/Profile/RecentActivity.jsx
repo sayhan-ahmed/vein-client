@@ -1,3 +1,5 @@
+// ================= [ RECENT ACTIVITY ] ================= //
+// > List view of the latest donation records.
 import { FaChartLine } from "react-icons/fa";
 import { Link } from "react-router";
 

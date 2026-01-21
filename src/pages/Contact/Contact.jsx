@@ -1,3 +1,5 @@
+// ================= [ CONTACT PAGE ] ================= //
+// > Communication gateway for user support and inquiries.
 import Container from "../../components/Shared/Container";
 import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaClock } from "react-icons/fa";
 import { useState } from "react";

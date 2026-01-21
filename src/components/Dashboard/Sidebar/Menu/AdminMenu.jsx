@@ -1,3 +1,5 @@
+// ================= [ ADMIN MENU ] ================= //
+// > Sidebar navigation links for administrator roles.
 import { FaUserCog, FaInbox, FaCoins } from "react-icons/fa";
 import MenuItem from "./MenuItem";
 

@@ -1,3 +1,5 @@
+// ================= [ USER DATA ROW ] ================= //
+// > Admin interface for user management and permissioning.
 import { Link } from "react-router";
 import {
   Menu,

@@ -1,3 +1,5 @@
+// ================= [ DASHBOARD LAYOUT ] ================= //
+// > Structural wrapper for the administrative interface.
 import { Outlet } from "react-router";
 import Sidebar from "../components/Dashboard/Sidebar/Sidebar";
 import ScrollToTop from "../components/Shared/ScrollToTop";

@@ -1,3 +1,5 @@
+// ================= [ HOME PAGE ] ================= //
+// > Main landing experience with featured sections.
 import Banner from "../../components/Home/Banner";
 import Contact from "../../components/Home/Contact";
 import DonationRequests from "../../components/Home/DonationRequests";

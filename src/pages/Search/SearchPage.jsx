@@ -9,6 +9,7 @@ import { FaLocationDot } from "react-icons/fa6";
 
 const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 
+// ================= [ DONOR SEARCH ENGINE ] ================= //
 const SearchPage = () => {
   const [selectedBloodGroup, setSelectedBloodGroup] = useState("");
   const [selectedDistrict, setSelectedDistrict] = useState("");
@@ -20,7 +21,7 @@ const SearchPage = () => {
 
   const axiosPublic = useAxiosPublic();
 
-  // Extract districts from JSON structure
+  // > Extraction of geographic datasets for search parameters.
   const districts = districtsData[2]?.data || [];
 
   // Filter upazilas based on selected district
@@ -273,8 +274,8 @@ const SearchPage = () => {
                                     !donor.bloodGroup
                                       ? "bg-slate-100 text-slate-500 border border-slate-200"
                                       : donor.bloodGroup.includes("+")
-                                      ? "bg-red-100 text-red-600 border border-red-200"
-                                      : "bg-indigo-100 text-indigo-600 border border-indigo-200"
+                                        ? "bg-red-100 text-red-600 border border-red-200"
+                                        : "bg-indigo-100 text-indigo-600 border border-indigo-200"
                                   }`}
                                 >
                                   {donor.bloodGroup || "N/A"}
@@ -284,8 +285,7 @@ const SearchPage = () => {
                                 <div className="flex flex-col">
                                   <span className="text-sm font-semibold text-slate-700">
                                     {donor.district ||
-                                      (!donor.upazila &&
-                                        "No info Found")}
+                                      (!donor.upazila && "No info Found")}
                                   </span>
                                   <span className="text-xs text-slate-400 font-medium">
                                     {donor.upazila}
@@ -301,7 +301,7 @@ const SearchPage = () => {
                                 <button
                                   onClick={() =>
                                     navigate(
-                                      `/dashboard/profile/${donor.email}`
+                                      `/dashboard/profile/${donor.email}`,
                                     )
                                   }
                                   className="inline-flex items-center justify-center px-5 py-2 rounded-xl bg-slate-900 text-white text-sm font-bold shadow-lg shadow-slate-900/10 hover:bg-red-600 hover:shadow-red-600/20 active:scale-95 transition-all duration-300"
