@@ -6,12 +6,14 @@ import DonationRequests from "../../components/Home/DonationRequests";
 import CompatibilityMatrix from "../../components/Home/CompatibilityMatrix";
 import WhyDonate from "../../components/Home/WhyDonate";
 import PulseOfLife from "../../components/Home/PulseOfLife";
+import MedicalAlliance from "../../components/Home/MedicalAlliance";
 
 const Home = () => {
   return (
     <div>
       <Banner />
       <PulseOfLife />
+      <MedicalAlliance />
       <CompatibilityMatrix />
       <WhyDonate />
       <DonationRequests />
