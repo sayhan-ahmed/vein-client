@@ -7,6 +7,7 @@ import CompatibilityMatrix from "../../components/Home/CompatibilityMatrix";
 import WhyDonate from "../../components/Home/WhyDonate";
 import PulseOfLife from "../../components/Home/PulseOfLife";
 import MedicalAlliance from "../../components/Home/MedicalAlliance";
+import VoiceOfPeople from "../../components/Home/VoiceOfPeople";
 
 const Home = () => {
   return (
@@ -17,6 +18,7 @@ const Home = () => {
       <CompatibilityMatrix />
       <WhyDonate />
       <DonationRequests />
+      <VoiceOfPeople />
       <Contact />
       {/* More components */}
     </div>
