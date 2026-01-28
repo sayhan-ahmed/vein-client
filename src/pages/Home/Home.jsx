@@ -2,6 +2,7 @@
 // > Main landing experience with featured sections.
 import Banner from "../../components/Home/Banner";
 import Contact from "../../components/Home/Contact";
+import CommunityPulse from "../../components/Home/CommunityPulse";
 import DonationRequests from "../../components/Home/DonationRequests";
 import CompatibilityMatrix from "../../components/Home/CompatibilityMatrix";
 import WhyDonate from "../../components/Home/WhyDonate";
@@ -17,6 +18,7 @@ const Home = () => {
       <MedicalAlliance />
       <CompatibilityMatrix />
       <WhyDonate />
+      <CommunityPulse />
       <DonationRequests />
       <VoiceOfPeople />
       <Contact />
