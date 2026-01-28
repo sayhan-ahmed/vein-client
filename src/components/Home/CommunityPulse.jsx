@@ -1,8 +1,8 @@
-import React from "react";
 import { useQuery } from "@tanstack/react-query";
+import { FaBolt, FaHeartPulse } from "react-icons/fa6";
 import { Link } from "react-router";
-import { FaHeartPulse, FaBolt } from "react-icons/fa6";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
+import { getUrgencyLevel } from "../../utils/urgency";
 import Container from "../Shared/Container";
 
 const CommunityPulse = () => {
@@ -67,33 +67,64 @@ const CommunityPulse = () => {
               </span>
             </div>
 
-            {/* Scrolling Ticker */}
-            <div className="relative flex-1 overflow-hidden h-6 mask-linear-x">
-              <div className="animate-marquee whitespace-nowrap flex items-center gap-8">
-                {requests.length > 0 ? (
-                  // Duplicate 4x time for seamless loop on large screens
-                  [...requests, ...requests, ...requests, ...requests].map(
-                    (req, i) => (
-                      <Link
-                        key={`${req._id}-${i}`}
-                        to={`/donation-requests/${req._id}`}
-                        className="flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors"
-                      >
-                        <span className="text-xs font-bold px-1.5 rounded bg-red-500/20 text-red-400">
-                          URGENT
+            {/* Seamless Scrolling Ticker */}
+            <div className="relative flex-1 overflow-hidden h-6 mask-linear-x group cursor-default">
+              <div className="flex min-w-full">
+                {/* We render the content twice to create a seamless infinite loop */}
+                {[0, 1].map((i) => {
+                  // Ensure we have enough items density (at least 10)
+                  let marqueeItems = requests.length > 0 ? [...requests] : [];
+                  const MIN_ITEMS = 10;
+                  while (
+                    marqueeItems.length > 0 &&
+                    marqueeItems.length < MIN_ITEMS
+                  ) {
+                    marqueeItems = [...marqueeItems, ...requests];
+                  }
+
+                  return (
+                    <div
+                      key={i}
+                      className="flex shrink-0 min-w-full items-center justify-around animate-marquee"
+                      aria-hidden={i === 1}
+                    >
+                      {marqueeItems.length > 0 ? (
+                        marqueeItems.map((req, idx) => {
+                          const urgency = getUrgencyLevel(req);
+                          const colorClass =
+                            urgency.color === "red"
+                              ? "bg-red-500/20 text-red-400"
+                              : urgency.color === "purple"
+                                ? "bg-purple-500/20 text-purple-400"
+                                : urgency.color === "orange"
+                                  ? "bg-orange-500/20 text-orange-400"
+                                  : "bg-blue-500/20 text-blue-400";
+                          return (
+                            <Link
+                              key={`${req._id}-${i}-${idx}`}
+                              to={`/donation-requests/${req._id}`}
+                              className="flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors px-8"
+                            >
+                              <span
+                                className={`text-xs font-bold px-1.5 rounded ${colorClass}`}
+                              >
+                                {urgency.label}
+                              </span>
+                              <span className="font-medium whitespace-nowrap">
+                                {req.bloodGroup} request in{" "}
+                                {req.recipientDistrict}
+                              </span>
+                            </Link>
+                          );
+                        })
+                      ) : (
+                        <span className="text-slate-500 text-sm italic px-4">
+                          Scanning for real-time signals...
                         </span>
-                        <span className="font-medium">
-                          {req.bloodGroup} Request in {req.recipientDistrict}
-                        </span>
-                        <span className="text-slate-600 ml-5">•</span>
-                      </Link>
-                    ),
-                  )
-                ) : (
-                  <span className="text-slate-500 text-sm">
-                    Waiting for new network activity...
-                  </span>
-                )}
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -130,17 +161,21 @@ const CommunityPulse = () => {
         </div>
       </Container>
 
-      {/* CSS for Marquee - Injecting style here for simplicity since tailwind config might not have it */}
+      {/* CSS for Seamless Marquee */}
       <style>{`
         .animate-marquee {
-          animation: marquee 30s linear infinite;
+          animation: marquee 40s linear infinite;
+        }
+        /* Pause on hover for better UX */
+        .group:hover .animate-marquee {
+          animation-play-state: paused;
         }
         @keyframes marquee {
           0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
+          100% { transform: translateX(-100%); }
         }
         .mask-linear-x {
-           mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+           mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
         }
       `}</style>
     </section>

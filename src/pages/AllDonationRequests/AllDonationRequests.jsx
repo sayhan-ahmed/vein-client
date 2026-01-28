@@ -2,6 +2,9 @@
 // > Public marketplace for active blood requests with filtering.
 import React, { useEffect, useState } from "react";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
+import Container from "../../components/Shared/Container";
+import useAxiosSecure from "../../hooks/useAxiosSecure"; // Just in case needed for future updates
+import { getUrgencyLevel } from "../../utils/urgency";
 import { Link } from "react-router";
 import Loader from "../../components/Shared/Loader";
 import districtsData from "../../assets/data/districts.json";
@@ -279,12 +282,28 @@ export default function AllDonationRequests() {
                     {/* Soft Gradient Overlay on Hover */}
                     <div className="absolute inset-0 bg-linear-to-br from-red-50/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
 
-                    {/* Header */}
+                    {/* Header with Urgency Badge */}
                     <div className="relative flex justify-between items-start mb-6">
                       <div className="space-y-1">
-                        <span className="inline-block px-3 py-1 rounded-full bg-slate-100 text-slate-500 text-[0.65rem] font-bold uppercase tracking-wider group-hover:bg-red-50 transition-colors">
-                          Recipient
-                        </span>
+                        {(() => {
+                          const urgency = getUrgencyLevel(request);
+                          const badgeColor =
+                            urgency.color === "red"
+                              ? "bg-red-50 text-red-600 border-red-100"
+                              : urgency.color === "purple"
+                                ? "bg-purple-50 text-purple-600 border-purple-100"
+                                : urgency.color === "orange"
+                                  ? "bg-orange-50 text-orange-600 border-orange-100"
+                                  : "bg-blue-50 text-blue-600 border-blue-100";
+                          return (
+                            <span
+                              className={`inline-block px-3 py-1 rounded-full border text-[0.65rem] font-bold uppercase tracking-wider mb-2 ${badgeColor}`}
+                            >
+                              {urgency.label}
+                            </span>
+                          );
+                        })()}
+
                         <h3 className="text-xl font-bold text-slate-900 leading-tight group-hover:text-red-600 transition-colors line-clamp-1">
                           {request.recipientName}
                         </h3>

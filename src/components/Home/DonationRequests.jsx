@@ -9,9 +9,11 @@ import {
   FaMapMarkerAlt,
 } from "react-icons/fa";
 import { MdBloodtype } from "react-icons/md";
+import { useNavigate } from "react-router";
 import { TbUrgent } from "react-icons/tb";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 import Container from "../Shared/Container";
+import { getUrgencyLevel } from "../../utils/urgency";
 import Loader from "../Shared/Loader";
 
 const DonationRequests = () => {
@@ -24,19 +26,21 @@ const DonationRequests = () => {
       try {
         // Fetching all requests to modify on client as "pending" limit 6 for Home
         // Ideally backend should support pagination/filtering
-        const res = await axiosPublic.get("/donation-requests");
-        const pendingRequests = res.data
+        const { data } = await axiosPublic.get("/donation-requests");
+
+        // Filter: Only show CRITICAL or HIGH priority items
+        // Sort: Critical first
+        const urgentRequests = data
           .filter((req) => req.donationStatus === "pending")
-          .sort((a, b) => {
-            // Sort by createdAt in descending order (latest first)
-            const dateA = new Date(a.createdAt || a.date || 0);
-            const dateB = new Date(b.createdAt || b.date || 0);
-            return dateB - dateA;
-          })
+          .map((req) => ({ ...req, urgency: getUrgencyLevel(req) }))
+          .filter((req) => req.urgency.priority <= 2) // Keep only CRITICAL (1) & HIGH (2)
+          .sort((a, b) => a.urgency.priority - b.urgency.priority)
           .slice(0, 6);
-        setRequests(pendingRequests);
-      } catch (error) {
-        console.error("Failed to fetch donation requests", error);
+
+        setRequests(urgentRequests);
+      } catch (err) {
+        console.error("Failed to fetch requests", err);
+        setRequests([]); // Set to empty array on error
       } finally {
         setLoading(false);
       }
