@@ -82,11 +82,11 @@ const DonationRequests = () => {
         </div>
 
         {requests.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 relative z-10">
+          <div className="flex flex-wrap justify-center gap-8 relative z-10 px-4">
             {requests.map((req) => (
               <div
                 key={req._id}
-                className="group relative bg-white rounded-3xl p-6 shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:shadow-red-500/10 transition-all duration-500 hover:-translate-y-2 border border-slate-100 overflow-hidden"
+                className="group relative bg-white rounded-3xl p-6 shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:shadow-red-500/10 transition-all duration-500 hover:-translate-y-2 border border-slate-100 overflow-hidden w-full md:w-[380px]"
               >
                 {/* Card Gradient Border Effect */}
                 <div className="absolute inset-0 border-2 border-transparent group-hover:border-red-100 rounded-3xl transition-colors pointer-events-none" />
