@@ -3,8 +3,11 @@ import Container from "../Shared/Container";
 import { FaLocationDot, FaPhone } from "react-icons/fa6";
 import { IoMail, IoTimeOutline } from "react-icons/io5";
 import Swal from "sweetalert2";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 const Contact = () => {
+  const axiosPublic = useAxiosPublic();
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -20,35 +23,51 @@ const Contact = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
-    // Show success alert
-    Swal.fire({
-      title: "Message Sent Successfully!",
-      html: `<p style="color: #666;">Thank you <strong>${formData.name}</strong> for reaching out. We'll get back to you soon at <strong>${formData.email}</strong></p>`,
-      icon: "success",
-      iconColor: "#10B981",
-      position: "center",
-      confirmButtonText: "Great!",
-      confirmButtonColor: "#1D3658",
-      customClass: {
-        popup: "rounded-3xl shadow-2xl",
-        title: "text-2xl font-bold text-gray-900",
-        htmlContainer: "text-gray-600",
-        confirmButton:
-          "px-6 py-3 rounded-xl font-bold shadow-lg transition-all hover:scale-105",
-      },
-    });
+    try {
+      const { data } = await axiosPublic.post("/contact", formData);
 
-    // Reset form
-    setFormData({
-      name: "",
-      phone: "",
-      email: "",
-      subject: "",
-      message: "",
-    });
+      if (data.success) {
+        Swal.fire({
+          title: "Message Sent Successfully!",
+          html: `<p style="color: #666;">Thank you <strong>${formData.name}</strong> for reaching out. We'll get back to you soon at <strong>${formData.email}</strong></p>`,
+          icon: "success",
+          iconColor: "#10B981",
+          position: "center",
+          confirmButtonText: "Great!",
+          confirmButtonColor: "#1D3658",
+          customClass: {
+            popup: "rounded-3xl shadow-2xl",
+            title: "text-2xl font-bold text-gray-900",
+            htmlContainer: "text-gray-600",
+            confirmButton:
+              "px-6 py-3 rounded-xl font-bold shadow-lg transition-all hover:scale-105",
+          },
+        });
+
+        // Reset form
+        setFormData({
+          name: "",
+          phone: "",
+          email: "",
+          subject: "",
+          message: "",
+        });
+      }
+    } catch (err) {
+      console.error(err);
+      Swal.fire({
+        title: "Oops!",
+        text: "Something went wrong. Please try again later.",
+        icon: "error",
+        confirmButtonColor: "#d33",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const locations = [
@@ -136,9 +155,10 @@ const Contact = () => {
               {/* Submit Button */}
               <button
                 type="submit"
-                className="w-full px-8 py-4 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg transition-all hover:-translate-y-1 duration-300 shadow-lg"
+                disabled={loading}
+                className="w-full px-8 py-4 bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white font-bold rounded-lg transition-all hover:-translate-y-1 duration-300 shadow-lg"
               >
-                Send Message
+                {loading ? "Sending..." : "Send Message"}
               </button>
             </form>
           </div>

@@ -5,31 +5,59 @@ import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaClock } from "react-icons/fa";
 import { useState } from "react";
 import Swal from "sweetalert2";
 
+import useAxiosPublic from "../../hooks/useAxiosPublic";
+
 const Contact = () => {
+  const axiosPublic = useAxiosPublic();
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    phone: "",
     subject: "",
     message: "",
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
-    Swal.fire({
-      title: "Message Sent!",
-      text: "Thank you for contacting us. We'll get back to you soon.",
-      icon: "success",
-      iconColor: "#10B981",
-      confirmButtonColor: "#1D3658",
-      customClass: {
-        popup: "rounded-3xl shadow-2xl",
-        title: "text-2xl font-bold",
-        confirmButton: "px-6 py-3 rounded-xl font-bold",
-      },
-    });
+    try {
+      const { data } = await axiosPublic.post("/contact", formData);
 
-    setFormData({ name: "", email: "", subject: "", message: "" });
+      if (data.success) {
+        Swal.fire({
+          title: "Message Sent!",
+          text: "Thank you for contacting us. We'll get back to you soon.",
+          icon: "success",
+          iconColor: "#10B981",
+          confirmButtonColor: "#1D3658",
+          customClass: {
+            popup: "rounded-3xl shadow-2xl",
+            title: "text-2xl font-bold",
+            confirmButton: "px-6 py-3 rounded-xl font-bold",
+          },
+        });
+
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          subject: "",
+          message: "",
+        });
+      }
+    } catch (err) {
+      console.error(err);
+      Swal.fire({
+        title: "Error",
+        text: "Failed to send message. Please try again.",
+        icon: "error",
+        confirmButtonColor: "#d33",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleChange = (e) => {
@@ -123,18 +151,33 @@ const Contact = () => {
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-2">
-                    Your Email
+                    Phone Number
                   </label>
                   <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
                     onChange={handleChange}
                     required
                     className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none transition-all"
-                    placeholder="john@example.com"
+                    placeholder="+880 123 456789"
                   />
                 </div>
+              </div>
+
+              <div className="mb-6">
+                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                  Your Email
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none transition-all"
+                  placeholder="john@example.com"
+                />
               </div>
 
               <div className="mb-6">
@@ -169,9 +212,10 @@ const Contact = () => {
 
               <button
                 type="submit"
-                className="w-full bg-red-600 text-white py-4 rounded-xl font-bold hover:bg-red-700 transition-all shadow-lg hover:shadow-xl"
+                disabled={loading}
+                className="w-full bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white py-4 rounded-xl font-bold transition-all shadow-lg hover:shadow-xl"
               >
-                Send Message
+                {loading ? "Sending..." : "Send Message"}
               </button>
             </form>
           </div>
