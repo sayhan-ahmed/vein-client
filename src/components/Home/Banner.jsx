@@ -6,6 +6,7 @@ import {
   MdSearch,
   MdDashboard,
   MdSecurity,
+  MdKeyboardArrowDown,
 } from "react-icons/md";
 import Container from "../Shared/Container";
 import useAuth from "../../hooks/useAuth";
@@ -47,8 +48,38 @@ const Banner = () => {
     },
   };
 
+  const arrowVariant = {
+    animate: {
+      y: [0, 5, 0],
+      transition: {
+        duration: 2,
+        repeat: Infinity,
+        ease: "easeInOut",
+      },
+    },
+  };
+
+  const mouseWheelVariant = {
+    animate: {
+      y: [0, 10, 0],
+      opacity: [1, 0, 1],
+      transition: {
+        duration: 1.5,
+        repeat: Infinity,
+        ease: "linear",
+      },
+    },
+  };
+
+  const handleScroll = () => {
+    window.scrollTo({
+      top: window.innerHeight,
+      behavior: "smooth",
+    });
+  };
+
   return (
-    <div className="relative w-full min-h-[600px] bg-[#0B1120] overflow-hidden flex items-center font-sans text-white py-12 lg:py-0">
+    <div className="relative w-full min-h-[600px] bg-[#0B1120] flex items-center font-sans text-white py-12 lg:py-0">
       {/* --- BACKGROUND ARCHITECTURE --- */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         {/* Soft Ambient Glows with Pulse */}
@@ -298,6 +329,52 @@ const Banner = () => {
           </div>
         </div>
       </Container>
+
+      {/* --- SCROLL DOWN INDICATOR --- */}
+      <div className="absolute top-full left-0 w-full flex justify-center -mt-px z-30 pointer-events-none">
+        {/* The Shape */}
+        <div className="relative flex justify-center">
+          {/* SVG Background */}
+          <svg
+            width="90"
+            height="64"
+            viewBox="0 0 90 64"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className="block drop-shadow-xl"
+          >
+            <path
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d="M90 0H0C0 0 20 0 20 16V35C20 49.8 31.2 60 45 60C58.8 60 70 49.8 70 35V16C70 0 90 0 90 0Z"
+              fill="#0B1120"
+            />
+          </svg>
+
+          {/* The Mouse */}
+          <div
+            onClick={handleScroll}
+            className="absolute -top-1 left-1/2 -translate-x-1/2 pointer-events-auto"
+          >
+            <div className="relative group w-9 h-14 rounded-full flex justify-center cursor-pointer transition-all duration-500 hover:scale-105">
+              {/* Mouse Body */}
+              <div className="absolute inset-0 rounded-full bg-linear-to-b from-white/15 via-white/5 to-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.4)]"></div>
+
+              {/* Inner Specular Shine */}
+              <div className="absolute top-1 inset-x-1 h-1/2 bg-linear-to-b from-white/20 to-transparent rounded-t-full opacity-40"></div>
+
+              {/* Red Scrolling Wheel */}
+              <div className="relative mt-3 w-1.5 h-6 rounded-full bg-white/5 border border-white/10 flex justify-center py-1">
+                <motion.div
+                  variants={mouseWheelVariant}
+                  animate="animate"
+                  className="w-1 h-2 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.8)]"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
