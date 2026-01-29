@@ -17,6 +17,16 @@ const Contact = () => {
   });
 
   const handleChange = (e) => {
+    // Phone validation: Allow ONLY numbers
+    if (e.target.name === "phone") {
+      const numericValue = e.target.value.replace(/[^0-9]/g, "");
+      setFormData({
+        ...formData,
+        [e.target.name]: numericValue,
+      });
+      return;
+    }
+
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
@@ -26,6 +36,19 @@ const Contact = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      Swal.fire({
+        title: "Invalid Email",
+        text: "Please enter a valid email address.",
+        icon: "warning",
+        confirmButtonColor: "#d33",
+      });
+      setLoading(false);
+      return;
+    }
 
     try {
       const { data } = await axiosPublic.post("/contact", formData);
