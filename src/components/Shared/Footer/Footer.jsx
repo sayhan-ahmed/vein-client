@@ -8,31 +8,55 @@ import { IoMail } from "react-icons/io5";
 import { FaFacebookF, FaInstagram, FaYoutube } from "react-icons/fa";
 import { FaLocationDot, FaPhone, FaXTwitter } from "react-icons/fa6";
 
+import useAxiosPublic from "../../../hooks/useAxiosPublic";
+
 const Footer = () => {
+  const axiosPublic = useAxiosPublic();
   const [email, setEmail] = useState("");
 
-  const handleSubscribe = (e) => {
+  const handleSubscribe = async (e) => {
     e.preventDefault();
 
-    // Show success alert with SweetAlert2
-    Swal.fire({
-      title: "Successfully Subscribed!",
-      html: `<p style="color: #666;">Thank you for subscribing to our newsletter with <strong>${email}</strong></p>`,
-      icon: "success",
-      iconColor: "#10B981",
-      position: "center",
-      confirmButtonText: "Great!",
-      confirmButtonColor: "#1D3658",
-      customClass: {
-        popup: "rounded-3xl shadow-2xl",
-        title: "text-2xl font-bold text-gray-900",
-        htmlContainer: "text-gray-600",
-        confirmButton:
-          "px-6 py-3 rounded-xl font-bold shadow-lg transition-all hover:scale-105",
-      },
-    });
+    if (!email) return;
 
-    setEmail("");
+    try {
+      const { data } = await axiosPublic.post("/subscribe", { email });
+
+      if (data.success) {
+        Swal.fire({
+          title: "Successfully Subscribed!",
+          html: `<p style="color: #666;">Thank you for subscribing to our newsletter with <strong>${email}</strong></p>`,
+          icon: "success",
+          iconColor: "#10B981",
+          position: "center",
+          confirmButtonText: "Great!",
+          confirmButtonColor: "#1D3658",
+          customClass: {
+            popup: "rounded-3xl shadow-2xl",
+            title: "text-2xl font-bold text-gray-900",
+            htmlContainer: "text-gray-600",
+            confirmButton:
+              "px-6 py-3 rounded-xl font-bold shadow-lg transition-all hover:scale-105",
+          },
+        });
+        setEmail("");
+      } else {
+        Swal.fire({
+          title: "Message",
+          text: data.message,
+          icon: "info",
+          confirmButtonColor: "#1D3658",
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      Swal.fire({
+        title: "Error",
+        text: "Something went wrong. Please try again.",
+        icon: "error",
+        confirmButtonColor: "#d33",
+      });
+    }
   };
 
   const quickLinks = [
